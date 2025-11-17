@@ -20,31 +20,121 @@ const ctx = canvas.getContext('2d');
  * @param {string} color 
  */
 const drawRect = (ctx, x, y, w, h, color) => {
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, w, h);
 }
 
-const vec2 = (x, y) => ({ x, y });
+/**
+ * 
+ * @param {CanvasRenderingContext2D} ctx 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} w 
+ * @param {number} h 
+ * @param {number} lineWidth 
+ * @param {string} color 
+ */
+const drawRectStroke = (ctx, x, y, w, h, lineWidth, color) => {
+  ctx.setLineDash([lineWidth, lineWidth])
+  ctx.lineWidth = lineWidth;
+  ctx.strokeStyle = color;
+  ctx.strokeRect(x, y, w, h);
+}
 
-class Shape {
+class Vector2 {
+  /**
+   * @type {number}
+   */
+  x;
+  /**
+   * @type {number}
+   */
+  y;
+ 
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  addScalar(number) {
+    this.x += number;
+    this.y += number;
+  }
+
+  add(vec) {
+    this.x += vec.x;
+    this.y += vec.y;
+  }
+}
+
+const vec2 = (x = 0, y = 0) => new Vector2(x, y);
+
+class CollisionShape {
   color = 'black';
-  dimensions = vec2();
+
+  /**
+   * 
+   * @param {CanvasRenderingContext2D} ctx 
+   * @param {{ x: number, y: number }} center 
+   */
+  render(ctx, center) {}
+}
+
+class RectCollisionShape extends CollisionShape {
+  dimensions = vec2(10, 10);
+
+  render(ctx, center) {
+    drawRectStroke(ctx, center.x, center.y, this.dimensions.x, this.dimensions.y, 2, this.color)
+  }
+}
+
+class Camera {
+  position = vec2();
+  dimensions = vec2(100, 100);
 }
 
 
 class Entity {
+  type = 'Entity';
+  centered = true;
   position = vec2();
-  shape = new Shape();
+  /**
+   * @type {CollisionShape|null}
+   */
+  collisionShape = null;
 }
 
+class PipeEntity extends Entity {
+  type = 'PipeEntity';
+  collisionShape = new RectCollisionShape();
+}
+
+class BirdEntity extends Entity {
+  type = 'BirdEntity';
+  collisionShape = new RectCollisionShape();
+  velocity = vec2(0, 0);
+  accel = vec2(0, 0);
+
+  constructor() {
+    super();
+    this.collisionShape.color = 'yellow';
+    this.accel = vec2(0, 0.1)
+  }
+}
+
+/**
+ * @type {Entity[]}
+ */
 const entities = [];
-const pipe = new Entity();
-pipe.position.x = 10;
-pipe.position.y = 10;
-pipe.shape.dimensions.x = 10;
-pipe.shape.dimensions.y = 100;
+const pipe = new PipeEntity();
+pipe.position.x = 250;
+pipe.position.y = 325;
+pipe.collisionShape.dimensions.x = 25;
+pipe.collisionShape.dimensions.y = 100;
+const bird = new BirdEntity();
 
 entities.push(pipe);
+entities.push(bird);
 
 
 
@@ -60,8 +150,16 @@ requestAnimationFrame(function loop(timestamp) {
   drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
 
   for (const entity of entities) {
-    if (entity.shape) {
-      drawRect(ctx, entity.position.x, entity.position.y, entity.shape.dimensions.x, entity.shape.dimensions.y, entity.shape.color)
+    if (entity instanceof BirdEntity) {
+      entity.velocity.add(entity.accel);
+      entity.position.add(entity.velocity);
+    }
+  }
+
+  // render
+  for (const entity of entities) {
+    if (entity.collisionShape) {
+      entity.collisionShape.render(ctx, entity.position);
     }
   }
 
