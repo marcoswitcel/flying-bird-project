@@ -24,8 +24,48 @@ const drawRect = (ctx, x, y, w, h, color) => {
     ctx.fillRect(x, y, w, h);
 }
 
-drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
+const vec2 = (x, y) => ({ x, y });
 
-drawRect(ctx, 0, 0, 10, 100, 'green')
+class Shape {
+  color = 'black';
+  dimensions = vec2();
+}
+
+
+class Entity {
+  position = vec2();
+  shape = new Shape();
+}
+
+const entities = [];
+const pipe = new Entity();
+pipe.position.x = 10;
+pipe.position.y = 10;
+pipe.shape.dimensions.x = 10;
+pipe.shape.dimensions.y = 100;
+
+entities.push(pipe);
+
+
+
+let lastTimestamp = 0;
+requestAnimationFrame(function loop(timestamp) {
+  if (lastTimestamp === 0)
+  {
+    lastTimestamp = timestamp;
+    requestAnimationFrame(loop)  
+    return;
+  }
+
+  drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
+
+  for (const entity of entities) {
+    if (entity.shape) {
+      drawRect(ctx, entity.position.x, entity.position.y, entity.shape.dimensions.x, entity.shape.dimensions.y, entity.shape.color)
+    }
+  }
+
+  requestAnimationFrame(loop)
+});
 
 
