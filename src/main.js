@@ -88,8 +88,6 @@ class RectCollisionShape extends CollisionShape {
     const x = (center.x - this.dimensions.x / 2) - camera.position.x + ctx.canvas.width / 2;
     const y = (center.y - this.dimensions.y / 2) - camera.position.y + ctx.canvas.height / 2;
 
-    console.log(x)
-
     drawRectStroke(ctx, x, y, this.dimensions.x, this.dimensions.y, 2, this.color)
   }
 }
@@ -108,6 +106,16 @@ class Entity {
    * @type {CollisionShape|null}
    */
   collisionShape = null;
+
+  /**
+   * 
+   * @param {Camera} camera 
+   */
+  isVisible(camera) {
+    // @todo João, não funciona
+    return (this.position.x >= (camera.position.x - camera.dimensions.x / 2) && this.position.x <= (camera.position.x + camera.dimensions.x / 2)) &&
+      (this.position.y >= (camera.position.y - camera.dimensions.y / 2) && this.position.y <= (camera.position.y + camera.dimensions.y / 2));
+  }
 }
 
 class PipeEntity extends Entity {
@@ -151,8 +159,16 @@ entities.push(pipe);
 entities.push(pipe2);
 entities.push(bird);
 
+let paused = false;
+
 document.addEventListener('click', () => {
   bird.accel.y = -9.8;
+});
+
+document.addEventListener('keyup', (event) => {
+  if (event.code === 'KeyP') {
+    paused = !paused;
+  }
 });
 
 
@@ -167,6 +183,7 @@ requestAnimationFrame(function loop(timestamp) {
 
   drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
 
+  if (!paused)
   for (const entity of entities) {
     if (entity instanceof BirdEntity) {
       // gravidade
@@ -184,6 +201,8 @@ requestAnimationFrame(function loop(timestamp) {
       // camera seguindo 'bird'
       camera.position.x = entity.position.x + 100;
     }
+    
+    // console.log(entity.isVisible(camera))
   }
 
   // render
