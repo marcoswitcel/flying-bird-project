@@ -75,16 +75,22 @@ class CollisionShape {
   /**
    * 
    * @param {CanvasRenderingContext2D} ctx 
-   * @param {{ x: number, y: number }} center 
+   * @param {Camera} camera
+   * @param {{ x: number, y: number }} center centro da figura no 'world space'
    */
-  render(ctx, center) {}
+  render(ctx, camera, center) {}
 }
 
 class RectCollisionShape extends CollisionShape {
   dimensions = vec2(10, 10);
 
-  render(ctx, center) {
-    drawRectStroke(ctx, center.x, center.y, this.dimensions.x, this.dimensions.y, 2, this.color)
+  render(ctx, camera, center) {
+    const x = (center.x - this.dimensions.x / 2) - camera.position.x + ctx.canvas.width / 2;
+    const y = (center.y - this.dimensions.y / 2) - camera.position.y + ctx.canvas.height / 2;
+
+    console.log(x)
+
+    drawRectStroke(ctx, x, y, this.dimensions.x, this.dimensions.y, 2, this.color)
   }
 }
 
@@ -121,6 +127,10 @@ class BirdEntity extends Entity {
   }
 }
 
+const camera = new Camera();
+camera.position.x = ctx.canvas.width / 2;
+camera.position.y = ctx.canvas.height / 2;
+
 /**
  * @type {Entity[]}
  */
@@ -130,13 +140,19 @@ pipe.position.x = 250;
 pipe.position.y = 325;
 pipe.collisionShape.dimensions.x = 25;
 pipe.collisionShape.dimensions.y = 100;
+const pipe2 = new PipeEntity();
+pipe2.position.x = 350;
+pipe2.position.y = 325;
+pipe2.collisionShape.dimensions.x = 25;
+pipe2.collisionShape.dimensions.y = 150;
 const bird = new BirdEntity();
 
 entities.push(pipe);
+entities.push(pipe2);
 entities.push(bird);
 
-document.addEventListener('keyup', () => {
-  bird.accel.y = -7;
+document.addEventListener('click', () => {
+  bird.accel.y = -9.8;
 });
 
 
@@ -154,21 +170,26 @@ requestAnimationFrame(function loop(timestamp) {
   for (const entity of entities) {
     if (entity instanceof BirdEntity) {
       // gravidade
-      entity.accel.y += 0.1;
+      entity.accel.y += 0.15;
 
       entity.velocity.add(entity.accel);
+      // por hora velocidade horizontal fixa
+      entity.velocity.x = 1;
       entity.position.add(entity.velocity);
 
       // reset aceleração
       entity.accel.x = 0;
       entity.accel.y = 0;
+
+      // camera seguindo 'bird'
+      camera.position.x = entity.position.x + 100;
     }
   }
 
   // render
   for (const entity of entities) {
     if (entity.collisionShape) {
-      entity.collisionShape.render(ctx, entity.position);
+      entity.collisionShape.render(ctx, camera, entity.position);
     }
   }
 
