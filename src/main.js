@@ -118,7 +118,6 @@ class BirdEntity extends Entity {
   constructor() {
     super();
     this.collisionShape.color = 'yellow';
-    this.accel = vec2(0, 0.1)
   }
 }
 
@@ -136,6 +135,9 @@ const bird = new BirdEntity();
 entities.push(pipe);
 entities.push(bird);
 
+document.addEventListener('keyup', () => {
+  bird.accel.y = -7;
+});
 
 
 let lastTimestamp = 0;
@@ -151,8 +153,15 @@ requestAnimationFrame(function loop(timestamp) {
 
   for (const entity of entities) {
     if (entity instanceof BirdEntity) {
+      // gravidade
+      entity.accel.y += 0.1;
+
       entity.velocity.add(entity.accel);
       entity.position.add(entity.velocity);
+
+      // reset aceleração
+      entity.accel.x = 0;
+      entity.accel.y = 0;
     }
   }
 
