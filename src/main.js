@@ -162,7 +162,8 @@ entities.push(bird);
 let paused = false;
 
 document.addEventListener('click', () => {
-  bird.accel.y = -9.8;
+  // bird.accel.y = -9.8;
+  bird.velocity.y = -4;
 });
 
 document.addEventListener('keyup', (event) => {
