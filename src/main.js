@@ -10,6 +10,10 @@ document.body.append(canvas);
 
 const ctx = canvas.getContext('2d');
 
+// @note Terminar de implementar
+const birdFrame = new Image();
+birdFrame.src = './assets/image/bird/idle/frame-1.png';
+
 /**
  * 
  * @param {CanvasRenderingContext2D} ctx 
@@ -201,6 +205,13 @@ requestAnimationFrame(function loop(timestamp) {
 
       // camera seguindo 'bird'
       camera.position.x = entity.position.x + 100;
+
+      /**
+       * @note João, terminar de implementar e criar uma função pra esse cálculo 
+      const x = ( entity.position.x - entity.collisionShape.dimensions.x / 2) - camera.position.x + ctx.canvas.width / 2;
+      const y = ( entity.position.y - entity.collisionShape.dimensions.y / 2) - camera.position.y + ctx.canvas.height / 2;
+      ctx.drawImage(birdFrame, x,y, 40, 35);
+      */
     }
     
     // console.log(entity.isVisible(camera))
