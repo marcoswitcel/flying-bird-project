@@ -153,6 +153,11 @@ class Entity {
   collisionShape = null;
 
   /**
+   * @type {Sprite|null}
+   */
+  sprite = null;
+
+  /**
    * 
    * @param {Camera} camera 
    */
@@ -160,6 +165,15 @@ class Entity {
     // @todo João, não funciona
     return (this.position.x >= (camera.position.x - camera.dimensions.x / 2) && this.position.x <= (camera.position.x + camera.dimensions.x / 2)) &&
       (this.position.y >= (camera.position.y - camera.dimensions.y / 2) && this.position.y <= (camera.position.y + camera.dimensions.y / 2));
+  }
+
+  render(ctx, camera) {
+    if (!this.sprite) return;
+
+    const x = (this.position.x) - camera.position.x + ctx.canvas.width / 2;
+    const y = (this.position.y) - camera.position.y + ctx.canvas.height / 2;
+
+    this.sprite.render(ctx, { x: x, y: y }, { x: this.sprite.width * 0.05, y: this.sprite.height * 0.05 }, this.centered);
   }
 }
 
@@ -199,6 +213,7 @@ pipe2.position.y = 325;
 pipe2.collisionShape.dimensions.x = 25;
 pipe2.collisionShape.dimensions.y = 150;
 const bird = new BirdEntity();
+bird.sprite = birdSprite;
 
 entities.push(pipe);
 entities.push(pipe2);
@@ -283,13 +298,10 @@ requestAnimationFrame(function loop(timestamp) {
 
   // render
   for (const entity of entities) {
+    entity.render(ctx, camera);
+
     if (entity.collisionShape) {
       entity.collisionShape.render(ctx, camera, entity.position);
-    }
-    if (entity instanceof BirdEntity) {
-      const x = ( entity.position.x ) - camera.position.x + ctx.canvas.width / 2;
-      const y = ( entity.position.y) - camera.position.y + ctx.canvas.height / 2;
-      birdSprite.render(ctx, {x, y}, { x: birdSprite.width * 0.05, y: birdSprite.height * 0.05 }, true);
     }
   }
 
