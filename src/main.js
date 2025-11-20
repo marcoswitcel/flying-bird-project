@@ -4,8 +4,8 @@ console.log('Olá mundo dos games de pássaros!');
 
 const canvas = document.createElement('canvas');
 
-canvas.width = 360;
-canvas.height = 480;
+canvas.width = 400;
+canvas.height = 520;
 
 document.body.append(canvas);
 
@@ -217,7 +217,7 @@ requestAnimationFrame(function loop(timestamp) {
 
       const x = ( entity.position.x ) - camera.position.x + ctx.canvas.width / 2;
       const y = ( entity.position.y) - camera.position.y + ctx.canvas.height / 2;
-      birdSprite.render(ctx, {x, y}, { x: 40, y: 35 }, true);
+      birdSprite.render(ctx, {x, y}, { x: birdSprite.source.width * 0.05, y: birdSprite.source.height * 0.05 }, true);
     }
     
     // console.log(entity.isVisible(camera))
