@@ -89,6 +89,7 @@ class RectCollisionShape extends CollisionShape {
   dimensions = vec2(10, 10);
 
   render(ctx, camera, center) {
+    // @note 'World space' pra 'screen space'
     const x = (center.x - this.dimensions.x / 2) - camera.position.x + ctx.canvas.width / 2;
     const y = (center.y - this.dimensions.y / 2) - camera.position.y + ctx.canvas.height / 2;
 
@@ -206,12 +207,9 @@ requestAnimationFrame(function loop(timestamp) {
       // camera seguindo 'bird'
       camera.position.x = entity.position.x + 100;
 
-      /**
-       * @note João, terminar de implementar e criar uma função pra esse cálculo 
-      const x = ( entity.position.x - entity.collisionShape.dimensions.x / 2) - camera.position.x + ctx.canvas.width / 2;
-      const y = ( entity.position.y - entity.collisionShape.dimensions.y / 2) - camera.position.y + ctx.canvas.height / 2;
+      const x = ( entity.position.x ) - camera.position.x + ctx.canvas.width / 2;
+      const y = ( entity.position.y) - camera.position.y + ctx.canvas.height / 2;
       ctx.drawImage(birdFrame, x,y, 40, 35);
-      */
     }
     
     // console.log(entity.isVisible(camera))
