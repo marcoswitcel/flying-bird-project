@@ -71,11 +71,43 @@ class Vector2 {
   addScalar(number) {
     this.x += number;
     this.y += number;
+
+    return this;
   }
 
   add(vec) {
     this.x += vec.x;
     this.y += vec.y;
+
+    return this;
+  }
+
+  subScalar(number) {
+    this.x -= number;
+    this.y -= number;
+
+    return this;
+  }
+
+  sub(vec) {
+    this.x -= vec.x;
+    this.y -= vec.y;
+
+    return this;
+  }
+
+  mulScalar(x, y = x) {
+    this.x *= x;
+    this.y *= y;
+
+    return this;
+  }
+
+  mul(vec) {
+    this.x *= vec.x;
+    this.y *= vec.y;
+
+    return this;
   }
 }
 
@@ -173,15 +205,43 @@ entities.push(pipe2);
 entities.push(bird);
 
 let paused = false;
+let freeCamera = false;
 
 document.addEventListener('click', () => {
-  // bird.accel.y = -9.8;
+  if (paused || freeCamera) return;
+
   bird.velocity.y = -4;
 });
 
+/**
+ * @type {Vector2 | null} 
+ */
+let mousedown = null;
+document.addEventListener('mouseup', (event) => {
+  mousedown = null;
+});
+document.addEventListener('mousedown', (event) => {
+  mousedown = vec2(event.screenX, event.screenY);
+});
+document.addEventListener('mousemove', (event) => {
+  if (!mousedown || !freeCamera) return;
+
+  const deltaMove = vec2(event.screenX, event.screenY)
+    .sub(mousedown);
+
+  mousedown = vec2(event.screenX, event.screenY);
+
+  camera.position.add(deltaMove.mulScalar(-1));
+})
+
 document.addEventListener('keyup', (event) => {
-  if (event.code === 'KeyP') {
-    paused = !paused;
+  switch (event.code) {
+    case 'KeyP': {
+      paused = !paused;
+    }; break;
+    case 'KeyD': {
+      freeCamera = !freeCamera;
+    }; break;
   }
 });
 
@@ -197,7 +257,7 @@ requestAnimationFrame(function loop(timestamp) {
 
   drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
 
-  if (!paused)
+  if (!paused && !freeCamera)
   for (const entity of entities) {
     if (entity instanceof BirdEntity) {
       // gravidade
@@ -213,11 +273,9 @@ requestAnimationFrame(function loop(timestamp) {
       entity.accel.y = 0;
 
       // camera seguindo 'bird'
-      camera.position.x = entity.position.x + 100;
-
-      const x = ( entity.position.x ) - camera.position.x + ctx.canvas.width / 2;
-      const y = ( entity.position.y) - camera.position.y + ctx.canvas.height / 2;
-      birdSprite.render(ctx, {x, y}, { x: birdSprite.source.width * 0.05, y: birdSprite.source.height * 0.05 }, true);
+      if (!freeCamera) {
+        camera.position.x = entity.position.x + 100;
+      }
     }
     
     // console.log(entity.isVisible(camera))
@@ -227,6 +285,11 @@ requestAnimationFrame(function loop(timestamp) {
   for (const entity of entities) {
     if (entity.collisionShape) {
       entity.collisionShape.render(ctx, camera, entity.position);
+    }
+    if (entity instanceof BirdEntity) {
+      const x = ( entity.position.x ) - camera.position.x + ctx.canvas.width / 2;
+      const y = ( entity.position.y) - camera.position.y + ctx.canvas.height / 2;
+      birdSprite.render(ctx, {x, y}, { x: birdSprite.width * 0.05, y: birdSprite.height * 0.05 }, true);
     }
   }
 
