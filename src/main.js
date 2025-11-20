@@ -19,7 +19,15 @@ img.src = './assets/image/bird/idle/frame-1.png';
 img.onload = () => {
   birdSprite.width = img.width;
   birdSprite.height = img.height;
-}
+};
+
+const pipeImg = new Image();
+const pipeSprite = new Sprite(pipeImg);
+pipeImg.src = './assets/image/pipe/pipe.svg';
+pipeImg.onload = () => {
+  pipeSprite.width = pipeImg.width;
+  pipeSprite.height = pipeImg.height;
+};
 
 
 /**
@@ -207,11 +215,13 @@ pipe.position.x = 250;
 pipe.position.y = 325;
 pipe.collisionShape.dimensions.x = 25;
 pipe.collisionShape.dimensions.y = 100;
+pipe.sprite = pipeSprite;
 const pipe2 = new PipeEntity();
 pipe2.position.x = 350;
 pipe2.position.y = 325;
 pipe2.collisionShape.dimensions.x = 25;
 pipe2.collisionShape.dimensions.y = 150;
+pipe2.sprite = pipeSprite;
 const bird = new BirdEntity();
 bird.sprite = birdSprite;
 
