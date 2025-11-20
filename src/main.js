@@ -1,3 +1,4 @@
+import { Sprite } from './sprite.js';
 
 console.log('Olá mundo dos games de pássaros!');
 
@@ -11,8 +12,15 @@ document.body.append(canvas);
 const ctx = canvas.getContext('2d');
 
 // @note Terminar de implementar
-const birdFrame = new Image();
-birdFrame.src = './assets/image/bird/idle/frame-1.png';
+const img = new Image();
+const birdSprite = new Sprite(img);
+
+img.src = './assets/image/bird/idle/frame-1.png';
+img.onload = () => {
+  birdSprite.width = img.width;
+  birdSprite.height = img.height;
+}
+
 
 /**
  * 
@@ -209,7 +217,7 @@ requestAnimationFrame(function loop(timestamp) {
 
       const x = ( entity.position.x ) - camera.position.x + ctx.canvas.width / 2;
       const y = ( entity.position.y) - camera.position.y + ctx.canvas.height / 2;
-      ctx.drawImage(birdFrame, x,y, 40, 35);
+      birdSprite.render(ctx, {x, y}, { x: 40, y: 35 }, true);
     }
     
     // console.log(entity.isVisible(camera))
