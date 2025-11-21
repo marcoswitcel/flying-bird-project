@@ -164,6 +164,10 @@ class Entity {
    * @type {Sprite|null}
    */
   sprite = null;
+  /**
+   * @type {Vector2}
+   */
+  dimension = vec2(0, 0);
 
   /**
    * 
@@ -181,7 +185,7 @@ class Entity {
     const x = (this.position.x) - camera.position.x + ctx.canvas.width / 2;
     const y = (this.position.y) - camera.position.y + ctx.canvas.height / 2;
 
-    this.sprite.render(ctx, { x: x, y: y }, { x: this.sprite.width * 0.05, y: this.sprite.height * 0.05 }, this.centered);
+    this.sprite.render(ctx, { x: x, y: y }, this.dimension, this.centered);
   }
 }
 
@@ -216,6 +220,7 @@ pipe.position.y = 325;
 pipe.collisionShape.dimensions.x = 25;
 pipe.collisionShape.dimensions.y = 100;
 pipe.sprite = pipeSprite;
+pipe.dimension = vec2(80, 120);
 const pipe2 = new PipeEntity();
 pipe2.position.x = 350;
 pipe2.position.y = 325;
@@ -224,6 +229,7 @@ pipe2.collisionShape.dimensions.y = 150;
 pipe2.sprite = pipeSprite;
 const bird = new BirdEntity();
 bird.sprite = birdSprite;
+bird.dimension = vec2(75, 65);
 
 entities.push(pipe);
 entities.push(pipe2);
