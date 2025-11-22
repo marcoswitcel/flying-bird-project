@@ -227,6 +227,7 @@ pipe2.position.y = 325;
 pipe2.collisionShape.dimensions.x = 25;
 pipe2.collisionShape.dimensions.y = 150;
 pipe2.sprite = pipeSprite;
+pipe2.dimension = vec2(75, 150);
 const bird = new BirdEntity();
 bird.sprite = birdSprite;
 bird.dimension = vec2(75, 65);
