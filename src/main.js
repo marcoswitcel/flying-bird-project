@@ -1,4 +1,5 @@
 import { drawRect, drawRectStroke } from './render.js';
+import { resourceManager } from './resource-manager.js';
 import { Sprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
 
@@ -31,8 +32,7 @@ pipeImg.onload = () => {
   pipeSprite.height = pipeImg.height;
 };
 
-
-
+resourceManager.add('./assets/image/pipe/pipe.svg', 'image','pipe');
 
 
 class CollisionShape {
@@ -106,6 +106,11 @@ class Entity {
 class PipeEntity extends Entity {
   type = 'PipeEntity';
   collisionShape = new RectCollisionShape();
+
+  constructor() {
+    super();
+    this.sprite = resourceManager.getSprite('pipe');
+  }
 }
 
 class BirdEntity extends Entity {
@@ -133,14 +138,12 @@ pipe.position.x = 250;
 pipe.position.y = 325;
 pipe.collisionShape.dimensions.x = 25;
 pipe.collisionShape.dimensions.y = 100;
-pipe.sprite = pipeSprite;
 pipe.dimension = vec2(80, 120);
 const pipe2 = new PipeEntity();
 pipe2.position.x = 350;
 pipe2.position.y = 325;
 pipe2.collisionShape.dimensions.x = 25;
 pipe2.collisionShape.dimensions.y = 150;
-pipe2.sprite = pipeSprite;
 pipe2.dimension = vec2(75, 150);
 const bird = new BirdEntity();
 bird.sprite = birdSprite;
