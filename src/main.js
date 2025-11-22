@@ -203,7 +203,7 @@ requestAnimationFrame(function loop(timestamp) {
 
   drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
 
-  if (!paused && !freeCamera)
+  if (!paused)
   for (const entity of entities) {
     if (entity instanceof BirdEntity) {
       // gravidade
