@@ -49,6 +49,9 @@ export class PipeEntity extends Entity {
   constructor() {
     super();
     this.sprite = resourceManager.getSprite('pipe');
+    this.collisionShape.dimensions.x = 25;
+    this.collisionShape.dimensions.y = 150;
+    this.dimension = vec2(75, 150);
   }
 }
 

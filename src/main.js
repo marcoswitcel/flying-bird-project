@@ -49,15 +49,9 @@ const entities = [];
 const pipe = new PipeEntity();
 pipe.position.x = 250;
 pipe.position.y = 325;
-pipe.collisionShape.dimensions.x = 25;
-pipe.collisionShape.dimensions.y = 100;
-pipe.dimension = vec2(80, 120);
 const pipe2 = new PipeEntity();
 pipe2.position.x = 350;
 pipe2.position.y = 325;
-pipe2.collisionShape.dimensions.x = 25;
-pipe2.collisionShape.dimensions.y = 150;
-pipe2.dimension = vec2(75, 150);
 const bird = new BirdEntity();
 bird.sprite = birdSprite;
 bird.dimension = vec2(75, 65);
@@ -68,6 +62,7 @@ entities.push(bird);
 
 let paused = false;
 let freeCamera = false;
+let isShowCollider = false;
 
 document.addEventListener('click', () => {
   if (paused || freeCamera) return;
@@ -103,6 +98,9 @@ document.addEventListener('keyup', (event) => {
     }; break;
     case 'KeyD': {
       freeCamera = !freeCamera;
+    }; break;
+    case 'KeyO': {
+      isShowCollider = !isShowCollider;
     }; break;
   }
 });
@@ -147,7 +145,7 @@ requestAnimationFrame(function loop(timestamp) {
   for (const entity of entities) {
     entity.render(ctx, camera);
 
-    if (entity.collisionShape) {
+    if (isShowCollider && entity.collisionShape) {
       entity.collisionShape.render(ctx, camera, entity.position);
     }
   }
