@@ -74,11 +74,18 @@ document.addEventListener('click', () => {
  * @type {Vector2 | null} 
  */
 let mousedown = null;
+let mouseMoved = false;
 document.addEventListener('mouseup', (event) => {
+  if (freeCamera && !mouseMoved) {
+    console.log(2)
+  }
+
   mousedown = null;
+  mouseMoved = false;
 });
 document.addEventListener('mousedown', (event) => {
   mousedown = vec2(event.screenX, event.screenY);
+  mouseMoved = false;
 });
 document.addEventListener('mousemove', (event) => {
   if (!mousedown || !freeCamera) return;
@@ -87,6 +94,7 @@ document.addEventListener('mousemove', (event) => {
     .sub(mousedown);
 
   mousedown = vec2(event.screenX, event.screenY);
+  mouseMoved = true;
 
   camera.position.add(deltaMove.mulScalar(-1));
 })
