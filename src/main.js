@@ -77,23 +77,40 @@ let mousedown = null;
 let mouseMoved = false;
 document.addEventListener('mouseup', (event) => {
   if (freeCamera && !mouseMoved) {
-    console.log(2)
+    // @todo João, mover esse código
+    const clickInWorldSpace = camera.position
+      .copy()
+      .add(mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
+    
+    let found = false;
+    for (const entity of entities) {
+      if (Math.abs(clickInWorldSpace.x - entity.position.x) <= entity.dimension.x / 2 && Math.abs(clickInWorldSpace.y - entity.position.y) <= entity.dimension.y / 2) {
+        console.log(entity);
+        found = true;
+      }
+    }
+
+    if (!found) {
+      const pipe = new PipeEntity();
+      pipe.position = clickInWorldSpace.copy();
+      entities.push(pipe);
+    }
   }
 
   mousedown = null;
   mouseMoved = false;
 });
 document.addEventListener('mousedown', (event) => {
-  mousedown = vec2(event.screenX, event.screenY);
+  mousedown = vec2(event.offsetX, event.offsetY);
   mouseMoved = false;
 });
 document.addEventListener('mousemove', (event) => {
   if (!mousedown || !freeCamera) return;
 
-  const deltaMove = vec2(event.screenX, event.screenY)
+  const deltaMove = vec2(event.offsetX, event.offsetY)
     .sub(mousedown);
 
-  mousedown = vec2(event.screenX, event.screenY);
+  mousedown = vec2(event.offsetX, event.offsetY);
   mouseMoved = true;
 
   camera.position.add(deltaMove.mulScalar(-1));

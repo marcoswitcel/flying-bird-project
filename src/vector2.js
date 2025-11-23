@@ -9,6 +9,11 @@ export class Vector2 {
    */
   y;
  
+  /**
+   * 
+   * @param {number} x 
+   * @param {number} y 
+   */
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -28,9 +33,9 @@ export class Vector2 {
     return this;
   }
 
-  subScalar(number) {
+  subScalar(number, number2 = number) {
     this.x -= number;
-    this.y -= number;
+    this.y -= number2;
 
     return this;
   }
@@ -54,6 +59,10 @@ export class Vector2 {
     this.y *= vec.y;
 
     return this;
+  }
+
+  copy() {
+    return new Vector2(this.x, this.y);
   }
 }
 
