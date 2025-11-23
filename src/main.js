@@ -1,3 +1,5 @@
+import { Camera } from './camera.js';
+import { CollisionShape, RectCollisionShape } from './collision.js';
 import { drawRect, drawRectStroke } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { Sprite } from './sprite.js';
@@ -34,35 +36,6 @@ pipeImg.onload = () => {
 
 resourceManager.add('./assets/image/pipe/pipe.svg', 'image','pipe');
 
-
-class CollisionShape {
-  color = 'black';
-
-  /**
-   * 
-   * @param {CanvasRenderingContext2D} ctx 
-   * @param {Camera} camera
-   * @param {{ x: number, y: number }} center centro da figura no 'world space'
-   */
-  render(ctx, camera, center) {}
-}
-
-class RectCollisionShape extends CollisionShape {
-  dimensions = vec2(10, 10);
-
-  render(ctx, camera, center) {
-    // @note 'World space' pra 'screen space'
-    const x = (center.x - this.dimensions.x / 2) - camera.position.x + ctx.canvas.width / 2;
-    const y = (center.y - this.dimensions.y / 2) - camera.position.y + ctx.canvas.height / 2;
-
-    drawRectStroke(ctx, x, y, this.dimensions.x, this.dimensions.y, 2, this.color)
-  }
-}
-
-class Camera {
-  position = vec2();
-  dimensions = vec2(100, 100);
-}
 
 
 class Entity {
