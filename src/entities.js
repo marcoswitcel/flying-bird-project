@@ -64,5 +64,7 @@ export class BirdEntity extends Entity {
   constructor() {
     super();
     this.collisionShape.color = 'yellow';
+    this.sprite = resourceManager.getSprite('bird');;
+    this.dimension = vec2(75, 65);
   }
 }

@@ -17,17 +17,8 @@ document.body.append(canvas);
 
 const ctx = canvas.getContext('2d');
 
-// @note Terminar de implementar
-const img = new Image();
-const birdSprite = new Sprite(img);
-
-img.src = './assets/image/bird/idle/frame-1.png';
-img.onload = () => {
-  birdSprite.width = img.width;
-  birdSprite.height = img.height;
-};
-
 resourceManager.add('./assets/image/pipe/pipe.svg', 'image','pipe');
+resourceManager.add('./assets/image/bird/idle/frame-1.png', 'image','bird');
 
 
 const camera = new Camera();
@@ -45,8 +36,6 @@ const pipe2 = new PipeEntity();
 pipe2.position.x = 350;
 pipe2.position.y = 325;
 const bird = new BirdEntity();
-bird.sprite = birdSprite;
-bird.dimension = vec2(75, 65);
 
 entities.push(pipe);
 entities.push(pipe2);
