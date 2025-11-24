@@ -27,14 +27,6 @@ img.onload = () => {
   birdSprite.height = img.height;
 };
 
-const pipeImg = new Image();
-const pipeSprite = new Sprite(pipeImg);
-pipeImg.src = './assets/image/pipe/pipe.svg';
-pipeImg.onload = () => {
-  pipeSprite.width = pipeImg.width;
-  pipeSprite.height = pipeImg.height;
-};
-
 resourceManager.add('./assets/image/pipe/pipe.svg', 'image','pipe');
 
 
