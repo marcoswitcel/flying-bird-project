@@ -1,5 +1,5 @@
 import { Camera } from './camera.js';
-import { CollisionShape, RectCollisionShape } from './collision.js';
+import { BoundingRect, CollisionShape, RectCollisionShape } from './collision.js';
 import { BirdEntity, Entity, PipeEntity } from './entities.js';
 import { drawRect, drawRectStroke } from './render.js';
 import { resourceManager } from './resource-manager.js';
@@ -143,8 +143,17 @@ requestAnimationFrame(function loop(timestamp) {
         camera.position.x = entity.position.x + 100;
       }
     }
-    
-    // console.log(entity.isVisible(camera))
+  }
+
+  if (!paused)
+  for (const entity of entities) {
+    if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
+      const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
+      const rectBird = new BoundingRect(bird.position, bird.collisionShape.dimensions);
+
+      // @todo João, terminar de ajustar aqui, não colidindo corretamente
+      entity.collisionShape.color = rectBird.isIntersecting(rectEntity) ? 'red' : 'black';
+    }
   }
 
   // render

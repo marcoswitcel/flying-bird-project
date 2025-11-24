@@ -1,6 +1,7 @@
 import { Camera } from './camera.js';
+import { Entity } from './entities.js';
 import { drawRectStroke } from './render.js';
-import { vec2 } from './vector2.js';
+import { vec2, Vector2 } from './vector2.js';
 
 export class CollisionShape {
   color = 'black';
@@ -24,4 +25,56 @@ export class RectCollisionShape extends CollisionShape {
 
     drawRectStroke(ctx, x, y, this.dimensions.x, this.dimensions.y, 2, this.color)
   }
+}
+
+export class BoundingRect {
+  position;
+  dimensions;
+
+  /**
+   * 
+   * @param {Vector2} position 
+   * @param {Vector2} dimension 
+   */
+  constructor(position, dimension) {
+    this.position = position;
+    this.dimensions = dimension;
+  }
+
+  /**
+   * 
+   * @param {BoundingRect} rect 
+   * @returns {boolean}
+   */
+  isIntersecting(rect) {
+    const aHalfDimension = this.dimensions.x / 2;
+    const bHalfDimension = rect.dimensions.x / 2;
+    const aYHalfDimension = rect.dimensions.y / 2;
+    const bYHalfDimension = rect.dimensions.y / 2;
+    
+    const aXStart = this.position.x - aHalfDimension;
+    const aXEnd = this.position.x + aHalfDimension;
+    const bXStart = rect.position.x - bHalfDimension;
+    const bXEnd = rect.position.x + bHalfDimension;
+
+    const aYStart = this.position.y - aYHalfDimension;
+    const aYEnd = this.position.y + aYHalfDimension;
+    const bYStart = rect.position.y - bYHalfDimension;
+    const bYEnd = rect.position.y + bYHalfDimension;
+
+    return ((aXStart >= bXStart && aXStart <= bXEnd) || (aXEnd >= bXStart && aXEnd <= bXEnd)) &&
+      ((aYStart >= bYStart && aYStart <= bYEnd) || (aYEnd >= bYStart && aYEnd <= bYEnd));
+  }
+
+}
+
+/**
+ * 
+  * @param {Entity} entityA
+  * @param {Entity} entityB 
+  * @returns {boolean}
+  */
+export function isCollidignWith(entityA, entityB) {
+
+  return false;
 }
