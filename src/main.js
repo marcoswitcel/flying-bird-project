@@ -19,6 +19,7 @@ const ctx = canvas.getContext('2d');
 
 resourceManager.add('./assets/image/pipe/pipe.svg', 'image','pipe');
 resourceManager.add('./assets/image/bird/idle/frame-1.png', 'image','bird');
+resourceManager.add('./assets/image/floor/floor.svg', 'image','floor');
 
 
 const camera = new Camera();
@@ -36,10 +37,18 @@ const pipe2 = new PipeEntity();
 pipe2.position.x = 350;
 pipe2.position.y = 325;
 const bird = new BirdEntity();
+const floor = new Entity();
+floor.position.x = 150;
+floor.position.y = 480;
+// @toodo João, avaliar como usar o createPattern pra replicar a imagem e ter apenas uma entidade grande para o chão
+floor.sprite = resourceManager.getSprite('floor');
+floor.dimension.x = 300;
+floor.dimension.y = 25;
 
 entities.push(pipe);
 entities.push(pipe2);
 entities.push(bird);
+entities.push(floor);
 
 let paused = false;
 let freeCamera = false;
