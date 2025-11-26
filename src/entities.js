@@ -32,6 +32,12 @@ export class Entity {
       (this.position.y >= (camera.position.y - camera.dimensions.y / 2) && this.position.y <= (camera.position.y + camera.dimensions.y / 2));
   }
 
+  /**
+   * 
+   * @param {CanvasRenderingContext2D} ctx 
+   * @param {Camera} camera 
+   * @returns 
+   */
   render(ctx, camera) {
     if (!this.sprite) return;
 
@@ -66,5 +72,37 @@ export class BirdEntity extends Entity {
     this.collisionShape.color = 'yellow';
     this.sprite = resourceManager.getSprite('bird');;
     this.dimension = vec2(75, 65);
+  }
+}
+
+export class FloorEntity extends Entity {
+  type = 'FloorEntity';
+  collisionShape = new RectCollisionShape();
+
+  constructor() {
+    super();
+    this.position.x = 150;
+    this.position.y = 480;
+    // @toodo João, avaliar como usar o createPattern pra replicar a imagem e ter apenas uma entidade grande para o chão
+    this.sprite = resourceManager.getSprite('floor');;
+    this.dimension.x = 300;
+    this.dimension.y = 25;
+  }
+
+  /**
+   * 
+   * @param {CanvasRenderingContext2D} ctx 
+   * @param {Camera} camera 
+   * @returns 
+   */
+  render(ctx, camera) {
+    if (!this.sprite) return;
+
+    const x = (this.position.x) - camera.position.x + ctx.canvas.width / 2;
+    const y = (this.position.y) - camera.position.y + ctx.canvas.height / 2;
+
+    ctx.fillStyle = ctx.createPattern(this.sprite.source, 'repeat-y');
+
+    ctx.fillRect(x, y, this.dimension.x, this.dimension.y);
   }
 }

@@ -1,6 +1,6 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, RectCollisionShape } from './collision.js';
-import { BirdEntity, Entity, PipeEntity } from './entities.js';
+import { BirdEntity, Entity, FloorEntity, PipeEntity } from './entities.js';
 import { drawRect, drawRectStroke } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { Sprite } from './sprite.js';
@@ -37,13 +37,7 @@ const pipe2 = new PipeEntity();
 pipe2.position.x = 350;
 pipe2.position.y = 325;
 const bird = new BirdEntity();
-const floor = new Entity();
-floor.position.x = 150;
-floor.position.y = 480;
-// @toodo João, avaliar como usar o createPattern pra replicar a imagem e ter apenas uma entidade grande para o chão
-floor.sprite = resourceManager.getSprite('floor');
-floor.dimension.x = 300;
-floor.dimension.y = 25;
+const floor = new FloorEntity();
 
 entities.push(pipe);
 entities.push(pipe2);
