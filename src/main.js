@@ -48,6 +48,7 @@ let paused = false;
 let freeCamera = false;
 let isShowCollider = false;
 let isRenderSprite = true;
+let isShowMemory = false;
 
 document.addEventListener('click', () => {
   if (paused || freeCamera) return;
@@ -109,6 +110,9 @@ document.addEventListener('keyup', (event) => {
     case 'KeyS': {
       isRenderSprite = !isRenderSprite;
     }; break;
+    case 'KeyM': {
+      isShowMemory = !isShowMemory;
+    }; break;
     case 'KeyD': {
       freeCamera = !freeCamera;
     }; break;
@@ -127,6 +131,8 @@ requestAnimationFrame(function loop(timestamp) {
     requestAnimationFrame(loop)  
     return;
   }
+
+  const starTime = performance.now();
 
   drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
 
@@ -170,6 +176,16 @@ requestAnimationFrame(function loop(timestamp) {
     if (isShowCollider && entity.collisionShape) {
       entity.collisionShape.render(ctx, camera, entity.position);
     }
+  }
+
+  const endTime = performance.now();
+
+  if (isShowMemory && performance.memory) {
+    ctx.fillStyle = 'white';
+    ctx.font = '24px serif';
+    ctx.fillText('JS Heap: ' + performance.memory.usedJSHeapSize, 25, 25);
+    ctx.fillText('JS Heap Total: ' + performance.memory.totalJSHeapSize, 25, 45);
+    ctx.fillText('Time: ' + (endTime - starTime).toFixed(4), 25, 65);
   }
 
   requestAnimationFrame(loop)
