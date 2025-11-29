@@ -47,6 +47,7 @@ entities.push(floor);
 let paused = false;
 let freeCamera = false;
 let isShowCollider = false;
+let isRenderSprite = true;
 
 document.addEventListener('click', () => {
   if (paused || freeCamera) return;
@@ -105,6 +106,9 @@ document.addEventListener('keyup', (event) => {
     case 'KeyP': {
       paused = !paused;
     }; break;
+    case 'KeyS': {
+      isRenderSprite = !isRenderSprite;
+    }; break;
     case 'KeyD': {
       freeCamera = !freeCamera;
     }; break;
@@ -161,7 +165,7 @@ requestAnimationFrame(function loop(timestamp) {
 
   // render
   for (const entity of entities) {
-    entity.render(ctx, camera);
+    if (isRenderSprite) entity.render(ctx, camera);
 
     if (isShowCollider && entity.collisionShape) {
       entity.collisionShape.render(ctx, camera, entity.position);
