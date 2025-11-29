@@ -75,18 +75,19 @@ export class BirdEntity extends Entity {
   }
 }
 
-export class FloorEntity extends Entity {
-  type = 'FloorEntity';
+export class TiledEntity extends Entity {
+  type = 'TiledEntity';
   collisionShape = new RectCollisionShape();
 
   constructor() {
     super();
-    this.position.x = 150;
+    this.position.x = 0;
     this.position.y = 480;
     // @toodo João, avaliar como usar o createPattern pra replicar a imagem e ter apenas uma entidade grande para o chão
     this.sprite = resourceManager.getSprite('floor');;
-    this.dimension.x = 300;
-    this.dimension.y = 25;
+    // @todo João, otimizar para não desenhar fora da tela e não computar, testar com valores altos no 'x', tipo, 100000
+    this.dimension.x = 10;
+    this.dimension.y = 1;
   }
 
   /**
@@ -98,11 +99,19 @@ export class FloorEntity extends Entity {
   render(ctx, camera) {
     if (!this.sprite) return;
 
-    const x = (this.position.x) - camera.position.x + ctx.canvas.width / 2;
-    const y = (this.position.y) - camera.position.y + ctx.canvas.height / 2;
+    const x = (this.position.x - (this.dimension.x * this.sprite.width) / 2) - camera.position.x + ctx.canvas.width / 2;
+    const y = (this.position.y - (this.dimension.y * this.sprite.height) / 2) - camera.position.y + ctx.canvas.height / 2;
 
-    ctx.fillStyle = ctx.createPattern(this.sprite.source, 'repeat-y');
+    const dimensions = { x: this.sprite.width, y: this.sprite.height };
+    let position = { x: 0, y: 0 };
 
-    ctx.fillRect(x, y, this.dimension.x, this.dimension.y);
+    for (let i = 0; i < this.dimension.x; i++) {
+      for (let j = 0; j < this.dimension.y; j++) {
+        position.x = x + this.sprite.width * i;
+        position.y = y + this.sprite.height * j;
+
+        this.sprite.render(ctx, position, dimensions, false);
+      }
+    }
   }
 }

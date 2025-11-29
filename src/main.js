@@ -1,6 +1,6 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, RectCollisionShape } from './collision.js';
-import { BirdEntity, Entity, FloorEntity, PipeEntity } from './entities.js';
+import { BirdEntity, Entity, TiledEntity, PipeEntity } from './entities.js';
 import { drawRect, drawRectStroke } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { Sprite } from './sprite.js';
@@ -37,7 +37,7 @@ const pipe2 = new PipeEntity();
 pipe2.position.x = 350;
 pipe2.position.y = 325;
 const bird = new BirdEntity();
-const floor = new FloorEntity();
+const floor = new TiledEntity();
 
 entities.push(pipe);
 entities.push(pipe2);
