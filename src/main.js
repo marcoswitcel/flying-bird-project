@@ -171,4 +171,3 @@ requestAnimationFrame(function loop(timestamp) {
   requestAnimationFrame(loop)
 });
 
-

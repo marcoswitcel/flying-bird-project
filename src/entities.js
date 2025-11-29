@@ -88,6 +88,8 @@ export class TiledEntity extends Entity {
     // @todo João, otimizar para não desenhar fora da tela e não computar, testar com valores altos no 'x', tipo, 100000
     this.dimension.x = 10;
     this.dimension.y = 1;
+
+    this.collisionShape = new RectCollisionShape();
   }
 
   /**
@@ -98,6 +100,11 @@ export class TiledEntity extends Entity {
    */
   render(ctx, camera) {
     if (!this.sprite) return;
+
+    // @todo João, não deveria recomputar isso toda vez, porém na hora de criação da entidade não é garantido que a largura
+    // do sprite já seja conhecida, ela depende do carregamento da imagem... Isso vai mudar eventualmente, por hora fica assim.
+    this.collisionShape.dimensions.x = this.sprite.width * this.dimension.x;
+    this.collisionShape.dimensions.y = this.sprite.height * this.dimension.y;
 
     const x = (this.position.x - (this.dimension.x * this.sprite.width) / 2) - camera.position.x + ctx.canvas.width / 2;
     const y = (this.position.y - (this.dimension.y * this.sprite.height) / 2) - camera.position.y + ctx.canvas.height / 2;
