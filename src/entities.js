@@ -11,7 +11,7 @@ export class Entity {
    * @type {number}
    */
   id = idSequence++;
-  type = 'Entity';
+  type;
   centered = true;
   position = vec2();
   /**
@@ -27,6 +27,10 @@ export class Entity {
    * @type {Vector2}
    */
   dimension = vec2(0, 0);
+
+  constructor() {
+    this.type = this.constructor.name;
+  }
 
   /**
    * 
