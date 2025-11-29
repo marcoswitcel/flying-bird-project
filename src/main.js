@@ -61,26 +61,19 @@ document.addEventListener('click', () => {
  */
 let mousedown = null;
 let mouseMoved = false;
+/**
+ * @type {Entity|null}
+ */
+let selectedEntity = null;
 document.addEventListener('mouseup', (event) => {
-  if (freeCamera && !mouseMoved) {
+  if (freeCamera && !mouseMoved && !selectedEntity) {
     // @todo João, mover esse código
     const clickInWorldSpace = camera.position
       .copy()
       .add(mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
-    
-    let found = false;
-    for (const entity of entities) {
-      if (Math.abs(clickInWorldSpace.x - entity.position.x) <= entity.dimension.x / 2 && Math.abs(clickInWorldSpace.y - entity.position.y) <= entity.dimension.y / 2) {
-        console.log(entity);
-        found = true;
-      }
-    }
-
-    if (!found) {
-      const pipe = new PipeEntity();
-      pipe.position = clickInWorldSpace.copy();
-      entities.push(pipe);
-    }
+    const pipe = new PipeEntity();
+    pipe.position = clickInWorldSpace.copy();
+    entities.push(pipe);
   }
 
   mousedown = null;
@@ -89,6 +82,18 @@ document.addEventListener('mouseup', (event) => {
 document.addEventListener('mousedown', (event) => {
   mousedown = vec2(event.offsetX, event.offsetY);
   mouseMoved = false;
+
+  const clickInWorldSpace = camera.position
+    .copy()
+    .add(mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
+  
+  selectedEntity = null;
+  for (const entity of entities) {
+    if (Math.abs(clickInWorldSpace.x - entity.position.x) <= entity.dimension.x / 2 && Math.abs(clickInWorldSpace.y - entity.position.y) <= entity.dimension.y / 2) {
+      console.log(entity);
+      selectedEntity = entity;
+    }
+  }
 });
 document.addEventListener('mousemove', (event) => {
   if (!mousedown || !freeCamera) return;
@@ -99,7 +104,11 @@ document.addEventListener('mousemove', (event) => {
   mousedown = vec2(event.offsetX, event.offsetY);
   mouseMoved = true;
 
-  camera.position.add(deltaMove.mulScalar(-1));
+  if (selectedEntity) {
+    selectedEntity.position.add(deltaMove);
+  } else {
+    camera.position.add(deltaMove.mulScalar(-1));
+  }
 })
 
 document.addEventListener('keyup', (event) => {
@@ -115,6 +124,11 @@ document.addEventListener('keyup', (event) => {
     }; break;
     case 'KeyD': {
       freeCamera = !freeCamera;
+    }; break;
+    case 'KeyE': {
+      if (selectedEntity) {
+        console.log(selectedEntity.serialize());
+      }
     }; break;
     case 'KeyO': {
       isShowCollider = !isShowCollider;

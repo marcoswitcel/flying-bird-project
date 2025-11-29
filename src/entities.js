@@ -4,7 +4,13 @@ import { resourceManager } from './resource-manager.js';
 import { Sprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
 
+
+let idSequence = 0;
 export class Entity {
+  /**
+   * @type {number}
+   */
+  id = idSequence++;
   type = 'Entity';
   centered = true;
   position = vec2();
@@ -45,6 +51,14 @@ export class Entity {
     const y = (this.position.y) - camera.position.y + ctx.canvas.height / 2;
 
     this.sprite.render(ctx, { x: x, y: y }, this.dimension, this.centered);
+  }
+
+  /**
+   * Serializa os dados para gerar a versão do level
+   * @returns 
+   */
+  serialize() {
+    return JSON.stringify(this);
   }
 }
 
