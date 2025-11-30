@@ -91,6 +91,7 @@ export class BirdEntity extends Entity {
    * @type {import('./sprite.js').RenderableSprite|null}
    */
   sprite;
+  hitted = false;
 
   constructor() {
     super();

@@ -23,6 +23,7 @@ resourceManager.add('./assets/image/bird/idle/frame-1.png', 'image','bird.1');
 resourceManager.add('./assets/image/bird/idle/frame-2.png', 'image','bird.2');
 resourceManager.add('./assets/image/bird/idle/frame-3.png', 'image','bird.3');
 resourceManager.add('./assets/image/bird/idle/frame-4.png', 'image','bird.4');
+resourceManager.add('./assets/image/bird/got-hit/frame-1.png', 'image','bird.hit');
 resourceManager.add('./assets/image/floor/floor.svg', 'image','floor');
 
 
@@ -64,7 +65,9 @@ let isShowMemory = false;
 document.addEventListener('click', () => {
   if (paused || freeCamera) return;
 
-  bird.velocity.y = -4;
+  if (!bird.hitted) {
+    bird.velocity.y = -4;
+  }
 });
 
 /**
@@ -172,7 +175,11 @@ requestAnimationFrame(function loop(timestamp) {
 
       entity.velocity.add(entity.accel);
       // por hora velocidade horizontal fixa
-      entity.velocity.x = 1;
+      if (!entity.hitted) {
+        entity.velocity.x = 1;
+      } else {
+        entity.velocity.x = 0;
+      }
       entity.position.add(entity.velocity);
 
       // reset aceleração
@@ -192,7 +199,12 @@ requestAnimationFrame(function loop(timestamp) {
       const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
       const rectBird = new BoundingRect(bird.position, bird.collisionShape.dimensions);
 
-      entity.collisionShape.color = rectBird.isIntersecting(rectEntity) ? 'red' : 'black';
+      if (rectBird.isIntersecting(rectEntity)) {
+        entity.collisionShape.color = 'red';
+        bird.hitted = true;
+      } else {
+        entity.collisionShape.color = 'black';
+      }
     }
   }
 
@@ -200,6 +212,10 @@ requestAnimationFrame(function loop(timestamp) {
   for (const entity of entities) {
     // @todo João, não funcionando para a TiledEntity
     // if (!entity.getVisibleRect().isIntersecting(camera)) continue;
+    if (entity instanceof BirdEntity && entity.hitted) {
+      entity.sprite = resourceManager.getSprite('bird.hit');
+      console.log(entity.sprite)
+    }
 
     if (isRenderSprite) entity.render(ctx, camera);
 
