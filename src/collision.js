@@ -73,7 +73,7 @@ export class BoundingRect {
   isIntersecting(rect) {
     const aHalfDimension = this.dimensions.x / 2;
     const bHalfDimension = rect.dimensions.x / 2;
-    const aYHalfDimension = rect.dimensions.y / 2;
+    const aYHalfDimension = this.dimensions.y / 2;
     const bYHalfDimension = rect.dimensions.y / 2;
     
     const aXStart = this.position.x - aHalfDimension;
@@ -90,15 +90,4 @@ export class BoundingRect {
       ((aYStart >= bYStart && aYStart <= bYEnd) || (aYEnd >= bYStart && aYEnd <= bYEnd));
   }
 
-}
-
-/**
- * 
-  * @param {Entity} entityA
-  * @param {Entity} entityB 
-  * @returns {boolean}
-  */
-export function isCollidignWith(entityA, entityB) {
-
-  return false;
 }

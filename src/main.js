@@ -182,7 +182,6 @@ requestAnimationFrame(function loop(timestamp) {
       const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
       const rectBird = new BoundingRect(bird.position, bird.collisionShape.dimensions);
 
-      // @todo João, terminar de ajustar aqui, não colidindo corretamente
       entity.collisionShape.color = rectBird.isIntersecting(rectEntity) ? 'red' : 'black';
     }
   }
