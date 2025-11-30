@@ -49,10 +49,16 @@ export class ResourceManager {
 
     const sprite = new Sprite(img);
 
-    img.onload = () => {
+    // @todo João, falta lidar com erro aqui..., usar textura padrão
+    if (img.complete) {
       sprite.width = img.width;
       sprite.height = img.height;
-    };
+    } else {
+      img.onload = () => {
+        sprite.width = img.width;
+        sprite.height = img.height;
+      };
+    }
 
     this.map.set(spriteKey, sprite);
 
