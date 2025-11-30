@@ -100,11 +100,11 @@ export class TiledEntity extends Entity {
   constructor() {
     super();
     this.position.x = 0;
-    this.position.y = 480;
+    this.position.y = 525;
     // @toodo João, avaliar como usar o createPattern pra replicar a imagem e ter apenas uma entidade grande para o chão
     this.sprite = resourceManager.getSprite('floor');;
     // @todo João, otimizar para não desenhar fora da tela e não computar, testar com valores altos no 'x', tipo, 100000
-    this.dimension.x = 10;
+    this.dimension.x = 5;
     this.dimension.y = 1;
 
     this.collisionShape = new RectCollisionShape();
