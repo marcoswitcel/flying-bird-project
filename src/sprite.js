@@ -1,4 +1,13 @@
 
+/**
+ * @typedef {{
+ *  source: CanvasImageSource,
+ *  width: number,
+ *  height: number,
+ *  render: (ctx: CanvasRenderingContext2D, position: { x: number, y: number, }, dimensions: { x: number, y: number, }, centered: boolean ) => void
+ * }} RenderableSprite
+ */
+
 export class Sprite {
   source;
   width;
@@ -37,5 +46,56 @@ export class Sprite {
     }
 
     ctx.drawImage(this.source, this.offsetX, this.offsetY, this.width, this.height, x, y, dimensions.x, dimensions.y);
+  }
+}
+
+export class AnimatedSprite {
+  /**
+   * @type {Sprite[]}
+   */
+  frames;
+
+  /**
+   * @type {number}
+   */
+  length;
+
+  /**
+   * 
+   * @param {Sprite[]} frames 
+   * @param {number} length 
+   */
+  constructor(frames, length) {
+    this.frames = frames;
+    this.length = length;
+  }
+
+  get width() {
+    return this.currentFrame.width;
+  }
+
+  get height() {
+    return this.currentFrame.height;
+  }
+
+  get source() {
+    return this.currentFrame.source;
+  }
+
+  get currentFrame() {
+    const tick = performance.now();
+    // @todo João, ajustar isso aqui...
+    const index = ~~(tick / this.length * 1000) % this.frames.length;
+    return this.frames[index];
+  }
+
+  /**
+   * @param {CanvasRenderingContext2D} ctx 
+   * @param {{ x: number, y: number }} position coordenada no espaço da tela
+   * @param {{ x: number, y: number }} dimensions em pixel
+   * @param {boolean} centered
+   */
+  render(ctx, position, dimensions, centered = false ) {
+    this.currentFrame.render(ctx, position, dimensions, centered);
   }
 }

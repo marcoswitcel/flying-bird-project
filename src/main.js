@@ -3,7 +3,7 @@ import { BoundingRect, CollisionShape, drawRectBorder, RectCollisionShape } from
 import { BirdEntity, Entity, TiledEntity, PipeEntity } from './entities.js';
 import { drawRect, drawRectStroke } from './render.js';
 import { resourceManager } from './resource-manager.js';
-import { Sprite } from './sprite.js';
+import { AnimatedSprite, Sprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
 
 console.log('Olá mundo dos games de pássaros!');
@@ -19,6 +19,10 @@ const ctx = canvas.getContext('2d');
 
 resourceManager.add('./assets/image/pipe/pipe.svg', 'image','pipe');
 resourceManager.add('./assets/image/bird/idle/frame-1.png', 'image','bird');
+resourceManager.add('./assets/image/bird/idle/frame-1.png', 'image','bird.1');
+resourceManager.add('./assets/image/bird/idle/frame-2.png', 'image','bird.2');
+resourceManager.add('./assets/image/bird/idle/frame-3.png', 'image','bird.3');
+resourceManager.add('./assets/image/bird/idle/frame-4.png', 'image','bird.4');
 resourceManager.add('./assets/image/floor/floor.svg', 'image','floor');
 
 
@@ -47,6 +51,8 @@ entities.push(pipe);
 entities.push(pipe2);
 entities.push(bird);
 entities.push(floor);
+
+bird.sprite = new AnimatedSprite([ resourceManager.getSprite('bird.1'), resourceManager.getSprite('bird.2'), resourceManager.getSprite('bird.3'), resourceManager.getSprite('bird.4') ], 2);
 
 let paused = false;
 let freeCamera = false;
@@ -209,11 +215,13 @@ requestAnimationFrame(function loop(timestamp) {
 
   const endTime = performance.now();
 
-  if (isShowMemory && performance.memory) {
+  // @ts-expect-error
+  const memory = performance.memory;
+  if (isShowMemory && memory) {
     ctx.fillStyle = 'white';
     ctx.font = '24px serif';
-    ctx.fillText('JS Heap: ' + performance.memory.usedJSHeapSize, 25, 25);
-    ctx.fillText('JS Heap Total: ' + performance.memory.totalJSHeapSize, 25, 45);
+    ctx.fillText('JS Heap: ' + memory.usedJSHeapSize, 25, 25);
+    ctx.fillText('JS Heap Total: ' + memory.totalJSHeapSize, 25, 45);
     ctx.fillText('Time: ' + (endTime - starTime).toFixed(4), 25, 65);
   }
 
