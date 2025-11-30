@@ -143,4 +143,8 @@ export class TiledEntity extends Entity {
       }
     }
   }
+
+  getVisibleRect() {
+    return new BoundingRect(this.position, { x: this.dimension.x * this.sprite.width, y: this.dimension.y * this.sprite.height, });
+  }
 }

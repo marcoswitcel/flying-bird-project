@@ -57,8 +57,8 @@ export class BoundingRect {
 
   /**
    * 
-   * @param {Vector2} position 
-   * @param {Vector2} dimension 
+   * @param {{ x: number, y: number,}} position 
+   * @param {{ x: number, y: number,}} dimension 
    */
   constructor(position, dimension) {
     this.position = position;
@@ -67,7 +67,7 @@ export class BoundingRect {
 
   /**
    * 
-   * @param {BoundingRect} rect 
+   * @param {{ position: { x: number, y: number,}, dimensions: { x: number, y: number,}, }} rect 
    * @returns {boolean}
    */
   isIntersecting(rect) {

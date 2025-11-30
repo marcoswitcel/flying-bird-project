@@ -25,6 +25,8 @@ resourceManager.add('./assets/image/floor/floor.svg', 'image','floor');
 const camera = new Camera();
 camera.position.x = ctx.canvas.width / 2;
 camera.position.y = ctx.canvas.height / 2;
+camera.dimensions.x = ctx.canvas.width;
+camera.dimensions.y = ctx.canvas.height;
 
 /**
  * @type {Entity[]}
@@ -32,10 +34,12 @@ camera.position.y = ctx.canvas.height / 2;
 const entities = [];
 const pipe = new PipeEntity();
 pipe.position.x = 250;
-pipe.position.y = 325;
+pipe.position.y = 405;
 const pipe2 = new PipeEntity();
-pipe2.position.x = 350;
-pipe2.position.y = 325;
+pipe2.position.x = 450;
+pipe2.position.y = 405;
+pipe2.collisionShape.dimensions.y *= 2;
+pipe2.dimension.y *= 2;
 const bird = new BirdEntity();
 const floor = new TiledEntity();
 
@@ -188,6 +192,9 @@ requestAnimationFrame(function loop(timestamp) {
 
   // render
   for (const entity of entities) {
+    // @todo João, não funcionando para a TiledEntity
+    // if (!entity.getVisibleRect().isIntersecting(camera)) continue;
+
     if (isRenderSprite) entity.render(ctx, camera);
 
     if (isShowDimension) {
