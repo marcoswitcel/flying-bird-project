@@ -1,5 +1,5 @@
 import { Camera } from './camera.js';
-import { BoundingRect, CollisionShape, RectCollisionShape } from './collision.js';
+import { BoundingRect, CollisionShape, drawRectBorder, RectCollisionShape } from './collision.js';
 import { BirdEntity, Entity, TiledEntity, PipeEntity } from './entities.js';
 import { drawRect, drawRectStroke } from './render.js';
 import { resourceManager } from './resource-manager.js';
@@ -47,6 +47,7 @@ entities.push(floor);
 let paused = false;
 let freeCamera = false;
 let isShowCollider = false;
+let isShowDimension = false;
 let isRenderSprite = true;
 let isShowMemory = false;
 
@@ -123,6 +124,9 @@ document.addEventListener('keyup', (event) => {
       isShowMemory = !isShowMemory;
     }; break;
     case 'KeyD': {
+      isShowDimension = !isShowDimension;
+    }; break;
+    case 'KeyF': {
       freeCamera = !freeCamera;
     }; break;
     case 'KeyE': {
@@ -186,6 +190,11 @@ requestAnimationFrame(function loop(timestamp) {
   // render
   for (const entity of entities) {
     if (isRenderSprite) entity.render(ctx, camera);
+
+    if (isShowDimension) {
+      const dimensions = (entity.type === 'TiledEntity') ? { x: entity.sprite.width * entity.dimension.x, y: entity.sprite.height * entity.dimension.y, } : entity.dimension;
+      drawRectBorder(ctx, camera, entity.position, dimensions, 'black', true);
+    }
 
     if (isShowCollider && entity.collisionShape) {
       entity.collisionShape.render(ctx, camera, entity.position);

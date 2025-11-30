@@ -3,6 +3,30 @@ import { Entity } from './entities.js';
 import { drawRectStroke } from './render.js';
 import { vec2, Vector2 } from './vector2.js';
 
+/**
+* @param {CanvasRenderingContext2D} ctx 
+* @param {Camera} camera
+* @param {{ x: number, y: number }} position coordenada no espaço da tela
+* @param {{ x: number, y: number }} dimensions em pixel
+* @param {string?} color
+* @param {boolean?} centered
+*/
+export const drawRectBorder = (ctx, camera, position, dimensions, color = 'white', centered = true) => {
+  const lineWidth = 2;
+  let x = position.x - camera.position.x + ctx.canvas.width / 2;
+  let y = position.y - camera.position.y + ctx.canvas.height / 2;
+  
+  if (centered) {
+    x -= dimensions.x / 2;
+    y -= dimensions.y / 2;
+  }
+
+  ctx.setLineDash([lineWidth, lineWidth])
+  ctx.lineWidth = lineWidth;
+  ctx.strokeStyle = color;
+  ctx.strokeRect(x, y, dimensions.x, dimensions.y);
+}
+
 export class CollisionShape {
   color = 'black';
 
