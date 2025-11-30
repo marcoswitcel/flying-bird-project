@@ -90,7 +90,7 @@ document.addEventListener('mousedown', (event) => {
   
   selectedEntity = null;
   for (const entity of entities) {
-    if (Math.abs(clickInWorldSpace.x - entity.position.x) <= entity.dimension.x / 2 && Math.abs(clickInWorldSpace.y - entity.position.y) <= entity.dimension.y / 2) {
+    if (entity.getVisibleRect().isInside(clickInWorldSpace)) {
       console.log(entity);
       selectedEntity = entity;
     }

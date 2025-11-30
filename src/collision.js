@@ -90,4 +90,11 @@ export class BoundingRect {
       ((aYStart >= bYStart && aYStart <= bYEnd) || (aYEnd >= bYStart && aYEnd <= bYEnd));
   }
 
+  /**
+   * 
+   * @param {{ x: number, y: number, }} point 
+   */
+  isInside(point) {
+    return (Math.abs(point.x - this.position.x) <= this.dimensions.x / 2 && Math.abs(point.y - this.position.y) <= this.dimensions.y / 2);
+  }
 }

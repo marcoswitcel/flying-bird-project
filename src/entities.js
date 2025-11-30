@@ -1,5 +1,5 @@
 import { Camera } from './camera.js';
-import { CollisionShape, RectCollisionShape } from './collision.js';
+import { BoundingRect, CollisionShape, RectCollisionShape } from './collision.js';
 import { resourceManager } from './resource-manager.js';
 import { Sprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
@@ -63,6 +63,10 @@ export class Entity {
    */
   serialize() {
     return JSON.stringify(this);
+  }
+
+  getVisibleRect() {
+    return new BoundingRect(this.position, this.dimension);
   }
 }
 
