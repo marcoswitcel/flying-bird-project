@@ -52,7 +52,7 @@ entities.push(pipe2);
 entities.push(bird);
 entities.push(floor);
 
-bird.sprite = new AnimatedSprite([ resourceManager.getSprite('bird.1'), resourceManager.getSprite('bird.2'), resourceManager.getSprite('bird.3'), resourceManager.getSprite('bird.4') ], 2);
+bird.sprite = new AnimatedSprite([ resourceManager.getSprite('bird.1'), resourceManager.getSprite('bird.2'), resourceManager.getSprite('bird.3'), resourceManager.getSprite('bird.4') ], 250);
 
 let paused = false;
 let freeCamera = false;

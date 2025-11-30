@@ -85,7 +85,7 @@ export class AnimatedSprite {
   get currentFrame() {
     const tick = performance.now();
     // @todo João, ajustar isso aqui...
-    const index = ~~(tick / this.length * 1000) % this.frames.length;
+    const index = ~~(~~(~~tick % (this.length)) / (this.length / this.frames.length)) % this.frames.length;
     return this.frames[index];
   }
 
