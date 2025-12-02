@@ -1,0 +1,9 @@
+{
+  "world": {
+    "entities": [
+      { "type": "PipeEntity", "position": { "x": 250, "y": 405 } },
+      { "type": "PipeEntity", "position": { "x": 450, "y": 405 } },
+      { "type": "TiledEntity", "position": { "x": 0, "y": 525 }, "dimension": { "x": 5, "y": 1} }
+    ]
+  }
+}

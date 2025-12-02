@@ -1,6 +1,6 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, drawRectBorder, RectCollisionShape } from './collision.js';
-import { BirdEntity, Entity, TiledEntity, PipeEntity } from './entities.js';
+import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData } from './entities.js';
 import { drawRect, drawRectStroke } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite, Sprite } from './sprite.js';
@@ -243,3 +243,13 @@ requestAnimationFrame(function loop(timestamp) {
   requestAnimationFrame(loop)
 });
 
+fetch("../public/level/level01.json")
+  .then(response => {
+    return response.json();
+  })
+  .then(json => {
+    processLevelData(json);
+  })
+  .catch((reason) => {
+    console.log(reason);
+  })

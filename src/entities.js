@@ -152,3 +152,25 @@ export class TiledEntity extends Entity {
     return new BoundingRect(this.position, { x: this.dimension.x * this.sprite.width, y: this.dimension.y * this.sprite.height, });
   }
 }
+
+const is = (type, value) => typeof value === type;
+
+/**
+ * 
+ * @param {object} json 
+ */
+export const processLevelData = (json) => {
+  const entities = [];
+  for (const entry of json.world.entities) {
+    if (entry.type === 'PipeEntity') {
+      const entity = new PipeEntity();
+      if (is('object', entry.position) && is('number', entry.position.x) && is('number', entry.position.y)) {
+        entity.position.x = entry.position.x;
+        entity.position.y = entry.position.y;
+      }
+      entities.push(entity);
+    }
+  }
+
+  console.log(entities);
+}
