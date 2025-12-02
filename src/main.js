@@ -214,7 +214,6 @@ requestAnimationFrame(function loop(timestamp) {
     // if (!entity.getVisibleRect().isIntersecting(camera)) continue;
     if (entity instanceof BirdEntity && entity.hitted) {
       entity.sprite = resourceManager.getSprite('bird.hit');
-      console.log(entity.sprite)
     }
 
     if (isRenderSprite) entity.render(ctx, camera);
