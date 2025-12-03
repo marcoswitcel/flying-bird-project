@@ -162,14 +162,40 @@ const is = (type, value) => typeof value === type;
 export const processLevelData = (json) => {
   const entities = [];
   for (const entry of json.world.entities) {
+    /**
+     * @type {Entity}
+     */
+    let entity;
+    
     if (entry.type === 'PipeEntity') {
-      const entity = new PipeEntity();
-      if (is('object', entry.position) && is('number', entry.position.x) && is('number', entry.position.y)) {
-        entity.position.x = entry.position.x;
-        entity.position.y = entry.position.y;
-      }
-      entities.push(entity);
+      entity = new PipeEntity();
+    } else {
+      continue;
     }
+    
+    if (is('object', entry.position) && is('number', entry.position.x) && is('number', entry.position.y)) {
+      entity.position.x = entry.position.x;
+      entity.position.y = entry.position.y;
+    }
+
+    if (is('object', entry.dimension) &&
+      is('number', entry.dimension.x) &&
+      is('number', entry.dimension.y)) {
+      entity.dimension.x = entry.dimension.x;
+      entity.dimension.y = entry.dimension.y;
+    }
+
+
+    if (is('object', entry.collisionShape) &&
+      is('object', entry.collisionShape.dimensions) &&
+      is('number', entry.collisionShape.dimensions.x) &&
+      is('number', entry.collisionShape.dimensions.y) &&
+      entity instanceof PipeEntity) {
+      entity.collisionShape.dimensions.x = entry.collisionShape.dimensions.x;
+      entity.collisionShape.dimensions.y = entry.collisionShape.dimensions.y;
+    }
+
+    entities.push(entity);
   }
 
   console.log(entities);
