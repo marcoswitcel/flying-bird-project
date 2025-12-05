@@ -4,7 +4,9 @@ import { resourceManager } from './resource-manager.js';
 import { vec2, Vector2 } from './vector2.js';
 
 
-let idSequence = 0;
+const RUNTIME_ID_SEQUENCE_START = 60000;
+
+let idSequence = RUNTIME_ID_SEQUENCE_START;
 export class Entity {
   /**
    * @type {number}
@@ -158,9 +160,12 @@ const is = (type, value) => typeof value === type;
 /**
  * 
  * @param {object} json 
+ * @returns {Entity[]}
  */
 export const processLevelData = (json) => {
   const entities = [];
+  const ids = new Set();
+
   for (const entry of json.world.entities) {
     /**
      * @type {Entity}
@@ -172,6 +177,15 @@ export const processLevelData = (json) => {
     } else {
       continue;
     }
+
+    if (is('number', entry.id)) {
+      entity.id = entry.id;
+      
+      console.assert(!ids.has(entity.id), 'Id duplicado detectado. Id: ' + entity.id);
+      ids.add(entity.id);
+      console.assert(entity.id < RUNTIME_ID_SEQUENCE_START, 'Id fora do range correto. Id: ' + entity.id);
+    }
+    
     
     if (is('object', entry.position) && is('number', entry.position.x) && is('number', entry.position.y)) {
       entity.position.x = entry.position.x;
@@ -198,5 +212,5 @@ export const processLevelData = (json) => {
     entities.push(entity);
   }
 
-  console.log(entities);
+  return entities;
 }

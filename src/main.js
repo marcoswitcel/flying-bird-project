@@ -37,19 +37,9 @@ camera.dimensions.y = ctx.canvas.height;
  * @type {Entity[]}
  */
 const entities = [];
-const pipe = new PipeEntity();
-pipe.position.x = 250;
-pipe.position.y = 405;
-const pipe2 = new PipeEntity();
-pipe2.position.x = 450;
-pipe2.position.y = 405;
-pipe2.collisionShape.dimensions.y *= 2;
-pipe2.dimension.y *= 2;
 const bird = new BirdEntity();
 const floor = new TiledEntity();
 
-entities.push(pipe);
-entities.push(pipe2);
 entities.push(bird);
 entities.push(floor);
 
@@ -248,7 +238,9 @@ fetch("../public/level/level01.json")
     return response.json();
   })
   .then(json => {
-    processLevelData(json);
+    for (const entity of processLevelData(json)) {
+      entities.push(entity);
+    }
   })
   .catch((reason) => {
     console.log(reason);
