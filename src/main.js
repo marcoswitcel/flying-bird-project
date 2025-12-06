@@ -140,7 +140,8 @@ document.addEventListener('keyup', (event) => {
       if (selectedEntity) {
         exported = selectedEntity.serialize();
       } else {
-        exported = JSON.stringify(entities.map(e => e.exportableObject()), null, 2);
+        const world = { world: { entities: entities.map(e => e.exportableObject()) } };
+        exported = JSON.stringify(world, null, 2);
       }
       navigator.clipboard.writeText(exported)
         .then(() => {
