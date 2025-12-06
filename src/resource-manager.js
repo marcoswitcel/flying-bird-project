@@ -1,5 +1,7 @@
 import { Sprite } from './sprite.js';
 
+const log = (...args) => console.log('[ResourceManager]', ...args);
+
 export class ResourceManager {
 
   map = new Map();
@@ -9,8 +11,8 @@ export class ResourceManager {
       const img = new Image();
       img.src = path;
       // @todo João, onload callback, tratar erros também
-      img.onload = () => { console.log(`[onload] path="${path}" alias="${alias}"`) };
-      img.onabort = () => { console.log(`[onabort] path="${path}" alias="${alias}"`) };
+      img.onload = () => { log(`[onload] path="${path}" alias="${alias}"`) };
+      img.onabort = () => { log(`[onabort] path="${path}" alias="${alias}"`) };
       
       this.map.set(path, img);
       if (alias) {
