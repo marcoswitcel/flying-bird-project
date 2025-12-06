@@ -9,3 +9,4 @@
 * Implementar animações baseadas em sprite
 * gráfico com uso de memória, talvez uma lib de métricas de tempo e memória que (gráfico e lib de métrica)
 * Definir ordem de renderização ou vários layers
+* implementar contadores (anexar as entidades 'pipe')

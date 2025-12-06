@@ -37,6 +37,7 @@ camera.dimensions.y = ctx.canvas.height;
  * @type {Entity[]}
  */
 const entities = [];
+let counter = 0;
 const bird = new BirdEntity();
 
 
@@ -167,8 +168,6 @@ requestAnimationFrame(function loop(timestamp) {
 
   const starTime = performance.now();
 
-  drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
-
   if (!paused)
   for (const entity of entities) {
     if (entity instanceof BirdEntity) {
@@ -195,6 +194,18 @@ requestAnimationFrame(function loop(timestamp) {
     }
   }
 
+  for (const entity of entities) {
+    if (entity.type === 'PipeEntity') {
+      /** @type {PipeEntity} */
+      // @ts-expect-error
+      const pipe = entity;
+      if (!pipe.birdPassedThrough && pipe.position.x < bird.position.x) {
+        pipe.birdPassedThrough = true;
+        counter++;
+      }
+    }
+  }
+
   if (!paused)
   for (const entity of entities) {
     if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
@@ -210,7 +221,12 @@ requestAnimationFrame(function loop(timestamp) {
     }
   }
 
-  // render
+  // faze de renderização
+  drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
+
+  // contador
+  drawText(ctx, `${counter}`, vec2(24, 24), 16, 'white', 'monospace');
+  
   for (const entity of entities) {
     // @todo João, não funcionando para a TiledEntity
     // if (!entity.getVisibleRect().isIntersecting(camera)) continue;
@@ -233,7 +249,7 @@ requestAnimationFrame(function loop(timestamp) {
     const y = ctx.canvas.height / 2 - boxHeight / 2;
     drawRect(ctx, 0, 0, canvas.width, canvas.height, 'rgba(0, 0, 0, .5)');
     drawRect(ctx, x, y, boxWidth, boxHeight, 'green');
-    drawText(ctx, 'Fim de jogo', vec2(ctx.canvas.width / 2, ctx.canvas.height / 2), 24, 'white', 'monospace')
+    drawText(ctx, 'Fim de jogo', vec2(ctx.canvas.width / 2, ctx.canvas.height / 2), 24, 'white', 'monospace');
   }
 
   const endTime = performance.now();

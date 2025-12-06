@@ -85,6 +85,7 @@ export class Entity {
 export class PipeEntity extends Entity {
   type = 'PipeEntity';
   collisionShape = new RectCollisionShape();
+  birdPassedThrough = false;
 
   constructor() {
     super();
