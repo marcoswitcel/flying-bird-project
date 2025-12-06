@@ -112,7 +112,11 @@ document.addEventListener('mousemove', (event) => {
 });
 
 const resetGameState = () => {
-  bird.initialState();
+  counter = 0;
+  // @todo João, revisar e integrar esses códigos de reset
+  for (const entity of entities) {
+    entity.initialState();
+  }
 };
 
 document.addEventListener('keyup', (event) => {

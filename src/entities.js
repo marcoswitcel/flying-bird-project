@@ -80,6 +80,8 @@ export class Entity {
   getVisibleRect() {
     return new BoundingRect(this.position, this.dimension);
   }
+
+  initialState() {}
 }
 
 export class PipeEntity extends Entity {
@@ -93,6 +95,10 @@ export class PipeEntity extends Entity {
     this.collisionShape.dimensions.x = 25;
     this.collisionShape.dimensions.y = 150;
     this.dimension = vec2(75, 150);
+  }
+
+  initialState() {
+    this.birdPassedThrough = false;
   }
 }
 
