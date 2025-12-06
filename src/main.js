@@ -47,7 +47,7 @@ let isShowDimension = false;
 let isRenderSprite = true;
 let isShowMemory = false;
 
-document.addEventListener('click', () => {
+document.addEventListener('mousedown', () => {
   if (paused || freeCamera) return;
 
   if (!bird.hitted) {
