@@ -1,7 +1,7 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, drawRectBorder, RectCollisionShape } from './collision.js';
 import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData } from './entities.js';
-import { drawRect, drawRectStroke } from './render.js';
+import { drawRect, drawRectStroke, drawText } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite, Sprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
@@ -39,9 +39,6 @@ camera.dimensions.y = ctx.canvas.height;
 const entities = [];
 const bird = new BirdEntity();
 
-entities.push(bird);
-
-bird.sprite = new AnimatedSprite([ resourceManager.getSprite('bird.1'), resourceManager.getSprite('bird.2'), resourceManager.getSprite('bird.3'), resourceManager.getSprite('bird.4') ], 250);
 
 let paused = false;
 let freeCamera = false;
@@ -111,7 +108,11 @@ document.addEventListener('mousemove', (event) => {
   } else {
     camera.position.add(deltaMove.mulScalar(-1));
   }
-})
+});
+
+const resetGameState = () => {
+  bird.initialState();
+};
 
 document.addEventListener('keyup', (event) => {
   switch (event.code) {
@@ -123,6 +124,9 @@ document.addEventListener('keyup', (event) => {
     }; break;
     case 'KeyM': {
       isShowMemory = !isShowMemory;
+    }; break;
+    case 'KeyR': {
+      resetGameState();
     }; break;
     case 'KeyD': {
       isShowDimension = !isShowDimension;
@@ -199,7 +203,7 @@ requestAnimationFrame(function loop(timestamp) {
 
       if (rectBird.isIntersecting(rectEntity)) {
         entity.collisionShape.color = 'red';
-        bird.hitted = true;
+        bird.gotHit();
       } else {
         entity.collisionShape.color = 'black';
       }
@@ -210,9 +214,6 @@ requestAnimationFrame(function loop(timestamp) {
   for (const entity of entities) {
     // @todo João, não funcionando para a TiledEntity
     // if (!entity.getVisibleRect().isIntersecting(camera)) continue;
-    if (entity instanceof BirdEntity && entity.hitted) {
-      entity.sprite = resourceManager.getSprite('bird.hit');
-    }
 
     if (isRenderSprite) entity.render(ctx, camera);
 
@@ -224,6 +225,15 @@ requestAnimationFrame(function loop(timestamp) {
     if (isShowCollider && entity.collisionShape) {
       entity.collisionShape.render(ctx, camera, entity.position);
     }
+  }
+
+  if (bird.hitted) {
+    const boxWidth = 200, boxHeight = 75;
+    const x = ctx.canvas.width / 2 - boxWidth / 2;
+    const y = ctx.canvas.height / 2 - boxHeight / 2;
+    drawRect(ctx, 0, 0, canvas.width, canvas.height, 'rgba(0, 0, 0, .5)');
+    drawRect(ctx, x, y, boxWidth, boxHeight, 'green');
+    drawText(ctx, 'Fim de jogo', vec2(ctx.canvas.width / 2, ctx.canvas.height / 2), 24, 'white', 'monospace')
   }
 
   const endTime = performance.now();
@@ -249,6 +259,8 @@ fetch("../public/level/level01.json")
     for (const entity of processLevelData(json)) {
       entities.push(entity);
     }
+    // @note João, hack temporário para fazer o paássaro ser renderizado por último
+    entities.push(bird);
   })
   .catch((reason) => {
     console.log(reason);

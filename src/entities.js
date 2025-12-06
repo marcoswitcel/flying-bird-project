@@ -1,6 +1,7 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, RectCollisionShape } from './collision.js';
 import { resourceManager } from './resource-manager.js';
+import { AnimatedSprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
 
 
@@ -110,6 +111,20 @@ export class BirdEntity extends Entity {
     this.collisionShape.color = 'yellow';
     this.sprite = resourceManager.getSprite('bird');;
     this.dimension = vec2(75, 65);
+    this.initialState();
+  }
+
+  initialState() {
+    this.position = vec2(0, 0);
+    this.velocity = vec2(0, 0);
+    this.accel = vec2(0, 0);
+    this.hitted = false;
+    this.sprite = new AnimatedSprite([ resourceManager.getSprite('bird.1'), resourceManager.getSprite('bird.2'), resourceManager.getSprite('bird.3'), resourceManager.getSprite('bird.4') ], 250);
+  }
+
+  gotHit() {
+    this.hitted = true;
+    this.sprite = resourceManager.getSprite('bird.hit');
   }
 }
 
