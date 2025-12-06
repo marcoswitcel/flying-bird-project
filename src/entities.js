@@ -63,7 +63,17 @@ export class Entity {
    * @returns 
    */
   serialize() {
-    return JSON.stringify(this);
+    return JSON.stringify(this.exportableObject(), null, 2);
+  }
+
+  exportableObject() {
+    return {
+      id: this.id,
+      type: this.type,
+      position: this.position,
+      collisionShape: this.collisionShape,
+      dimension: this.dimension,
+    };
   }
 
   getVisibleRect() {
@@ -174,7 +184,10 @@ export const processLevelData = (json) => {
     
     if (entry.type === 'PipeEntity') {
       entity = new PipeEntity();
+    } else if (entry.type === 'TiledEntity') {
+      entity = new TiledEntity();
     } else {
+      console.log('Object ignorado. Tipo: ' + entry.type)
       continue;
     }
 

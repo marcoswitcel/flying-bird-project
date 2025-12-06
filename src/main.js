@@ -38,10 +38,8 @@ camera.dimensions.y = ctx.canvas.height;
  */
 const entities = [];
 const bird = new BirdEntity();
-const floor = new TiledEntity();
 
 entities.push(bird);
-entities.push(floor);
 
 bird.sprite = new AnimatedSprite([ resourceManager.getSprite('bird.1'), resourceManager.getSprite('bird.2'), resourceManager.getSprite('bird.3'), resourceManager.getSprite('bird.4') ], 250);
 
@@ -133,9 +131,19 @@ document.addEventListener('keyup', (event) => {
       freeCamera = !freeCamera;
     }; break;
     case 'KeyE': {
+      let exported = ''; ;
       if (selectedEntity) {
-        console.log(selectedEntity.serialize());
+        exported = selectedEntity.serialize();
+      } else {
+        exported = JSON.stringify(entities.map(e => e.exportableObject()), null, 2);
       }
+      navigator.clipboard.writeText(exported)
+        .then(() => {
+          console.log('Copiado: ' + exported);
+        })
+        .catch(() => {
+          console.error('Problema ao copiar');
+        });
     }; break;
     case 'KeyO': {
       isShowCollider = !isShowCollider;

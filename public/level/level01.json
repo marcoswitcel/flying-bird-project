@@ -1,10 +1,101 @@
 {
   "world": {
     "entities": [
-      { "id": 1, "type": "PipeEntity", "position": { "x": 250, "y": 405 } },
-      { "id": 2, "type": "PipeEntity", "position": { "x": 450, "y": 405 }, "dimension": { "x": 75, "y": 300 }, "collisionShape": { "dimensions": { "x": 25, "y": 300 } } },
-      { "id": 3, "type": "PipeEntity", "position": { "x": 650, "y": 405 }, "dimension": { "x": 75, "y": 300 }, "collisionShape": { "dimensions": { "x": 25, "y": 300 } } },
-      { "id": 4, "type": "TiledEntity", "position": { "x": 0, "y": 525 }, "dimension": { "x": 5, "y": 1} }
+      {
+        "id": 60000,
+        "type": "BirdEntity",
+        "position": {
+          "x": 25,
+          "y": 48.749999999999986
+        },
+        "collisionShape": {
+          "color": "yellow",
+          "dimensions": {
+            "x": 10,
+            "y": 10
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 65
+        }
+      },
+      {
+        "id": 1,
+        "type": "PipeEntity",
+        "position": {
+          "x": 250,
+          "y": 405
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 150
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 150
+        }
+      },
+      {
+        "id": 2,
+        "type": "PipeEntity",
+        "position": {
+          "x": 450,
+          "y": 405
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 300
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 300
+        }
+      },
+      {
+        "id": 3,
+        "type": "PipeEntity",
+        "position": {
+          "x": 650,
+          "y": 405
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 300
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 300
+        }
+      },
+      {
+        "id": 4,
+        "type": "TiledEntity",
+        "position": {
+          "x": 0,
+          "y": 525
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 5670,
+            "y": 94
+          }
+        },
+        "dimension": {
+          "x": 5,
+          "y": 1
+        }
+      }
     ]
   }
 }
