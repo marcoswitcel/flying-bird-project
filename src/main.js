@@ -206,6 +206,15 @@ requestAnimationFrame(function loop(timestamp) {
       if (!freeCamera) {
         camera.position.x = entity.position.x + 100;
       }
+
+      // pequeno feedback visual para demonstrar o esforço do pássaro tentando subir
+      if (entity.sprite instanceof AnimatedSprite) {
+        if (entity.velocity.y < 0) {
+          entity.sprite.length = 150;
+        } else {
+          entity.sprite.length = 250;
+        }
+      }
     }
   }
 
