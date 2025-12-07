@@ -2,7 +2,7 @@
   "world": {
     "entities": [
       {
-        "id": 1,
+        "id": 0,
         "type": "PipeEntity",
         "position": {
           "x": 250,
@@ -21,7 +21,7 @@
         }
       },
       {
-        "id": 2,
+        "id": 1,
         "type": "PipeEntity",
         "position": {
           "x": 450,
@@ -40,7 +40,7 @@
         }
       },
       {
-        "id": 3,
+        "id": 2,
         "type": "PipeEntity",
         "position": {
           "x": 650,
@@ -59,7 +59,7 @@
         }
       },
       {
-        "id": 4,
+        "id": 3,
         "type": "TiledEntity",
         "position": {
           "x": 0,
@@ -78,7 +78,7 @@
         }
       },
       {
-        "id": 5,
+        "id": 4,
         "type": "PipeEntity",
         "position": {
           "x": 960,
@@ -97,26 +97,7 @@
         }
       },
       {
-        "id": 6,
-        "type": "BirdEntity",
-        "position": {
-          "x": 50,
-          "y": 191.25000000000003
-        },
-        "collisionShape": {
-          "color": "yellow",
-          "dimensions": {
-            "x": 10,
-            "y": 10
-          }
-        },
-        "dimension": {
-          "x": 75,
-          "y": 65
-        }
-      },
-      {
-        "id": 7,
+        "id": 5,
         "type": "PipeEntity",
         "position": {
           "x": 1168,
@@ -135,7 +116,7 @@
         }
       },
       {
-        "id": 9,
+        "id": 6,
         "type": "PipeEntity",
         "position": {
           "x": 1392,
@@ -151,6 +132,25 @@
         "dimension": {
           "x": 75,
           "y": 150
+        }
+      },
+      {
+        "id": 7,
+        "type": "BirdEntity",
+        "position": {
+          "x": 34,
+          "y": 7.299999999999972
+        },
+        "collisionShape": {
+          "color": "yellow",
+          "dimensions": {
+            "x": 10,
+            "y": 10
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 65
         }
       }
     ]

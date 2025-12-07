@@ -1,6 +1,6 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, drawRectBorder, RectCollisionShape } from './collision.js';
-import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData } from './entities.js';
+import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData, RUNTIME_ID_SEQUENCE_START, exportedIdGenerator } from './entities.js';
 import { drawRect, drawRectStroke, drawText } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite, Sprite } from './sprite.js';
@@ -147,7 +147,14 @@ document.addEventListener('keyup', (event) => {
       if (selectedEntity) {
         exported = selectedEntity.serialize();
       } else {
-        const world = { world: { entities: entities.map(e => e.exportableObject()) } };
+        const world = {
+          world: {
+            entities: entities
+              .map(e => e.exportableObject())
+              .sort((a, b) => a.id - b.id)
+              .map(e => { e.id = exportedIdGenerator(); return e; })
+          }
+        };
         exported = JSON.stringify(world, null, 2);
       }
       navigator.clipboard.writeText(exported)

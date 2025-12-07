@@ -5,14 +5,18 @@ import { AnimatedSprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
 
 
-const RUNTIME_ID_SEQUENCE_START = 60000;
+export const RUNTIME_ID_SEQUENCE_START = 60000;
 
-let idSequence = RUNTIME_ID_SEQUENCE_START;
+let exportedIdSequence = 0;
+let runtimeIdSequence = RUNTIME_ID_SEQUENCE_START;
+export const exportedIdGenerator = () => exportedIdSequence++;
+const runtimeIdGenerator = () => runtimeIdSequence++;
+
 export class Entity {
   /**
    * @type {number}
    */
-  id = idSequence++;
+  id = runtimeIdGenerator();
   type;
   centered = true;
   position = vec2();
