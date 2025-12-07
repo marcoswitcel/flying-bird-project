@@ -139,6 +139,9 @@ document.addEventListener('keyup', (event) => {
     case 'KeyF': {
       freeCamera = !freeCamera;
     }; break;
+    case 'KeyC': {
+      selectedEntity = null;
+    }; break;
     case 'KeyE': {
       let exported = ''; ;
       if (selectedEntity) {

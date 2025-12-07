@@ -78,11 +78,30 @@
         }
       },
       {
-        "id": 60000,
+        "id": 5,
+        "type": "PipeEntity",
+        "position": {
+          "x": 960,
+          "y": 403
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 150
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 150
+        }
+      },
+      {
+        "id": 6,
         "type": "BirdEntity",
         "position": {
-          "x": 65,
-          "y": 321.75000000000017
+          "x": 50,
+          "y": 191.25000000000003
         },
         "collisionShape": {
           "color": "yellow",
@@ -94,6 +113,44 @@
         "dimension": {
           "x": 75,
           "y": 65
+        }
+      },
+      {
+        "id": 7,
+        "type": "PipeEntity",
+        "position": {
+          "x": 1168,
+          "y": 406
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 150
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 150
+        }
+      },
+      {
+        "id": 9,
+        "type": "PipeEntity",
+        "position": {
+          "x": 1392,
+          "y": 404
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 150
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 150
         }
       }
     ]
