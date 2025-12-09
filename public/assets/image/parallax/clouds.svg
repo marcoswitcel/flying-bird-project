@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="297mm"
+   height="210mm"
+   viewBox="0 0 297 210"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (2aeb623e1d, 2025-05-12)"
+   sodipodi:docname="clouds.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.69575617"
+     inkscape:cx="446.99567"
+     inkscape:cy="450.58889"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="0"
+     inkscape:window-y="34"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       d="m 69.611255,24.229529 a 33.84507,18.823944 0 0 0 -33.844963,18.824174 33.84507,18.823944 0 0 0 0.01034,0.468705 33.84507,18.823944 0 0 0 -17.142623,16.372127 33.84507,18.823944 0 0 0 33.844962,18.823658 33.84507,18.823944 0 0 0 15.62902,-2.127002 33.84507,18.823944 0 0 0 19.756934,3.539835 33.84507,18.823944 0 0 0 33.844959,-18.824174 33.84507,18.823944 0 0 0 -18.36322,-16.73903 33.84507,18.823944 0 0 0 0.10956,-1.514119 33.84507,18.823944 0 0 0 -33.844965,-18.824174 z"
+       style="fill:#ffffff;stroke-width:0.689999"
+       id="path2" />
+    <path
+       d="M 221.05092,54.231839 A 15.238437,29.974227 88.427003 0 0 250.59545,38.176152 15.238437,29.974227 88.427003 0 0 250.57603,37.797115 15.238437,29.974227 88.427003 0 0 265.38852,24.131723 15.238437,29.974227 88.427003 0 0 235.00739,9.7220661 15.238437,29.974227 88.427003 0 0 221.21834,11.823234 15.238437,29.974227 88.427003 0 0 203.64893,9.4390427 15.238437,29.974227 88.427003 0 0 174.1044,25.494729 a 15.238437,29.974227 88.427003 0 0 16.62887,13.099113 15.238437,29.974227 88.427003 0 0 -0.0633,1.227916 15.238437,29.974227 88.427003 0 0 30.38114,14.410076 z"
+       style="fill:#ffffff;stroke-width:0.584238"
+       id="path2-6" />
+  </g>
+</svg>

@@ -89,7 +89,6 @@ export class Entity {
 }
 
 export class PipeEntity extends Entity {
-  type = 'PipeEntity';
   collisionShape = new RectCollisionShape();
   birdPassedThrough = false;
 
@@ -107,7 +106,6 @@ export class PipeEntity extends Entity {
 }
 
 export class BirdEntity extends Entity {
-  type = 'BirdEntity';
   collisionShape = new RectCollisionShape();
   velocity = vec2(0, 0);
   accel = vec2(0, 0);
@@ -140,7 +138,6 @@ export class BirdEntity extends Entity {
 }
 
 export class TiledEntity extends Entity {
-  type = 'TiledEntity';
   collisionShape = new RectCollisionShape();
 
   constructor() {
@@ -188,6 +185,30 @@ export class TiledEntity extends Entity {
 
   getVisibleRect() {
     return new BoundingRect(this.position, { x: this.dimension.x * this.sprite.width, y: this.dimension.y * this.sprite.height, });
+  }
+}
+
+export class ParallaxEntity extends Entity {
+  /**
+   * @type {import('./sprite.js').RenderableSprite[]|null}
+   */
+  backgrounds = null;
+
+  constructor() {
+    super();
+    this.backgrounds = [ resourceManager.getSprite('moutains'), resourceManager.getSprite('clouds')];
+    this.position.y = 300;
+    this.dimension.x = 1123;
+    this.dimension.y = 794;
+  }
+
+  render(ctx, camera) {
+    const x = (this.position.x) - camera.position.x + ctx.canvas.width / 2;
+    const y = (this.position.y) - camera.position.y + ctx.canvas.height / 2;
+
+    for (const sprite of this.backgrounds) {
+      sprite.render(ctx, { x: x, y: y }, this.dimension, this.centered);
+    }
   }
 }
 

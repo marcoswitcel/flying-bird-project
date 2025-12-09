@@ -1,6 +1,6 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, drawRectBorder, RectCollisionShape } from './collision.js';
-import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData, RUNTIME_ID_SEQUENCE_START, exportedIdGenerator } from './entities.js';
+import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData, RUNTIME_ID_SEQUENCE_START, exportedIdGenerator, ParallaxEntity } from './entities.js';
 import { drawRect, drawRectStroke, drawText } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite, Sprite } from './sprite.js';
@@ -25,6 +25,9 @@ resourceManager.add('./assets/image/bird/idle/frame-3.png', 'image','bird.3');
 resourceManager.add('./assets/image/bird/idle/frame-4.png', 'image','bird.4');
 resourceManager.add('./assets/image/bird/got-hit/frame-1.png', 'image','bird.hit');
 resourceManager.add('./assets/image/floor/floor.svg', 'image','floor');
+// parallax
+resourceManager.add('./assets/image/parallax/moutains.svg', 'image','moutains');
+resourceManager.add('./assets/image/parallax/clouds.svg', 'image','clouds');
 
 
 const camera = new Camera();
@@ -39,6 +42,7 @@ camera.dimensions.y = ctx.canvas.height;
 const entities = [];
 let counter = 0;
 const bird = new BirdEntity();
+const parallax = new ParallaxEntity();
 
 
 let paused = false;
@@ -296,6 +300,9 @@ fetch("../public/level/level01.json")
     return response.json();
   })
   .then(json => {
+    // @todo joão, parallax ajustar
+    entities.push(parallax);
+
     for (const entity of processLevelData(json)) {
       entities.push(entity);
     }
