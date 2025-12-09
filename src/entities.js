@@ -203,6 +203,7 @@ export class ParallaxEntity extends Entity {
   }
 
   render(ctx, camera) {
+    // @todo João, preciso definir a velocidade de transição ou a área visívil da entidade de parallax
     const x = (this.position.x) - camera.position.x + ctx.canvas.width / 2;
     const y = (this.position.y) - camera.position.y + ctx.canvas.height / 2;
 
