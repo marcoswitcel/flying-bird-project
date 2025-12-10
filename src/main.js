@@ -285,8 +285,10 @@ requestAnimationFrame(function loop(timestamp) {
   // @ts-expect-error
   const memory = performance.memory;
   if (isShowMemory && memory) {
+    drawRect(ctx, 0, 0, 300, 85, 'rgba(0, 0, 0, .75)');
     ctx.fillStyle = 'white';
     ctx.font = '24px serif';
+    ctx.textAlign = 'left';
     ctx.fillText('JS Heap: ' + memory.usedJSHeapSize, 25, 25);
     ctx.fillText('JS Heap Total: ' + memory.totalJSHeapSize, 25, 45);
     ctx.fillText('Time: ' + (endTime - starTime).toFixed(4), 25, 65);
