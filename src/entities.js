@@ -198,7 +198,8 @@ export class ParallaxEntity extends Entity {
     super();
     this.backgrounds = [ resourceManager.getSprite('moutains'), resourceManager.getSprite('clouds')];
     this.position.y = 300;
-    this.dimension.x = 1123;
+    this.position.x = 1123 * 3 / 2 - 100;
+    this.dimension.x = 1123 * 3;
     this.dimension.y = 794;
   }
 
