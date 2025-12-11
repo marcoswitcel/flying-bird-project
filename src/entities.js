@@ -193,23 +193,31 @@ export class ParallaxEntity extends Entity {
    * @type {import('./sprite.js').RenderableSprite[]|null}
    */
   backgrounds = null;
+  centered = true;
 
   constructor() {
     super();
     this.backgrounds = [ resourceManager.getSprite('moutains'), resourceManager.getSprite('clouds')];
     this.position.y = 300;
-    this.position.x = 1123 * 3 / 2 - 100;
-    this.dimension.x = 1123 * 3;
+    // @note João, deveria ser ignorado
+    this.position.x = 0;
+    this.dimension.x = 1123;
     this.dimension.y = 794;
   }
 
   render(ctx, camera) {
     // @todo João, preciso definir a velocidade de transição ou a área visívil da entidade de parallax
-    const x = (this.position.x) - camera.position.x + ctx.canvas.width / 2;
+    // const x = (this.position.x) - camera.position.x + ctx.canvas.width / 2;
+    const x = ctx.canvas.width / 2;
     const y = (this.position.y) - camera.position.y + ctx.canvas.height / 2;
-
+    
+    // @todo João, funciona, só que o reset não é suave, acho que daria ou pra exportar uma textura que seja simétrica ou
+    // ensinar a duplica a textura pra ela entrar pela direita de novo
+    let i = 1;
+    const m = camera.position.x % 1024;
     for (const sprite of this.backgrounds) {
-      sprite.render(ctx, { x: x, y: y }, this.dimension, this.centered);
+      sprite.render(ctx, { x: x - i * 0.2 * m, y: y }, this.dimension, this.centered);
+      i++;
     }
   }
 }
