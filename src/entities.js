@@ -214,9 +214,9 @@ export class ParallaxEntity extends Entity {
     // @todo João, funciona, só que o reset não é suave, acho que daria ou pra exportar uma textura que seja simétrica ou
     // ensinar a duplica a textura pra ela entrar pela direita de novo
     let i = 1;
-    const m = camera.position.x % 1024;
+    const m = camera.position.x % 1123;
     for (const sprite of this.backgrounds) {
-      sprite.render(ctx, { x: x - i * 0.2 * m, y: y }, this.dimension, this.centered);
+      sprite.render(ctx, { x: x - i * 0.1 * m, y: y }, this.dimension, this.centered);
       i++;
     }
   }
