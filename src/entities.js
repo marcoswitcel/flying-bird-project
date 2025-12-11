@@ -206,6 +206,9 @@ export class ParallaxEntity extends Entity {
   }
 
   render(ctx, camera) {
+    // mantendo a área visível alinhada com a renderização em relação a câmera câmera
+    this.position.x = camera.position.x;
+
     // @todo João, preciso definir a velocidade de transição ou a área visívil da entidade de parallax
     // const x = (this.position.x) - camera.position.x + ctx.canvas.width / 2;
     const x = ctx.canvas.width / 2;
@@ -219,6 +222,11 @@ export class ParallaxEntity extends Entity {
       sprite.render(ctx, { x: x - i * 0.1 * m, y: y }, this.dimension, this.centered);
       i++;
     }
+  }
+
+  // @note João, hack pra não ser selecionável
+  getVisibleRect() {
+    return new BoundingRect(this.position, { x: 0, y: 0});
   }
 }
 
