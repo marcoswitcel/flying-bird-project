@@ -142,10 +142,30 @@
       },
       {
         "id": 7,
+        "type": "PipeEntity",
+        "position": {
+          "x": 1612,
+          "y": 71
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 300
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 300
+        },
+        "isUpsideDown": true
+      },
+      {
+        "id": 8,
         "type": "BirdEntity",
         "position": {
-          "x": 224.3999999999993,
-          "y": 215.8000000000002
+          "x": 43.20000000000002,
+          "y": 99.89999999999998
         },
         "collisionShape": {
           "color": "yellow",
@@ -160,10 +180,10 @@
         }
       },
       {
-        "id": 8,
+        "id": 9,
         "type": "ParallaxEntity",
         "position": {
-          "x": 324.3999999999993,
+          "x": 143.20000000000002,
           "y": 300
         },
         "collisionShape": null,
