@@ -190,14 +190,17 @@ export class TiledEntity extends Entity {
 
 export class ParallaxEntity extends Entity {
   /**
-   * @type {import('./sprite.js').RenderableSprite[]|null}
+   * @type {{ sprite: import('./sprite.js').RenderableSprite, dt: number }[] | null}
    */
   backgrounds = null;
   centered = true;
 
   constructor() {
     super();
-    this.backgrounds = [ resourceManager.getSprite('moutains'), resourceManager.getSprite('clouds')];
+    this.backgrounds = [
+      { sprite: resourceManager.getSprite('moutains'), dt: 0.2 },
+      { sprite: resourceManager.getSprite('clouds'), dt: 0.1 },
+    ];
     this.position.y = 300;
     // @note João, deveria ser ignorado
     this.position.x = 0;
@@ -216,11 +219,11 @@ export class ParallaxEntity extends Entity {
     
     // @todo João, funciona, só que o reset não é suave, acho que daria ou pra exportar uma textura que seja simétrica ou
     // ensinar a duplica a textura pra ela entrar pela direita de novo
-    let i = 1;
-    const m = camera.position.x % 1123;
-    for (const sprite of this.backgrounds) {
-      sprite.render(ctx, { x: x - i * 0.1 * m, y: y }, this.dimension, this.centered);
-      i++;
+    const width = this.dimension.x;
+    for (const bg of this.backgrounds) {
+      const delta = bg.dt;
+      const m = camera.position.x % Math.floor(width / delta);
+      bg.sprite.render(ctx, { x: x - (delta * m), y: y }, this.dimension, this.centered);
     }
   }
 
