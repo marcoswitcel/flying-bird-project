@@ -91,17 +91,29 @@ export class Entity {
 export class PipeEntity extends Entity {
   collisionShape = new RectCollisionShape();
   birdPassedThrough = false;
+  isUpsideDown=false;
 
   constructor() {
     super();
-    this.sprite = resourceManager.getSprite('pipe');
     this.collisionShape.dimensions.x = 25;
     this.collisionShape.dimensions.y = 150;
     this.dimension = vec2(75, 150);
+    this.updateSprite();
+  }
+
+  updateSprite() {
+    this.sprite = (this.isUpsideDown) ? resourceManager.getSprite('upside-down-pipe') : resourceManager.getSprite('pipe');
   }
 
   initialState() {
     this.birdPassedThrough = false;
+  }
+
+  exportableObject() {
+    const object = super.exportableObject();
+    object.isUpsideDown = this.isUpsideDown;
+
+    return object;
   }
 }
 
@@ -288,6 +300,11 @@ export const processLevelData = (json) => {
       entity instanceof PipeEntity) {
       entity.collisionShape.dimensions.x = entry.collisionShape.dimensions.x;
       entity.collisionShape.dimensions.y = entry.collisionShape.dimensions.y;
+    }
+
+    if (is('boolean', entry.isUpsideDown) &&  entity instanceof PipeEntity) {
+      entity.isUpsideDown =  entry.isUpsideDown;
+      entity.updateSprite();
     }
 
     entities.push(entity);

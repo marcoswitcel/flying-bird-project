@@ -18,6 +18,7 @@ document.body.append(canvas);
 const ctx = canvas.getContext('2d');
 
 resourceManager.add('./assets/image/pipe/pipe.svg', 'image','pipe');
+resourceManager.add('./assets/image/pipe/upside-down-pipe.svg', 'image','upside-down-pipe');
 resourceManager.add('./assets/image/bird/idle/frame-1.png', 'image','bird');
 resourceManager.add('./assets/image/bird/idle/frame-1.png', 'image','bird.1');
 resourceManager.add('./assets/image/bird/idle/frame-2.png', 'image','bird.2');
@@ -196,7 +197,7 @@ requestAnimationFrame(function loop(timestamp) {
       entity.velocity.add(entity.accel);
       // por hora velocidade horizontal fixa
       if (!entity.hitted) {
-        entity.velocity.x = 1;
+        entity.velocity.x = 1.2;
       } else {
         entity.velocity.x = 0;
       }
