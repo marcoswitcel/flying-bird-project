@@ -56,10 +56,10 @@ export class ResourceManager {
       sprite.width = img.width;
       sprite.height = img.height;
     } else {
-      img.onload = () => {
+      img.addEventListener('load', () => {
         sprite.width = img.width;
         sprite.height = img.height;
-      };
+      });
     }
 
     this.map.set(spriteKey, sprite);
