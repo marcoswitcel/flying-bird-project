@@ -16,6 +16,7 @@ export class ResourceManager {
       
       this.map.set(path, img);
       if (alias) {
+        console.assert(!this.map.has(alias), `Alias duplicad: ${alias}`)
         this.map.set(alias, img);
       }
     }
