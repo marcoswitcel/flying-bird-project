@@ -43,7 +43,6 @@ camera.dimensions.y = ctx.canvas.height;
 const entities = [];
 let counter = 0;
 const bird = new BirdEntity();
-const parallax = new ParallaxEntity();
 
 
 let paused = false;
@@ -305,10 +304,14 @@ fetch("../public/level/level01.json")
     return response.json();
   })
   .then(json => {
-    // @todo joão, parallax ajustar
-    entities.push(parallax);
+    const allEntitiesImported = processLevelData(json)
 
-    for (const entity of processLevelData(json)) {
+    // @note João, hack temporário para fazer o parallax renderizar por trás da cena
+    for (const entity of allEntitiesImported) if (entity instanceof ParallaxEntity) {
+      entities.push(entity);
+    }
+    
+    for (const entity of allEntitiesImported) if (!(entity instanceof ParallaxEntity)) {
       entities.push(entity);
     }
     // @note João, hack temporário para fazer o paássaro ser renderizado por último

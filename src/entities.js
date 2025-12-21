@@ -246,7 +246,13 @@ export class ParallaxEntity extends Entity {
   }
 }
 
-const is = (type, value) => typeof value === type;
+/**
+ * @note não retorna true para a combinação de parâmetros: 'object', null. O typeof diz que 'null' é 'object'
+ * @param {'string'|'object'|'number'|'boolean'} type 
+ * @param {any} value 
+ * @returns {boolean}
+ */
+const is = (type, value) => typeof value === type && value !== null;
 
 /**
  * 
@@ -267,6 +273,8 @@ export const processLevelData = (json) => {
       entity = new PipeEntity();
     } else if (entry.type === 'TiledEntity') {
       entity = new TiledEntity();
+    } else if (entry.type === 'ParallaxEntity') {
+      entity = new ParallaxEntity();
     } else {
       console.log('Object ignorado. Tipo: ' + entry.type)
       continue;
