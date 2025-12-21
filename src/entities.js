@@ -9,6 +9,7 @@ export const RUNTIME_ID_SEQUENCE_START = 60000;
 
 let exportedIdSequence = 0;
 let runtimeIdSequence = RUNTIME_ID_SEQUENCE_START;
+export const resetExportedIdSequence = () => { exportedIdSequence = 0; }
 export const exportedIdGenerator = () => exportedIdSequence++;
 const runtimeIdGenerator = () => runtimeIdSequence++;
 

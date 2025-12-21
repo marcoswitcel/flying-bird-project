@@ -1,6 +1,6 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, drawRectBorder, RectCollisionShape } from './collision.js';
-import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData, RUNTIME_ID_SEQUENCE_START, exportedIdGenerator, ParallaxEntity } from './entities.js';
+import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData, RUNTIME_ID_SEQUENCE_START, exportedIdGenerator, ParallaxEntity, resetExportedIdSequence } from './entities.js';
 import { drawRect, drawRectStroke, drawText } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite, Sprite } from './sprite.js';
@@ -152,6 +152,8 @@ document.addEventListener('keyup', (event) => {
       if (selectedEntity) {
         exported = selectedEntity.serialize();
       } else {
+        resetExportedIdSequence();
+        
         const world = {
           world: {
             entities: entities
