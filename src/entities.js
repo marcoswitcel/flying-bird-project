@@ -244,6 +244,14 @@ export class ParallaxEntity extends Entity {
   getVisibleRect() {
     return new BoundingRect(this.position, { x: 0, y: 0});
   }
+
+  exportableObject() {
+    const object = super.exportableObject()
+    // não exporta campo nullo
+    delete object['collisionShape']
+    
+    return object;
+  }
 }
 
 /**
