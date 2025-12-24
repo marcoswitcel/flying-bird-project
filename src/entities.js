@@ -92,7 +92,8 @@ export class Entity {
 export class PipeEntity extends Entity {
   collisionShape = new RectCollisionShape();
   birdPassedThrough = false;
-  isUpsideDown=false;
+  isUpsideDown = false;
+  isClearLevel = false;
 
   constructor() {
     super();
@@ -113,6 +114,9 @@ export class PipeEntity extends Entity {
   exportableObject() {
     const object = super.exportableObject();
     object.isUpsideDown = this.isUpsideDown;
+    if (this.isClearLevel) {
+      object.isClearLevel = true;
+    }
 
     return object;
   }
@@ -317,6 +321,10 @@ export const processLevelData = (json) => {
       entity instanceof PipeEntity) {
       entity.collisionShape.dimensions.x = entry.collisionShape.dimensions.x;
       entity.collisionShape.dimensions.y = entry.collisionShape.dimensions.y;
+    }
+
+    if (is('boolean', entry.isClearLevel) && entity instanceof PipeEntity) {
+      entity.isClearLevel = entry.isClearLevel;
     }
 
     if (is('boolean', entry.isUpsideDown) &&  entity instanceof PipeEntity) {

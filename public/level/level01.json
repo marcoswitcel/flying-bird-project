@@ -158,7 +158,8 @@
           "x": 75,
           "y": 300
         },
-        "isUpsideDown": true
+        "isUpsideDown": true,
+        "isClearLevel": true
       },
       {
         "id": 8,

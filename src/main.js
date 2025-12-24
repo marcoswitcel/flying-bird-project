@@ -41,9 +41,14 @@ camera.dimensions.y = ctx.canvas.height;
  * @type {Entity[]}
  */
 const entities = [];
-let counter = 0;
 const bird = new BirdEntity();
 
+/**
+ * @type {'running'|'win'|'lose'}
+ */
+let state = 'running';
+
+let counter = 0;
 
 let paused = false;
 let freeCamera = false;
@@ -224,6 +229,10 @@ requestAnimationFrame(function loop(timestamp) {
     }
   }
 
+  if (state === 'win') {
+    bird.position.y = 122;
+  }
+
   for (const entity of entities) {
     if (entity.type === 'PipeEntity') {
       /** @type {PipeEntity} */
@@ -232,6 +241,9 @@ requestAnimationFrame(function loop(timestamp) {
       if (!pipe.birdPassedThrough && pipe.position.x < bird.position.x) {
         pipe.birdPassedThrough = true;
         counter++;
+        if (pipe.isClearLevel) {
+          state = 'win';
+        }
       }
     }
   }
