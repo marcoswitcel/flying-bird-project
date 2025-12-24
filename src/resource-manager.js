@@ -13,6 +13,7 @@ export class ResourceManager {
       // @todo João, onload callback, tratar erros também
       img.onload = () => { log(`[onload] path="${path}" alias="${alias}"`) };
       img.onabort = () => { log(`[onabort] path="${path}" alias="${alias}"`) };
+      img.onerror = () => { log(`[onerror] path="${path}" alias="${alias}"`) };
       
       this.map.set(path, img);
       if (alias) {
