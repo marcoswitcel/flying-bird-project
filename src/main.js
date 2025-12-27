@@ -202,6 +202,11 @@ requestAnimationFrame(function loop(timestamp) {
       entity.accel.y += 0.15;
 
       entity.velocity.add(entity.accel);
+
+      if (state === 'win') {
+        entity.velocity.y = 0
+      }
+
       // por hora velocidade horizontal fixa
       if (!entity.hitted) {
         entity.velocity.x = 1.2;
@@ -228,10 +233,6 @@ requestAnimationFrame(function loop(timestamp) {
         }
       }
     }
-  }
-
-  if (state === 'win') {
-    bird.position.y = 122;
   }
 
   for (const entity of entities) {
