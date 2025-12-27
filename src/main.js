@@ -1,6 +1,7 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, drawRectBorder, RectCollisionShape } from './collision.js';
 import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData, RUNTIME_ID_SEQUENCE_START, exportedIdGenerator, ParallaxEntity, resetExportedIdSequence } from './entities.js';
+import { GameContext } from './game-scene.js';
 import { drawRect, drawRectStroke, drawText } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite, Sprite } from './sprite.js';
@@ -37,31 +38,14 @@ camera.position.y = ctx.canvas.height / 2;
 camera.dimensions.x = ctx.canvas.width;
 camera.dimensions.y = ctx.canvas.height;
 
-/**
- * @type {Entity[]}
- */
-const entities = [];
-const bird = new BirdEntity();
 
-/**
- * @type {'running'|'win'|'lose'}
- */
-let state = 'running';
-
-let counter = 0;
-
-let paused = false;
-let freeCamera = false;
-let isShowCollider = false;
-let isShowDimension = false;
-let isRenderSprite = true;
-let isShowMemory = false;
+const gameContext = new GameContext();
 
 document.addEventListener('mousedown', () => {
-  if (paused || freeCamera) return;
+  if (gameContext.paused || gameContext.freeCamera) return;
 
-  if (!bird.hitted) {
-    bird.velocity.y = -4;
+  if (!gameContext.bird.hitted) {
+    gameContext.bird.velocity.y = -4;
   }
 });
 
@@ -75,14 +59,14 @@ let mouseMoved = false;
  */
 let selectedEntity = null;
 document.addEventListener('mouseup', (event) => {
-  if (freeCamera && !mouseMoved && !selectedEntity) {
+  if (gameContext.freeCamera && !mouseMoved && !selectedEntity) {
     // @todo João, mover esse código
     const clickInWorldSpace = camera.position
       .copy()
       .add(mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
     const pipe = new PipeEntity();
     pipe.position = clickInWorldSpace.copy();
-    entities.push(pipe);
+    gameContext.entities.push(pipe);
   }
 
   mousedown = null;
@@ -97,7 +81,7 @@ document.addEventListener('mousedown', (event) => {
     .add(mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
   
   selectedEntity = null;
-  for (const entity of entities) {
+  for (const entity of gameContext.entities) {
     if (entity.getVisibleRect().isInside(clickInWorldSpace)) {
       console.log(entity);
       selectedEntity = entity;
@@ -105,7 +89,7 @@ document.addEventListener('mousedown', (event) => {
   }
 });
 document.addEventListener('mousemove', (event) => {
-  if (!mousedown || !freeCamera) return;
+  if (!mousedown || !gameContext.freeCamera) return;
 
   const deltaMove = vec2(event.offsetX, event.offsetY)
     .sub(mousedown);
@@ -121,10 +105,10 @@ document.addEventListener('mousemove', (event) => {
 });
 
 const resetGameState = () => {
-  state = 'running'
-  counter = 0;
+  gameContext.state = 'running'
+  gameContext.counter = 0;
   // @todo João, revisar e integrar esses códigos de reset
-  for (const entity of entities) {
+  for (const entity of gameContext.entities) {
     entity.initialState();
   }
 };
@@ -132,22 +116,22 @@ const resetGameState = () => {
 document.addEventListener('keyup', (event) => {
   switch (event.code) {
     case 'KeyP': {
-      paused = !paused;
+      gameContext.paused = !gameContext.paused;
     }; break;
     case 'KeyS': {
-      isRenderSprite = !isRenderSprite;
+      gameContext.isRenderSprite = !gameContext.isRenderSprite;
     }; break;
     case 'KeyM': {
-      isShowMemory = !isShowMemory;
+      gameContext.isShowMemory = !gameContext.isShowMemory;
     }; break;
     case 'KeyR': {
       resetGameState();
     }; break;
     case 'KeyD': {
-      isShowDimension = !isShowDimension;
+      gameContext.isShowDimension = !gameContext.isShowDimension;
     }; break;
     case 'KeyF': {
-      freeCamera = !freeCamera;
+      gameContext.freeCamera = !gameContext.freeCamera;
     }; break;
     case 'KeyC': {
       selectedEntity = null;
@@ -161,7 +145,7 @@ document.addEventListener('keyup', (event) => {
         
         const world = {
           world: {
-            entities: entities
+            entities: gameContext.entities
               .map(e => e.exportableObject())
               .sort((a, b) => a.id - b.id)
               .map(e => { e.id = exportedIdGenerator(); return e; })
@@ -178,7 +162,7 @@ document.addEventListener('keyup', (event) => {
         });
     }; break;
     case 'KeyO': {
-      isShowCollider = !isShowCollider;
+      gameContext.isShowCollider = !gameContext.isShowCollider;
     }; break;
   }
 });
@@ -195,15 +179,15 @@ requestAnimationFrame(function loop(timestamp) {
 
   const starTime = performance.now();
 
-  if (!paused)
-  for (const entity of entities) {
+  if (!gameContext.paused)
+  for (const entity of gameContext.entities) {
     if (entity instanceof BirdEntity) {
       // gravidade
       entity.accel.y += 0.15;
 
       entity.velocity.add(entity.accel);
 
-      if (state === 'win') {
+      if (gameContext.state === 'win') {
         entity.velocity.y = 0
         loadLevel("../public/level/level02.json")
       }
@@ -221,7 +205,7 @@ requestAnimationFrame(function loop(timestamp) {
       entity.accel.y = 0;
 
       // camera seguindo 'bird'
-      if (!freeCamera) {
+      if (!gameContext.freeCamera) {
         camera.position.x = entity.position.x + 100;
       }
 
@@ -236,30 +220,30 @@ requestAnimationFrame(function loop(timestamp) {
     }
   }
 
-  for (const entity of entities) {
+  for (const entity of gameContext.entities) {
     if (entity.type === 'PipeEntity') {
       /** @type {PipeEntity} */
       // @ts-expect-error
       const pipe = entity;
-      if (!pipe.birdPassedThrough && pipe.position.x < bird.position.x) {
+      if (!pipe.birdPassedThrough && pipe.position.x < gameContext.bird.position.x) {
         pipe.birdPassedThrough = true;
-        counter++;
+        gameContext.counter++;
         if (pipe.isClearLevel) {
-          state = 'win';
+          gameContext.state = 'win';
         }
       }
     }
   }
 
-  if (!paused)
-  for (const entity of entities) {
+  if (!gameContext.paused)
+  for (const entity of gameContext.entities) {
     if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
       const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
-      const rectBird = new BoundingRect(bird.position, bird.collisionShape.dimensions);
+      const rectBird = new BoundingRect(gameContext.bird.position, gameContext.bird.collisionShape.dimensions);
 
       if (rectBird.isIntersecting(rectEntity)) {
         entity.collisionShape.color = 'red';
-        bird.gotHit();
+        gameContext.bird.gotHit();
       } else {
         entity.collisionShape.color = 'black';
       }
@@ -270,25 +254,25 @@ requestAnimationFrame(function loop(timestamp) {
   drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
 
   // contador
-  drawText(ctx, `${counter}`, vec2(24, 24), 16, 'white', 'monospace');
+  drawText(ctx, `${gameContext.counter}`, vec2(24, 24), 16, 'white', 'monospace');
   
-  for (const entity of entities) {
+  for (const entity of gameContext.entities) {
     // @todo João, não funcionando para a TiledEntity
     // if (!entity.getVisibleRect().isIntersecting(camera)) continue;
 
-    if (isRenderSprite) entity.render(ctx, camera);
+    if (gameContext.isRenderSprite) entity.render(ctx, camera);
 
-    if (isShowDimension) {
+    if (gameContext.isShowDimension) {
       const dimensions = (entity.type === 'TiledEntity') ? { x: entity.sprite.width * entity.dimension.x, y: entity.sprite.height * entity.dimension.y, } : entity.dimension;
       drawRectBorder(ctx, camera, entity.position, dimensions, 'black', true);
     }
 
-    if (isShowCollider && entity.collisionShape) {
+    if (gameContext.isShowCollider && entity.collisionShape) {
       entity.collisionShape.render(ctx, camera, entity.position);
     }
   }
 
-  if (bird.hitted) {
+  if (gameContext.bird.hitted) {
     const boxWidth = 200, boxHeight = 75;
     const x = ctx.canvas.width / 2 - boxWidth / 2;
     const y = ctx.canvas.height / 2 - boxHeight / 2;
@@ -301,7 +285,7 @@ requestAnimationFrame(function loop(timestamp) {
 
   // @ts-expect-error
   const memory = performance.memory;
-  if (isShowMemory && memory) {
+  if (gameContext.isShowMemory && memory) {
     drawRect(ctx, 0, 0, 300, 85, 'rgba(0, 0, 0, .75)');
     ctx.fillStyle = 'white';
     ctx.font = '24px serif';
@@ -321,22 +305,22 @@ function loadLevel(levelFile) {
     })
     .then(json => {
       // reset
-      entities.length = 0;
+      gameContext.entities.length = 0;
       resetGameState();
 
       const allEntitiesImported = processLevelData(json)
 
       // @note João, hack temporário para fazer o parallax renderizar por trás da cena
       for (const entity of allEntitiesImported) if (entity instanceof ParallaxEntity) {
-        entities.push(entity);
+        gameContext.entities.push(entity);
       }
       
       for (const entity of allEntitiesImported) if (!(entity instanceof ParallaxEntity)) {
-        entities.push(entity);
+        gameContext.entities.push(entity);
       }
       // @note João, hack temporário para fazer o paássaro ser renderizado por último
-      entities.push(bird);
-      bird.initialState()
+      gameContext.entities.push(gameContext.bird);
+      gameContext.bird.initialState()
       
     })
     .catch((reason) => {
