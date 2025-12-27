@@ -38,4 +38,13 @@ export class GameScene extends Scene {
     super()
     this.context = contex;
   }
+
+  resetGameState() {
+    this.context.state = 'running'
+    this.context.counter = 0;
+    // @todo João, revisar e integrar esses códigos de reset
+    for (const entity of this.context.entities) {
+      entity.initialState();
+    }
+  }
 }

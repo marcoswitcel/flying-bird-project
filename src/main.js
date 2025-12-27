@@ -1,7 +1,7 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, drawRectBorder, RectCollisionShape } from './collision.js';
 import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData, RUNTIME_ID_SEQUENCE_START, exportedIdGenerator, ParallaxEntity, resetExportedIdSequence } from './entities.js';
-import { GameContext } from './game-scene.js';
+import { GameContext, GameScene } from './game-scene.js';
 import { drawRect, drawRectStroke, drawText } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite, Sprite } from './sprite.js';
@@ -40,6 +40,7 @@ camera.dimensions.y = ctx.canvas.height;
 
 
 const gameContext = new GameContext();
+const gameScene = new GameScene(gameContext);
 
 document.addEventListener('mousedown', () => {
   if (gameContext.paused || gameContext.freeCamera) return;
@@ -104,14 +105,7 @@ document.addEventListener('mousemove', (event) => {
   }
 });
 
-const resetGameState = () => {
-  gameContext.state = 'running'
-  gameContext.counter = 0;
-  // @todo João, revisar e integrar esses códigos de reset
-  for (const entity of gameContext.entities) {
-    entity.initialState();
-  }
-};
+
 
 document.addEventListener('keyup', (event) => {
   switch (event.code) {
@@ -125,7 +119,7 @@ document.addEventListener('keyup', (event) => {
       gameContext.isShowMemory = !gameContext.isShowMemory;
     }; break;
     case 'KeyR': {
-      resetGameState();
+      gameScene.resetGameState();
     }; break;
     case 'KeyD': {
       gameContext.isShowDimension = !gameContext.isShowDimension;
@@ -311,7 +305,7 @@ function loadLevel(gameContext, levelFile) {
     .then(json => {
       // reset
       gameContext.entities.length = 0;
-      resetGameState();
+      gameScene.resetGameState();
 
       const allEntitiesImported = processLevelData(json)
 
