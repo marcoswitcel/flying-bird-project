@@ -7,6 +7,11 @@ export class GameContext {
    */
   entities = [];
   bird = new BirdEntity();
+
+  /**
+   * @type {Entity|null}
+   */
+  selectedEntity = null;
   
   /**
    * @type {'running'|'win'|'lose'}

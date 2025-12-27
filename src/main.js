@@ -55,12 +55,9 @@ document.addEventListener('mousedown', () => {
  */
 let mousedown = null;
 let mouseMoved = false;
-/**
- * @type {Entity|null}
- */
-let selectedEntity = null;
+
 document.addEventListener('mouseup', (event) => {
-  if (gameContext.freeCamera && !mouseMoved && !selectedEntity) {
+  if (gameContext.freeCamera && !mouseMoved && !gameContext.selectedEntity) {
     // @todo João, mover esse código
     const clickInWorldSpace = camera.position
       .copy()
@@ -81,11 +78,11 @@ document.addEventListener('mousedown', (event) => {
     .copy()
     .add(mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
   
-  selectedEntity = null;
+  gameContext.selectedEntity = null;
   for (const entity of gameContext.entities) {
     if (entity.getVisibleRect().isInside(clickInWorldSpace)) {
       console.log(entity);
-      selectedEntity = entity;
+      gameContext.selectedEntity = entity;
     }
   }
 });
@@ -98,8 +95,8 @@ document.addEventListener('mousemove', (event) => {
   mousedown = vec2(event.offsetX, event.offsetY);
   mouseMoved = true;
 
-  if (selectedEntity) {
-    selectedEntity.position.add(deltaMove);
+  if (gameContext.selectedEntity) {
+    gameContext.selectedEntity.position.add(deltaMove);
   } else {
     camera.position.add(deltaMove.mulScalar(-1));
   }
@@ -128,12 +125,12 @@ document.addEventListener('keyup', (event) => {
       gameContext.freeCamera = !gameContext.freeCamera;
     }; break;
     case 'KeyC': {
-      selectedEntity = null;
+      gameContext.selectedEntity = null;
     }; break;
     case 'KeyE': {
       let exported = ''; ;
-      if (selectedEntity) {
-        exported = selectedEntity.serialize();
+      if (gameContext.selectedEntity) {
+        exported = gameContext.selectedEntity.serialize();
       } else {
         resetExportedIdSequence();
         
