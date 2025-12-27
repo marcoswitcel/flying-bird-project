@@ -189,7 +189,7 @@ requestAnimationFrame(function loop(timestamp) {
 
       if (gameContext.state === 'win') {
         entity.velocity.y = 0
-        loadLevel("../public/level/level02.json")
+        loadLevel(gameContext, "../public/level/level02.json")
       }
 
       // por hora velocidade horizontal fixa
@@ -298,7 +298,12 @@ requestAnimationFrame(function loop(timestamp) {
   requestAnimationFrame(loop)
 });
 
-function loadLevel(levelFile) {
+/**
+ * 
+ * @param {GameContext} gameContext 
+ * @param {string} levelFile 
+ */
+function loadLevel(gameContext, levelFile) {
   fetch(levelFile)
     .then(response => {
       return response.json();
@@ -328,4 +333,4 @@ function loadLevel(levelFile) {
     })
 }
 
-loadLevel("../public/level/level01.json")
+loadLevel(gameContext, "../public/level/level01.json")
