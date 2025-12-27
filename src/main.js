@@ -121,6 +121,7 @@ document.addEventListener('mousemove', (event) => {
 });
 
 const resetGameState = () => {
+  state = 'running'
   counter = 0;
   // @todo João, revisar e integrar esses códigos de reset
   for (const entity of entities) {
