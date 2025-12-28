@@ -179,6 +179,8 @@ function loadLevel(gameContext, levelFile) {
       return response.json();
     })
     .then(json => {
+      console.log("[loadLevel] level loaded name: '%s'", levelFile)
+
       // reset
       gameContext.entities.length = 0;
       gameScene.resetGameState();
