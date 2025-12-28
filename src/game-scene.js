@@ -1,6 +1,7 @@
 import { Camera } from './camera.js';
 import { BirdEntity, Entity } from './entities.js';
 import { Scene } from './scene.js';
+import { Vector2 } from './vector2.js';
 
 export class GameContext {
   /**
@@ -29,6 +30,12 @@ export class GameContext {
   isShowMemory = false;
 
   camera = new Camera();
+
+  /**
+   * @type {Vector2 | null} 
+   */
+  mousedown = null;
+  mouseMoved = false;
 
   /**
    * 

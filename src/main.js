@@ -43,33 +43,28 @@ document.addEventListener('mousedown', () => {
   }
 });
 
-/**
- * @type {Vector2 | null} 
- */
-let mousedown = null;
-let mouseMoved = false;
 
 document.addEventListener('mouseup', (event) => {
-  if (gameContext.freeCamera && !mouseMoved && !gameContext.selectedEntity) {
+  if (gameContext.freeCamera && !gameContext.mouseMoved && !gameContext.selectedEntity) {
     // @todo João, mover esse código
     const clickInWorldSpace = gameContext.camera.position
       .copy()
-      .add(mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
+      .add(gameContext.mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
     const pipe = new PipeEntity();
     pipe.position = clickInWorldSpace.copy();
     gameContext.entities.push(pipe);
   }
 
-  mousedown = null;
-  mouseMoved = false;
+  gameContext.mousedown = null;
+  gameContext.mouseMoved = false;
 });
 document.addEventListener('mousedown', (event) => {
-  mousedown = vec2(event.offsetX, event.offsetY);
-  mouseMoved = false;
+  gameContext.mousedown = vec2(event.offsetX, event.offsetY);
+  gameContext.mouseMoved = false;
 
   const clickInWorldSpace = gameContext.camera.position
     .copy()
-    .add(mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
+    .add(gameContext.mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
   
   gameContext.selectedEntity = null;
   for (const entity of gameContext.entities) {
@@ -80,13 +75,13 @@ document.addEventListener('mousedown', (event) => {
   }
 });
 document.addEventListener('mousemove', (event) => {
-  if (!mousedown || !gameContext.freeCamera) return;
+  if (!gameContext.mousedown || !gameContext.freeCamera) return;
 
   const deltaMove = vec2(event.offsetX, event.offsetY)
-    .sub(mousedown);
+    .sub(gameContext.mousedown);
 
-  mousedown = vec2(event.offsetX, event.offsetY);
-  mouseMoved = true;
+  gameContext.mousedown = vec2(event.offsetX, event.offsetY);
+  gameContext.mouseMoved = true;
 
   if (gameContext.selectedEntity) {
     gameContext.selectedEntity.position.add(deltaMove);
