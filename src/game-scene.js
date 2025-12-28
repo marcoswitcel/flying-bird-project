@@ -1,7 +1,7 @@
 import { Camera } from './camera.js';
-import { BirdEntity, Entity } from './entities.js';
+import { BirdEntity, Entity, exportedIdGenerator, PipeEntity, resetExportedIdSequence } from './entities.js';
 import { Scene } from './scene.js';
-import { Vector2 } from './vector2.js';
+import { vec2, Vector2 } from './vector2.js';
 
 export class GameContext {
   /**
@@ -38,10 +38,16 @@ export class GameContext {
   mouseMoved = false;
 
   /**
+   * @type {CanvasRenderingContext2D}
+   */
+  ctx;
+
+  /**
    * 
    * @param {CanvasRenderingContext2D} ctx 
    */
   constructor(ctx) {
+    this.ctx = ctx;
     this.camera.position.x = ctx.canvas.width / 2;
     this.camera.position.y = ctx.canvas.height / 2;
     this.camera.dimensions.x = ctx.canvas.width;
@@ -72,5 +78,118 @@ export class GameScene extends Scene {
     for (const entity of this.context.entities) {
       entity.initialState();
     }
+  }
+
+  setup() {
+    document.addEventListener('mousedown', () => {
+      if (this.context.paused || this.context.freeCamera) return;
+    
+      if (!this.context.bird.hitted) {
+        this.context.bird.velocity.y = -4;
+      }
+    });
+    
+    
+    document.addEventListener('mouseup', (event) => {
+      if (this.context.freeCamera && !this.context.mouseMoved && !this.context.selectedEntity) {
+        // @todo João, mover esse código
+        const clickInWorldSpace = this.context.camera.position
+          .copy()
+          .add(this.context.mousedown.copy().subScalar(this.context.ctx.canvas.width / 2, this.context.ctx.canvas.height / 2));
+        const pipe = new PipeEntity();
+        pipe.position = clickInWorldSpace.copy();
+        this.context.entities.push(pipe);
+      }
+    
+      this.context.mousedown = null;
+      this.context.mouseMoved = false;
+    });
+    document.addEventListener('mousedown', (event) => {
+      this.context.mousedown = vec2(event.offsetX, event.offsetY);
+      this.context.mouseMoved = false;
+    
+      const clickInWorldSpace = this.context.camera.position
+        .copy()
+        .add(this.context.mousedown.copy().subScalar(this.context.ctx.canvas.width / 2, this.context.ctx.canvas.height / 2));
+      
+      this.context.selectedEntity = null;
+      for (const entity of this.context.entities) {
+        if (entity.getVisibleRect().isInside(clickInWorldSpace)) {
+          console.log(entity);
+          this.context.selectedEntity = entity;
+        }
+      }
+    });
+    document.addEventListener('mousemove', (event) => {
+      if (!this.context.mousedown || !this.context.freeCamera) return;
+    
+      const deltaMove = vec2(event.offsetX, event.offsetY)
+        .sub(this.context.mousedown);
+    
+      this.context.mousedown = vec2(event.offsetX, event.offsetY);
+      this.context.mouseMoved = true;
+    
+      if (this.context.selectedEntity) {
+        this.context.selectedEntity.position.add(deltaMove);
+      } else {
+        this.context.camera.position.add(deltaMove.mulScalar(-1));
+      }
+    });
+    
+    
+    
+    document.addEventListener('keyup', (event) => {
+      switch (event.code) {
+        case 'KeyP': {
+          this.context.paused = !this.context.paused;
+        }; break;
+        case 'KeyS': {
+          this.context.isRenderSprite = !this.context.isRenderSprite;
+        }; break;
+        case 'KeyM': {
+          this.context.isShowMemory = !this.context.isShowMemory;
+        }; break;
+        case 'KeyR': {
+          this.resetGameState();
+        }; break;
+        case 'KeyD': {
+          this.context.isShowDimension = !this.context.isShowDimension;
+        }; break;
+        case 'KeyF': {
+          this.context.freeCamera = !this.context.freeCamera;
+        }; break;
+        case 'KeyC': {
+          this.context.selectedEntity = null;
+        }; break;
+        case 'KeyE': {
+          let exported = ''; ;
+          if (this.context.selectedEntity) {
+            exported = this.context.selectedEntity.serialize();
+          } else {
+            resetExportedIdSequence();
+            
+            const world = {
+              world: {
+                entities: this.context.entities
+                  .map(e => e.exportableObject())
+                  .sort((a, b) => a.id - b.id)
+                  .map(e => { e.id = exportedIdGenerator(); return e; })
+              }
+            };
+            exported = JSON.stringify(world, null, 2);
+          }
+          navigator.clipboard.writeText(exported)
+            .then(() => {
+              console.log('Copiado: ' + exported);
+            })
+            .catch(() => {
+              console.error('Problema ao copiar');
+            });
+        }; break;
+        case 'KeyO': {
+          this.context.isShowCollider = !this.context.isShowCollider;
+        }; break;
+      }
+    });
   }
 }

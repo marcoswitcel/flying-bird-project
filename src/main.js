@@ -1,11 +1,10 @@
-import { Camera } from './camera.js';
-import { BoundingRect, CollisionShape, drawRectBorder, RectCollisionShape } from './collision.js';
-import { BirdEntity, Entity, TiledEntity, PipeEntity, processLevelData, RUNTIME_ID_SEQUENCE_START, exportedIdGenerator, ParallaxEntity, resetExportedIdSequence } from './entities.js';
+import { BoundingRect, drawRectBorder, RectCollisionShape } from './collision.js';
+import { BirdEntity, PipeEntity, processLevelData, ParallaxEntity } from './entities.js';
 import { GameContext, GameScene } from './game-scene.js';
-import { drawRect, drawRectStroke, drawText } from './render.js';
+import { drawRect, drawText } from './render.js';
 import { resourceManager } from './resource-manager.js';
-import { AnimatedSprite, Sprite } from './sprite.js';
-import { vec2, Vector2 } from './vector2.js';
+import { AnimatedSprite } from './sprite.js';
+import { vec2 } from './vector2.js';
 
 console.log('Olá mundo dos games de pássaros!');
 
@@ -35,116 +34,8 @@ resourceManager.add('./assets/image/parallax/clouds.svg', 'image','clouds');
 const gameContext = new GameContext(ctx);
 const gameScene = new GameScene(gameContext);
 
-document.addEventListener('mousedown', () => {
-  if (gameContext.paused || gameContext.freeCamera) return;
+gameScene.setup()
 
-  if (!gameContext.bird.hitted) {
-    gameContext.bird.velocity.y = -4;
-  }
-});
-
-
-document.addEventListener('mouseup', (event) => {
-  if (gameContext.freeCamera && !gameContext.mouseMoved && !gameContext.selectedEntity) {
-    // @todo João, mover esse código
-    const clickInWorldSpace = gameContext.camera.position
-      .copy()
-      .add(gameContext.mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
-    const pipe = new PipeEntity();
-    pipe.position = clickInWorldSpace.copy();
-    gameContext.entities.push(pipe);
-  }
-
-  gameContext.mousedown = null;
-  gameContext.mouseMoved = false;
-});
-document.addEventListener('mousedown', (event) => {
-  gameContext.mousedown = vec2(event.offsetX, event.offsetY);
-  gameContext.mouseMoved = false;
-
-  const clickInWorldSpace = gameContext.camera.position
-    .copy()
-    .add(gameContext.mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
-  
-  gameContext.selectedEntity = null;
-  for (const entity of gameContext.entities) {
-    if (entity.getVisibleRect().isInside(clickInWorldSpace)) {
-      console.log(entity);
-      gameContext.selectedEntity = entity;
-    }
-  }
-});
-document.addEventListener('mousemove', (event) => {
-  if (!gameContext.mousedown || !gameContext.freeCamera) return;
-
-  const deltaMove = vec2(event.offsetX, event.offsetY)
-    .sub(gameContext.mousedown);
-
-  gameContext.mousedown = vec2(event.offsetX, event.offsetY);
-  gameContext.mouseMoved = true;
-
-  if (gameContext.selectedEntity) {
-    gameContext.selectedEntity.position.add(deltaMove);
-  } else {
-    gameContext.camera.position.add(deltaMove.mulScalar(-1));
-  }
-});
-
-
-
-document.addEventListener('keyup', (event) => {
-  switch (event.code) {
-    case 'KeyP': {
-      gameContext.paused = !gameContext.paused;
-    }; break;
-    case 'KeyS': {
-      gameContext.isRenderSprite = !gameContext.isRenderSprite;
-    }; break;
-    case 'KeyM': {
-      gameContext.isShowMemory = !gameContext.isShowMemory;
-    }; break;
-    case 'KeyR': {
-      gameScene.resetGameState();
-    }; break;
-    case 'KeyD': {
-      gameContext.isShowDimension = !gameContext.isShowDimension;
-    }; break;
-    case 'KeyF': {
-      gameContext.freeCamera = !gameContext.freeCamera;
-    }; break;
-    case 'KeyC': {
-      gameContext.selectedEntity = null;
-    }; break;
-    case 'KeyE': {
-      let exported = ''; ;
-      if (gameContext.selectedEntity) {
-        exported = gameContext.selectedEntity.serialize();
-      } else {
-        resetExportedIdSequence();
-        
-        const world = {
-          world: {
-            entities: gameContext.entities
-              .map(e => e.exportableObject())
-              .sort((a, b) => a.id - b.id)
-              .map(e => { e.id = exportedIdGenerator(); return e; })
-          }
-        };
-        exported = JSON.stringify(world, null, 2);
-      }
-      navigator.clipboard.writeText(exported)
-        .then(() => {
-          console.log('Copiado: ' + exported);
-        })
-        .catch(() => {
-          console.error('Problema ao copiar');
-        });
-    }; break;
-    case 'KeyO': {
-      gameContext.isShowCollider = !gameContext.isShowCollider;
-    }; break;
-  }
-});
 
 
 let lastTimestamp = 0;
