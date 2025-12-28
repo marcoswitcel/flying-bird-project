@@ -32,14 +32,7 @@ resourceManager.add('./assets/image/parallax/moutains.svg', 'image','moutains');
 resourceManager.add('./assets/image/parallax/clouds.svg', 'image','clouds');
 
 
-const camera = new Camera();
-camera.position.x = ctx.canvas.width / 2;
-camera.position.y = ctx.canvas.height / 2;
-camera.dimensions.x = ctx.canvas.width;
-camera.dimensions.y = ctx.canvas.height;
-
-
-const gameContext = new GameContext();
+const gameContext = new GameContext(ctx);
 const gameScene = new GameScene(gameContext);
 
 document.addEventListener('mousedown', () => {
@@ -59,7 +52,7 @@ let mouseMoved = false;
 document.addEventListener('mouseup', (event) => {
   if (gameContext.freeCamera && !mouseMoved && !gameContext.selectedEntity) {
     // @todo João, mover esse código
-    const clickInWorldSpace = camera.position
+    const clickInWorldSpace = gameContext.camera.position
       .copy()
       .add(mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
     const pipe = new PipeEntity();
@@ -74,7 +67,7 @@ document.addEventListener('mousedown', (event) => {
   mousedown = vec2(event.offsetX, event.offsetY);
   mouseMoved = false;
 
-  const clickInWorldSpace = camera.position
+  const clickInWorldSpace = gameContext.camera.position
     .copy()
     .add(mousedown.copy().subScalar(canvas.width / 2, canvas.height / 2));
   
@@ -98,7 +91,7 @@ document.addEventListener('mousemove', (event) => {
   if (gameContext.selectedEntity) {
     gameContext.selectedEntity.position.add(deltaMove);
   } else {
-    camera.position.add(deltaMove.mulScalar(-1));
+    gameContext.camera.position.add(deltaMove.mulScalar(-1));
   }
 });
 
@@ -197,7 +190,7 @@ requestAnimationFrame(function loop(timestamp) {
 
       // camera seguindo 'bird'
       if (!gameContext.freeCamera) {
-        camera.position.x = entity.position.x + 100;
+        gameContext.camera.position.x = entity.position.x + 100;
       }
 
       // pequeno feedback visual para demonstrar o esforço do pássaro tentando subir
@@ -251,15 +244,15 @@ requestAnimationFrame(function loop(timestamp) {
     // @todo João, não funcionando para a TiledEntity
     // if (!entity.getVisibleRect().isIntersecting(camera)) continue;
 
-    if (gameContext.isRenderSprite) entity.render(ctx, camera);
+    if (gameContext.isRenderSprite) entity.render(ctx, gameContext.camera);
 
     if (gameContext.isShowDimension) {
       const dimensions = (entity.type === 'TiledEntity') ? { x: entity.sprite.width * entity.dimension.x, y: entity.sprite.height * entity.dimension.y, } : entity.dimension;
-      drawRectBorder(ctx, camera, entity.position, dimensions, 'black', true);
+      drawRectBorder(ctx, gameContext.camera, entity.position, dimensions, 'black', true);
     }
 
     if (gameContext.isShowCollider && entity.collisionShape) {
-      entity.collisionShape.render(ctx, camera, entity.position);
+      entity.collisionShape.render(ctx, gameContext.camera, entity.position);
     }
   }
 

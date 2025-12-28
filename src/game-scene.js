@@ -1,3 +1,4 @@
+import { Camera } from './camera.js';
 import { BirdEntity, Entity } from './entities.js';
 import { Scene } from './scene.js';
 
@@ -26,6 +27,19 @@ export class GameContext {
   isShowDimension = false;
   isRenderSprite = true;
   isShowMemory = false;
+
+  camera = new Camera();
+
+  /**
+   * 
+   * @param {CanvasRenderingContext2D} ctx 
+   */
+  constructor(ctx) {
+    this.camera.position.x = ctx.canvas.width / 2;
+    this.camera.position.y = ctx.canvas.height / 2;
+    this.camera.dimensions.x = ctx.canvas.width;
+    this.camera.dimensions.y = ctx.canvas.height;
+  }
 }
 
 export class GameScene extends Scene {
