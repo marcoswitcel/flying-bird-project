@@ -86,85 +86,35 @@ export class GameScene extends Scene {
     document.addEventListener('mouseup', this.handleMouseup);
 
     document.addEventListener('mousedown', (event) => {
-      this.context.mousedown = vec2(event.offsetX, event.offsetY);
-      this.context.mouseMoved = false;
-    
-      const clickInWorldSpace = this.context.camera.position
-        .copy()
-        .add(this.context.mousedown.copy().subScalar(this.context.ctx.canvas.width / 2, this.context.ctx.canvas.height / 2));
       
-      this.context.selectedEntity = null;
-      for (const entity of this.context.entities) {
-        if (entity.getVisibleRect().isInside(clickInWorldSpace)) {
-          console.log(entity);
-          this.context.selectedEntity = entity;
-        }
-      }
     });
 
     document.addEventListener('mousemove', this.handleMousemove);
     
-    document.addEventListener('keyup', (event) => {
-      switch (event.code) {
-        case 'KeyP': {
-          this.context.paused = !this.context.paused;
-        }; break;
-        case 'KeyS': {
-          this.context.isRenderSprite = !this.context.isRenderSprite;
-        }; break;
-        case 'KeyM': {
-          this.context.isShowMemory = !this.context.isShowMemory;
-        }; break;
-        case 'KeyR': {
-          this.resetGameState();
-        }; break;
-        case 'KeyD': {
-          this.context.isShowDimension = !this.context.isShowDimension;
-        }; break;
-        case 'KeyF': {
-          this.context.freeCamera = !this.context.freeCamera;
-        }; break;
-        case 'KeyC': {
-          this.context.selectedEntity = null;
-        }; break;
-        case 'KeyE': {
-          let exported = ''; ;
-          if (this.context.selectedEntity) {
-            exported = this.context.selectedEntity.serialize();
-          } else {
-            resetExportedIdSequence();
-            
-            const world = {
-              world: {
-                entities: this.context.entities
-                  .map(e => e.exportableObject())
-                  .sort((a, b) => a.id - b.id)
-                  .map(e => { e.id = exportedIdGenerator(); return e; })
-              }
-            };
-            exported = JSON.stringify(world, null, 2);
-          }
-          navigator.clipboard.writeText(exported)
-            .then(() => {
-              console.log('Copiado: ' + exported);
-            })
-            .catch(() => {
-              console.error('Problema ao copiar');
-            });
-        }; break;
-        case 'KeyO': {
-          this.context.isShowCollider = !this.context.isShowCollider;
-        }; break;
-      }
-    });
+    document.addEventListener('keyup', this.handleKeyup);
   }
 
   /**
    * @private
-   * @type {() => void}
-   * @returns 
+   * @param {MouseEvent} event
    */
-  handleMousedown = () => {
+  handleMousedown = (event) => {
+    this.context.mousedown = vec2(event.offsetX, event.offsetY);
+    this.context.mouseMoved = false;
+  
+    const clickInWorldSpace = this.context.camera.position
+      .copy()
+      .add(this.context.mousedown.copy().subScalar(this.context.ctx.canvas.width / 2, this.context.ctx.canvas.height / 2));
+    
+    this.context.selectedEntity = null;
+    for (const entity of this.context.entities) {
+      if (entity.getVisibleRect().isInside(clickInWorldSpace)) {
+        console.log(entity);
+        this.context.selectedEntity = entity;
+      }
+    }
+
+
     if (this.context.paused || this.context.freeCamera) return;
   
     if (!this.context.bird.hitted) {
@@ -208,6 +158,64 @@ export class GameScene extends Scene {
       this.context.selectedEntity.position.add(deltaMove);
     } else {
       this.context.camera.position.add(deltaMove.mulScalar(-1));
+    }
+  }
+
+  /**
+   * @private
+   * @param {KeyboardEvent} event 
+   */
+  handleKeyup = (event) => {
+    switch (event.code) {
+      case 'KeyP': {
+        this.context.paused = !this.context.paused;
+      }; break;
+      case 'KeyS': {
+        this.context.isRenderSprite = !this.context.isRenderSprite;
+      }; break;
+      case 'KeyM': {
+        this.context.isShowMemory = !this.context.isShowMemory;
+      }; break;
+      case 'KeyR': {
+        this.resetGameState();
+      }; break;
+      case 'KeyD': {
+        this.context.isShowDimension = !this.context.isShowDimension;
+      }; break;
+      case 'KeyF': {
+        this.context.freeCamera = !this.context.freeCamera;
+      }; break;
+      case 'KeyC': {
+        this.context.selectedEntity = null;
+      }; break;
+      case 'KeyE': {
+        let exported = ''; ;
+        if (this.context.selectedEntity) {
+          exported = this.context.selectedEntity.serialize();
+        } else {
+          resetExportedIdSequence();
+          
+          const world = {
+            world: {
+              entities: this.context.entities
+                .map(e => e.exportableObject())
+                .sort((a, b) => a.id - b.id)
+                .map(e => { e.id = exportedIdGenerator(); return e; })
+            }
+          };
+          exported = JSON.stringify(world, null, 2);
+        }
+        navigator.clipboard.writeText(exported)
+          .then(() => {
+            console.log('Copiado: ' + exported);
+          })
+          .catch(() => {
+            console.error('Problema ao copiar');
+          });
+      }; break;
+      case 'KeyO': {
+        this.context.isShowCollider = !this.context.isShowCollider;
+      }; break;
     }
   }
 }
