@@ -81,29 +81,10 @@ export class GameScene extends Scene {
   }
 
   setup() {
-    document.addEventListener('mousedown', () => {
-      if (this.context.paused || this.context.freeCamera) return;
+    document.addEventListener('mousedown', this.handleMousedown);
     
-      if (!this.context.bird.hitted) {
-        this.context.bird.velocity.y = -4;
-      }
-    });
-    
-    
-    document.addEventListener('mouseup', (event) => {
-      if (this.context.freeCamera && !this.context.mouseMoved && !this.context.selectedEntity) {
-        // @todo João, mover esse código
-        const clickInWorldSpace = this.context.camera.position
-          .copy()
-          .add(this.context.mousedown.copy().subScalar(this.context.ctx.canvas.width / 2, this.context.ctx.canvas.height / 2));
-        const pipe = new PipeEntity();
-        pipe.position = clickInWorldSpace.copy();
-        this.context.entities.push(pipe);
-      }
-    
-      this.context.mousedown = null;
-      this.context.mouseMoved = false;
-    });
+    document.addEventListener('mouseup', this.handleMouseup);
+
     document.addEventListener('mousedown', (event) => {
       this.context.mousedown = vec2(event.offsetX, event.offsetY);
       this.context.mouseMoved = false;
@@ -120,23 +101,8 @@ export class GameScene extends Scene {
         }
       }
     });
-    document.addEventListener('mousemove', (event) => {
-      if (!this.context.mousedown || !this.context.freeCamera) return;
-    
-      const deltaMove = vec2(event.offsetX, event.offsetY)
-        .sub(this.context.mousedown);
-    
-      this.context.mousedown = vec2(event.offsetX, event.offsetY);
-      this.context.mouseMoved = true;
-    
-      if (this.context.selectedEntity) {
-        this.context.selectedEntity.position.add(deltaMove);
-      } else {
-        this.context.camera.position.add(deltaMove.mulScalar(-1));
-      }
-    });
-    
-    
+
+    document.addEventListener('mousemove', this.handleMousemove);
     
     document.addEventListener('keyup', (event) => {
       switch (event.code) {
@@ -191,5 +157,57 @@ export class GameScene extends Scene {
         }; break;
       }
     });
+  }
+
+  /**
+   * @private
+   * @type {() => void}
+   * @returns 
+   */
+  handleMousedown = () => {
+    if (this.context.paused || this.context.freeCamera) return;
+  
+    if (!this.context.bird.hitted) {
+      this.context.bird.velocity.y = -4;
+    }
+  }
+
+  /**
+   * @private
+   * @param {MouseEvent} event 
+   */
+  handleMouseup = (event) => {
+    if (this.context.freeCamera && !this.context.mouseMoved && !this.context.selectedEntity) {
+      // @todo João, mover esse código
+      const clickInWorldSpace = this.context.camera.position
+        .copy()
+        .add(this.context.mousedown.copy().subScalar(this.context.ctx.canvas.width / 2, this.context.ctx.canvas.height / 2));
+      const pipe = new PipeEntity();
+      pipe.position = clickInWorldSpace.copy();
+      this.context.entities.push(pipe);
+    }
+  
+    this.context.mousedown = null;
+    this.context.mouseMoved = false;
+  }
+
+  /**
+   * @private
+   * @param {MouseEvent} event 
+   */
+  handleMousemove = (event) => {
+    if (!this.context.mousedown || !this.context.freeCamera) return;
+  
+    const deltaMove = vec2(event.offsetX, event.offsetY)
+      .sub(this.context.mousedown);
+  
+    this.context.mousedown = vec2(event.offsetX, event.offsetY);
+    this.context.mouseMoved = true;
+  
+    if (this.context.selectedEntity) {
+      this.context.selectedEntity.position.add(deltaMove);
+    } else {
+      this.context.camera.position.add(deltaMove.mulScalar(-1));
+    }
   }
 }
