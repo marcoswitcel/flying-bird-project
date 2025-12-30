@@ -81,17 +81,19 @@ export class GameScene extends Scene {
   }
 
   setup() {
+    // @note listas sincronizadas @setup/cleanup
     document.addEventListener('mousedown', this.handleMousedown);
-    
     document.addEventListener('mouseup', this.handleMouseup);
-
-    document.addEventListener('mousedown', (event) => {
-      
-    });
-
     document.addEventListener('mousemove', this.handleMousemove);
-    
     document.addEventListener('keyup', this.handleKeyup);
+  }
+
+  cleanUp() {
+    // @note listas sincronizadas @setup/cleanup
+    document.removeEventListener('mousedown', this.handleMousedown);
+    document.removeEventListener('mouseup', this.handleMouseup);
+    document.removeEventListener('mousemove', this.handleMousemove);
+    document.removeEventListener('keyup', this.handleKeyup);
   }
 
   /**
