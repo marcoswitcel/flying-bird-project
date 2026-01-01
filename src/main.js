@@ -31,9 +31,10 @@ resourceManager.add('./assets/image/parallax/clouds.svg', 'image','clouds');
 const gameContext = new GameContext(ctx);
 const gameScene = new GameScene(gameContext);
 
-gameScene.setup()
-
-
+const sceneManager = {
+  current: null,
+  entering: gameScene,
+}
 
 let lastTimestamp = 0;
 requestAnimationFrame(function loop(timestamp) {
@@ -42,6 +43,20 @@ requestAnimationFrame(function loop(timestamp) {
     lastTimestamp = timestamp;
     requestAnimationFrame(loop)  
     return;
+  }
+
+  // roda cleanUp e setup fazendo assim o swap da cena
+  if (sceneManager.entering) {
+    if (sceneManager.current) {
+      console.log('[SceneManager] cleanUp: ' + sceneManager.current.constructor.name)
+      sceneManager.current.cleanUp();
+    }
+    
+    sceneManager.current = sceneManager.entering;
+    sceneManager.entering = null;
+
+    console.log('[SceneManager] setup: ' + sceneManager.current.constructor.name)
+    sceneManager.current.setup();
   }
 
   const starTime = performance.now();
