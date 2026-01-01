@@ -8,16 +8,21 @@
         body {
             background-color: #333;
         }
-        canvas {
+        #app {
+
             position: absolute;
             top: 50vh;
             left: 50vw;
             transform: translate(-50%, -50%);
             max-width: 100%;
         }
+        canvas {
+            max-width: 100%;
+        }
     </style>
 </head>
 <body>
+    <div id="app"></div>
     <script type="module" src="../src/main.js"></script>
 </body>
 </html>

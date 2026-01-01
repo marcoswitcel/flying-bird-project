@@ -6,12 +6,16 @@ import { SceneManager } from './scene-manager.js';
 
 console.log('Olá mundo dos games de pássaros!');
 
+const appElement = document.getElementById('app');
 const canvas = document.createElement('canvas');
 
 canvas.width = 400;
 canvas.height = 520;
+appElement.style.width = 400 + 'px';
+appElement.style.height = 520 + 'px';
 
-document.body.append(canvas);
+// adiciona no elemento #app
+appElement.append(canvas)
 
 const ctx = canvas.getContext('2d');
 
