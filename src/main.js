@@ -2,6 +2,7 @@ import { loadLevel } from './entities.js';
 import { GameContext, GameScene } from './game-scene.js';
 import { drawRect } from './render.js';
 import { resourceManager } from './resource-manager.js';
+import { SceneManager } from './scene-manager.js';
 
 console.log('Olá mundo dos games de pássaros!');
 
@@ -31,46 +32,29 @@ resourceManager.add('./assets/image/parallax/clouds.svg', 'image','clouds');
 const gameContext = new GameContext(ctx);
 const gameScene = new GameScene(gameContext);
 
-const sceneManager = {
-  current: null,
-  entering: gameScene,
-}
+const sceneManager = new SceneManager(gameScene)
 
 let lastTimestamp = 0;
 requestAnimationFrame(function loop(timestamp) {
-  if (lastTimestamp === 0)
-  {
+  
+  if (lastTimestamp === 0) {
     lastTimestamp = timestamp;
     requestAnimationFrame(loop)  
     return;
   }
 
-  // roda cleanUp e setup fazendo assim o swap da cena
-  if (sceneManager.entering) {
-    if (sceneManager.current) {
-      console.log('[SceneManager] cleanUp: ' + sceneManager.current.constructor.name)
-      sceneManager.current.cleanUp();
-    }
-    
-    sceneManager.current = sceneManager.entering;
-    sceneManager.entering = null;
-
-    console.log('[SceneManager] setup: ' + sceneManager.current.constructor.name)
-    sceneManager.current.setup();
-  }
-
   const starTime = performance.now();
 
+  sceneManager.changeIfNeeds()
 
-  gameScene.update(timestamp);
-
-  gameScene.render(ctx);
+  sceneManager.execute(ctx, timestamp)
 
   // @note também faz parte da renderização, mas por hora fica fora do método `Scene.render`
   const endTime = performance.now();
   // @ts-expect-error
   const memory = performance.memory;
-  if (gameScene.context.isShowMemory && memory) {
+  // @todo joão, talvez mover esse parâmetro pra fora desse objeto
+  if (gameContext.isShowMemory && memory) {
     drawRect(ctx, 0, 0, 300, 85, 'rgba(0, 0, 0, .75)');
     ctx.fillStyle = 'white';
     ctx.font = '24px serif';
