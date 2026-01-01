@@ -1,10 +1,7 @@
-import { BoundingRect, drawRectBorder, RectCollisionShape } from './collision.js';
-import { BirdEntity, PipeEntity, processLevelData, ParallaxEntity } from './entities.js';
+import { loadLevel } from './entities.js';
 import { GameContext, GameScene } from './game-scene.js';
-import { drawRect, drawText } from './render.js';
+import { drawRect } from './render.js';
 import { resourceManager } from './resource-manager.js';
-import { AnimatedSprite } from './sprite.js';
-import { vec2 } from './vector2.js';
 
 console.log('Olá mundo dos games de pássaros!');
 
@@ -49,77 +46,8 @@ requestAnimationFrame(function loop(timestamp) {
 
   const starTime = performance.now();
 
-  if (!gameContext.paused)
-  for (const entity of gameContext.entities) {
-    if (entity instanceof BirdEntity) {
-      // gravidade
-      entity.accel.y += 0.15;
 
-      entity.velocity.add(entity.accel);
-
-      if (gameContext.state === 'win') {
-        entity.velocity.y = 0
-        loadLevel(gameContext, "../public/level/level02.json")
-      }
-
-      // por hora velocidade horizontal fixa
-      if (!entity.hitted) {
-        entity.velocity.x = 1.2;
-      } else {
-        entity.velocity.x = 0;
-      }
-      entity.position.add(entity.velocity);
-
-      // reset aceleração
-      entity.accel.x = 0;
-      entity.accel.y = 0;
-
-      // camera seguindo 'bird'
-      if (!gameContext.freeCamera) {
-        gameContext.camera.position.x = entity.position.x + 100;
-      }
-
-      // pequeno feedback visual para demonstrar o esforço do pássaro tentando subir
-      if (entity.sprite instanceof AnimatedSprite) {
-        if (entity.velocity.y < 0) {
-          entity.sprite.length = 150;
-        } else {
-          entity.sprite.length = 250;
-        }
-      }
-    }
-  }
-
-  for (const entity of gameContext.entities) {
-    if (entity.type === 'PipeEntity') {
-      /** @type {PipeEntity} */
-      // @ts-expect-error
-      const pipe = entity;
-      if (!pipe.birdPassedThrough && pipe.position.x < gameContext.bird.position.x) {
-        pipe.birdPassedThrough = true;
-        gameContext.counter++;
-        if (pipe.isClearLevel) {
-          gameContext.state = 'win';
-        }
-      }
-    }
-  }
-
-  if (!gameContext.paused)
-  for (const entity of gameContext.entities) {
-    if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
-      const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
-      const rectBird = new BoundingRect(gameContext.bird.position, gameContext.bird.collisionShape.dimensions);
-
-      if (rectBird.isIntersecting(rectEntity)) {
-        entity.collisionShape.color = 'red';
-        gameContext.bird.gotHit();
-      } else {
-        entity.collisionShape.color = 'black';
-      }
-    }
-  }
-
+  gameScene.update(timestamp);
 
   gameScene.render(ctx);
 
@@ -140,41 +68,4 @@ requestAnimationFrame(function loop(timestamp) {
   requestAnimationFrame(loop)
 });
 
-/**
- * 
- * @param {GameContext} gameContext 
- * @param {string} levelFile 
- */
-function loadLevel(gameContext, levelFile) {
-  fetch(levelFile)
-    .then(response => {
-      return response.json();
-    })
-    .then(json => {
-      console.log("[loadLevel] level loaded name: '%s'", levelFile)
-
-      // reset
-      gameContext.entities.length = 0;
-      gameScene.resetGameState();
-
-      const allEntitiesImported = processLevelData(json)
-
-      // @note João, hack temporário para fazer o parallax renderizar por trás da cena
-      for (const entity of allEntitiesImported) if (entity instanceof ParallaxEntity) {
-        gameContext.entities.push(entity);
-      }
-      
-      for (const entity of allEntitiesImported) if (!(entity instanceof ParallaxEntity)) {
-        gameContext.entities.push(entity);
-      }
-      // @note João, hack temporário para fazer o paássaro ser renderizado por último
-      gameContext.entities.push(gameContext.bird);
-      gameContext.bird.initialState()
-      
-    })
-    .catch((reason) => {
-      console.log(reason);
-    })
-}
-
-loadLevel(gameContext, "../public/level/level01.json")
+loadLevel(gameScene, "../public/level/level01.json")

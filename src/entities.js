@@ -1,5 +1,6 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, RectCollisionShape } from './collision.js';
+import { GameScene } from './game-scene.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
@@ -336,4 +337,41 @@ export const processLevelData = (json) => {
   }
 
   return entities;
+}
+
+/**
+ * 
+ * @param {GameScene} gameScene 
+ * @param {string} levelFile 
+ */
+export function loadLevel(gameScene, levelFile) {
+  fetch(levelFile)
+    .then(response => {
+      return response.json();
+    })
+    .then(json => {
+      console.log("[loadLevel] level loaded name: '%s'", levelFile)
+
+      // reset
+      gameScene.context.entities.length = 0;
+      gameScene.resetGameState();
+
+      const allEntitiesImported = processLevelData(json)
+
+      // @note João, hack temporário para fazer o parallax renderizar por trás da cena
+      for (const entity of allEntitiesImported) if (entity instanceof ParallaxEntity) {
+        gameScene.context.entities.push(entity);
+      }
+      
+      for (const entity of allEntitiesImported) if (!(entity instanceof ParallaxEntity)) {
+        gameScene.context.entities.push(entity);
+      }
+      // @note João, hack temporário para fazer o paássaro ser renderizado por último
+      gameScene.context.entities.push(gameScene.context.bird);
+      gameScene.context.bird.initialState()
+      
+    })
+    .catch((reason) => {
+      console.log(reason);
+    })
 }

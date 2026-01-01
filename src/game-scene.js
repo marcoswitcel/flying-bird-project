@@ -1,8 +1,9 @@
 import { Camera } from './camera.js';
-import { drawRectBorder } from './collision.js';
-import { BirdEntity, Entity, exportedIdGenerator, PipeEntity, resetExportedIdSequence } from './entities.js';
+import { BoundingRect, drawRectBorder, RectCollisionShape } from './collision.js';
+import { BirdEntity, Entity, exportedIdGenerator, loadLevel, PipeEntity, resetExportedIdSequence } from './entities.js';
 import { drawRect, drawText } from './render.js';
 import { Scene } from './scene.js';
+import { AnimatedSprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
 
 export class GameContext {
@@ -96,6 +97,79 @@ export class GameScene extends Scene {
     document.removeEventListener('mouseup', this.handleMouseup);
     document.removeEventListener('mousemove', this.handleMousemove);
     document.removeEventListener('keyup', this.handleKeyup);
+  }
+
+  update(timestamp) {
+    if (!this.context.paused)
+    for (const entity of this.context.entities) {
+      if (entity instanceof BirdEntity) {
+        // gravidade
+        entity.accel.y += 0.15;
+
+        entity.velocity.add(entity.accel);
+
+        if (this.context.state === 'win') {
+          entity.velocity.y = 0
+          loadLevel(this, "../public/level/level02.json")
+        }
+
+        // por hora velocidade horizontal fixa
+        if (!entity.hitted) {
+          entity.velocity.x = 1.2;
+        } else {
+          entity.velocity.x = 0;
+        }
+        entity.position.add(entity.velocity);
+
+        // reset aceleração
+        entity.accel.x = 0;
+        entity.accel.y = 0;
+
+        // camera seguindo 'bird'
+        if (!this.context.freeCamera) {
+          this.context.camera.position.x = entity.position.x + 100;
+        }
+
+        // pequeno feedback visual para demonstrar o esforço do pássaro tentando subir
+        if (entity.sprite instanceof AnimatedSprite) {
+          if (entity.velocity.y < 0) {
+            entity.sprite.length = 150;
+          } else {
+            entity.sprite.length = 250;
+          }
+        }
+      }
+    }
+
+    for (const entity of this.context.entities) {
+      if (entity.type === 'PipeEntity') {
+        /** @type {PipeEntity} */
+        // @ts-expect-error
+        const pipe = entity;
+        if (!pipe.birdPassedThrough && pipe.position.x < this.context.bird.position.x) {
+          pipe.birdPassedThrough = true;
+          this.context.counter++;
+          if (pipe.isClearLevel) {
+            this.context.state = 'win';
+          }
+        }
+      }
+    }
+
+    if (!this.context.paused)
+    for (const entity of this.context.entities) {
+      if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
+        const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
+        const rectBird = new BoundingRect(this.context.bird.position, this.context.bird.collisionShape.dimensions);
+
+        if (rectBird.isIntersecting(rectEntity)) {
+          entity.collisionShape.color = 'red';
+          this.context.bird.gotHit();
+        } else {
+          entity.collisionShape.color = 'black';
+        }
+      }
+    }
   }
 
   /**
