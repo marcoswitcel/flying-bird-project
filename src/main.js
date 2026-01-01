@@ -120,42 +120,14 @@ requestAnimationFrame(function loop(timestamp) {
     }
   }
 
-  // faze de renderização
-  drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
 
-  // contador
-  drawText(ctx, `${gameContext.counter}`, vec2(24, 24), 16, 'white', 'monospace');
-  
-  for (const entity of gameContext.entities) {
-    // @todo João, não funcionando para a TiledEntity
-    // if (!entity.getVisibleRect().isIntersecting(camera)) continue;
+  gameScene.render(ctx);
 
-    if (gameContext.isRenderSprite) entity.render(ctx, gameContext.camera);
-
-    if (gameContext.isShowDimension) {
-      const dimensions = (entity.type === 'TiledEntity') ? { x: entity.sprite.width * entity.dimension.x, y: entity.sprite.height * entity.dimension.y, } : entity.dimension;
-      drawRectBorder(ctx, gameContext.camera, entity.position, dimensions, 'black', true);
-    }
-
-    if (gameContext.isShowCollider && entity.collisionShape) {
-      entity.collisionShape.render(ctx, gameContext.camera, entity.position);
-    }
-  }
-
-  if (gameContext.bird.hitted) {
-    const boxWidth = 200, boxHeight = 75;
-    const x = ctx.canvas.width / 2 - boxWidth / 2;
-    const y = ctx.canvas.height / 2 - boxHeight / 2;
-    drawRect(ctx, 0, 0, canvas.width, canvas.height, 'rgba(0, 0, 0, .5)');
-    drawRect(ctx, x, y, boxWidth, boxHeight, 'green');
-    drawText(ctx, 'Fim de jogo', vec2(ctx.canvas.width / 2, ctx.canvas.height / 2), 24, 'white', 'monospace');
-  }
-
+  // @note também faz parte da renderização, mas por hora fica fora do método `Scene.render`
   const endTime = performance.now();
-
   // @ts-expect-error
   const memory = performance.memory;
-  if (gameContext.isShowMemory && memory) {
+  if (gameScene.context.isShowMemory && memory) {
     drawRect(ctx, 0, 0, 300, 85, 'rgba(0, 0, 0, .75)');
     ctx.fillStyle = 'white';
     ctx.font = '24px serif';
