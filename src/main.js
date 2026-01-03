@@ -1,5 +1,8 @@
+import { AppContext } from './app-context.js';
+import { config } from './config.js';
 import { loadLevel } from './entities.js';
 import { GameContext, GameScene } from './game-scene.js';
+import { MenuScene } from './menu-scene.js';
 import { drawRect } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { SceneManager } from './scene-manager.js';
@@ -7,17 +10,10 @@ import { SceneManager } from './scene-manager.js';
 console.log('Olá mundo dos games de pássaros!');
 
 const appElement = document.getElementById('app');
-const canvas = document.createElement('canvas');
 
-canvas.width = 400;
-canvas.height = 520;
-appElement.style.width = 400 + 'px';
-appElement.style.height = 520 + 'px';
+appElement.style.width = config.width + 'px';
+appElement.style.height = config.height + 'px';
 
-// adiciona no elemento #app
-appElement.append(canvas)
-
-const ctx = canvas.getContext('2d');
 
 resourceManager.add('./assets/image/pipe/pipe.svg', 'image','pipe');
 resourceManager.add('./assets/image/pipe/upside-down-pipe.svg', 'image','upside-down-pipe');
@@ -33,10 +29,9 @@ resourceManager.add('./assets/image/parallax/moutains.svg', 'image','moutains');
 resourceManager.add('./assets/image/parallax/clouds.svg', 'image','clouds');
 
 
-const gameContext = new GameContext(ctx);
-const gameScene = new GameScene(gameContext);
+const context = new AppContext(new SceneManager(appElement, null));
 
-const sceneManager = new SceneManager(gameScene)
+context.changeTo(new MenuScene(context));
 
 let lastTimestamp = 0;
 requestAnimationFrame(function loop(timestamp) {
@@ -49,16 +44,18 @@ requestAnimationFrame(function loop(timestamp) {
 
   const starTime = performance.now();
 
-  sceneManager.changeIfNeeds()
+  context.sceneManager.changeIfNeeds()
 
-  sceneManager.execute(ctx, timestamp)
+  context.sceneManager.execute(timestamp)
 
   // @note também faz parte da renderização, mas por hora fica fora do método `Scene.render`
   const endTime = performance.now();
   // @ts-expect-error
   const memory = performance.memory;
   // @todo joão, talvez mover esse parâmetro pra fora desse objeto
-  if (gameContext.isShowMemory && memory) {
+  if (context.sceneManager.current && context.sceneManager.current instanceof GameScene && 
+    context.sceneManager.current.gameContext.isShowMemory && memory) {
+    const ctx = context.sceneManager.current.gameContext.ctx;
     drawRect(ctx, 0, 0, 300, 85, 'rgba(0, 0, 0, .75)');
     ctx.fillStyle = 'white';
     ctx.font = '24px serif';
@@ -71,4 +68,3 @@ requestAnimationFrame(function loop(timestamp) {
   requestAnimationFrame(loop)
 });
 
-loadLevel(gameScene, "../public/level/level01.json")

@@ -353,22 +353,22 @@ export function loadLevel(gameScene, levelFile) {
       console.log("[loadLevel] level loaded name: '%s'", levelFile)
 
       // reset
-      gameScene.context.entities.length = 0;
+      gameScene.gameContext.entities.length = 0;
       gameScene.resetGameState();
 
       const allEntitiesImported = processLevelData(json)
 
       // @note João, hack temporário para fazer o parallax renderizar por trás da cena
       for (const entity of allEntitiesImported) if (entity instanceof ParallaxEntity) {
-        gameScene.context.entities.push(entity);
+        gameScene.gameContext.entities.push(entity);
       }
       
       for (const entity of allEntitiesImported) if (!(entity instanceof ParallaxEntity)) {
-        gameScene.context.entities.push(entity);
+        gameScene.gameContext.entities.push(entity);
       }
       // @note João, hack temporário para fazer o paássaro ser renderizado por último
-      gameScene.context.entities.push(gameScene.context.bird);
-      gameScene.context.bird.initialState()
+      gameScene.gameContext.entities.push(gameScene.gameContext.bird);
+      gameScene.gameContext.bird.initialState()
       
     })
     .catch((reason) => {

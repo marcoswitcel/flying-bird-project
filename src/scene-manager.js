@@ -1,6 +1,11 @@
 import { Scene } from './scene.js';
 
 export class SceneManager {
+
+  /**
+   * @type {HTMLElement|null}
+   */
+  rootElement = null;
   /**
    * @type {Scene|null}
    */
@@ -10,7 +15,13 @@ export class SceneManager {
    */
   entering = null;
 
-  constructor(entering = null) {
+  /**
+   * 
+   * @param {HTMLElement} rootElement 
+   * @param {Scene} entering 
+   */
+  constructor(rootElement, entering = null) {
+    this.rootElement = rootElement;
     this.entering = entering;
   }
 
@@ -19,28 +30,27 @@ export class SceneManager {
     if (this.entering) {
       if (this.current) {
         console.log('[SceneManager] cleanUp: ' + this.current.constructor.name)
-        this.current.cleanUp();
+        this.current.cleanUp(this.rootElement);
       }
       
       this.current = this.entering;
       this.entering = null;
 
       console.log('[SceneManager] setup: ' + this.current.constructor.name)
-      this.current.setup();
+      this.current.setup(this.rootElement);
     }
   }
 
   /**
    * 
-   * @param {CanvasRenderingContext2D} ctx 
    * @param {number} timestamp 
    * @returns 
    */
-  execute(ctx, timestamp) {
+  execute(timestamp) {
 
     if (!this.current) return
 
     this.current.update(timestamp);
-    this.current.render(ctx);
+    this.current.render();
   }
 }

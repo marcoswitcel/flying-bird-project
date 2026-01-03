@@ -1,5 +1,7 @@
+import { AppContext } from './app-context.js';
 import { Camera } from './camera.js';
 import { BoundingRect, drawRectBorder, RectCollisionShape } from './collision.js';
+import { config } from './config.js';
 import { BirdEntity, Entity, exportedIdGenerator, loadLevel, PipeEntity, resetExportedIdSequence } from './entities.js';
 import { drawRect, drawText } from './render.js';
 import { Scene } from './scene.js';
@@ -63,52 +65,72 @@ export class GameScene extends Scene {
   /**
    * @type {GameContext}
    */
-  context;
+  gameContext;
 
   /**
    * 
-   * @param {GameContext} contex 
+   * @param {AppContext} appContext
    */
-  constructor(contex) {
-    super()
-    this.context = contex;
+  constructor(appContext) {
+    super(appContext);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = config.width;
+    canvas.height = config.height;
+
+    this.gameContext = new GameContext(ctx);
   }
 
   resetGameState() {
-    this.context.state = 'running'
-    this.context.counter = 0;
+    this.gameContext.state = 'running'
+    this.gameContext.counter = 0;
     // @todo João, revisar e integrar esses códigos de reset
-    for (const entity of this.context.entities) {
+    for (const entity of this.gameContext.entities) {
       entity.initialState();
     }
   }
 
-  setup() {
+  /**
+   * @param {HTMLElement|null} rootElement 
+   */
+  setup(rootElement = null) {
     // @note listas sincronizadas @setup/cleanup
     document.addEventListener('mousedown', this.handleMousedown);
     document.addEventListener('mouseup', this.handleMouseup);
     document.addEventListener('mousemove', this.handleMousemove);
     document.addEventListener('keyup', this.handleKeyup);
+    
+    // adiciona no elemento #app
+    rootElement.append(this.gameContext.ctx.canvas)
+
+    loadLevel(this, "../public/level/level01.json")
   }
 
-  cleanUp() {
+  /**
+   * @param {HTMLElement|null} rootElement 
+   */
+  cleanUp(rootElement = null) {
     // @note listas sincronizadas @setup/cleanup
     document.removeEventListener('mousedown', this.handleMousedown);
     document.removeEventListener('mouseup', this.handleMouseup);
     document.removeEventListener('mousemove', this.handleMousemove);
     document.removeEventListener('keyup', this.handleKeyup);
+
+    // removendo canvas do #app
+    rootElement.removeChild(this.gameContext.ctx.canvas)
   }
 
   update(timestamp) {
-    if (!this.context.paused)
-    for (const entity of this.context.entities) {
+    if (!this.gameContext.paused)
+    for (const entity of this.gameContext.entities) {
       if (entity instanceof BirdEntity) {
         // gravidade
         entity.accel.y += 0.15;
 
         entity.velocity.add(entity.accel);
 
-        if (this.context.state === 'win') {
+        if (this.gameContext.state === 'win') {
           entity.velocity.y = 0
           loadLevel(this, "../public/level/level02.json")
         }
@@ -126,8 +148,8 @@ export class GameScene extends Scene {
         entity.accel.y = 0;
 
         // camera seguindo 'bird'
-        if (!this.context.freeCamera) {
-          this.context.camera.position.x = entity.position.x + 100;
+        if (!this.gameContext.freeCamera) {
+          this.gameContext.camera.position.x = entity.position.x + 100;
         }
 
         // pequeno feedback visual para demonstrar o esforço do pássaro tentando subir
@@ -141,30 +163,30 @@ export class GameScene extends Scene {
       }
     }
 
-    for (const entity of this.context.entities) {
+    for (const entity of this.gameContext.entities) {
       if (entity.type === 'PipeEntity') {
         /** @type {PipeEntity} */
         // @ts-expect-error
         const pipe = entity;
-        if (!pipe.birdPassedThrough && pipe.position.x < this.context.bird.position.x) {
+        if (!pipe.birdPassedThrough && pipe.position.x < this.gameContext.bird.position.x) {
           pipe.birdPassedThrough = true;
-          this.context.counter++;
+          this.gameContext.counter++;
           if (pipe.isClearLevel) {
-            this.context.state = 'win';
+            this.gameContext.state = 'win';
           }
         }
       }
     }
 
-    if (!this.context.paused)
-    for (const entity of this.context.entities) {
+    if (!this.gameContext.paused)
+    for (const entity of this.gameContext.entities) {
       if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
         const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
-        const rectBird = new BoundingRect(this.context.bird.position, this.context.bird.collisionShape.dimensions);
+        const rectBird = new BoundingRect(this.gameContext.bird.position, this.gameContext.bird.collisionShape.dimensions);
 
         if (rectBird.isIntersecting(rectEntity)) {
           entity.collisionShape.color = 'red';
-          this.context.bird.gotHit();
+          this.gameContext.bird.gotHit();
         } else {
           entity.collisionShape.color = 'black';
         }
@@ -172,36 +194,33 @@ export class GameScene extends Scene {
     }
   }
 
-  /**
-   * 
-   * @param {CanvasRenderingContext2D} ctx 
-   */
-  render(ctx) {
+  render() {
+    const ctx = this.gameContext.ctx;
     const canvas = ctx.canvas;
 
     // faze de renderização
     drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
   
     // contador
-    drawText(ctx, `${this.context.counter}`, vec2(24, 24), 16, 'white', 'monospace');
+    drawText(ctx, `${this.gameContext.counter}`, vec2(24, 24), 16, 'white', 'monospace');
     
-    for (const entity of this.context.entities) {
+    for (const entity of this.gameContext.entities) {
       // @todo João, não funcionando para a TiledEntity
       // if (!entity.getVisibleRect().isIntersecting(camera)) continue;
   
-      if (this.context.isRenderSprite) entity.render(ctx, this.context.camera);
+      if (this.gameContext.isRenderSprite) entity.render(ctx, this.gameContext.camera);
   
-      if (this.context.isShowDimension) {
+      if (this.gameContext.isShowDimension) {
         const dimensions = (entity.type === 'TiledEntity') ? { x: entity.sprite.width * entity.dimension.x, y: entity.sprite.height * entity.dimension.y, } : entity.dimension;
-        drawRectBorder(ctx, this.context.camera, entity.position, dimensions, 'black', true);
+        drawRectBorder(ctx, this.gameContext.camera, entity.position, dimensions, 'black', true);
       }
   
-      if (this.context.isShowCollider && entity.collisionShape) {
-        entity.collisionShape.render(ctx, this.context.camera, entity.position);
+      if (this.gameContext.isShowCollider && entity.collisionShape) {
+        entity.collisionShape.render(ctx, this.gameContext.camera, entity.position);
       }
     }
   
-    if (this.context.bird.hitted) {
+    if (this.gameContext.bird.hitted) {
       const boxWidth = 200, boxHeight = 75;
       const x = ctx.canvas.width / 2 - boxWidth / 2;
       const y = ctx.canvas.height / 2 - boxHeight / 2;
@@ -216,26 +235,26 @@ export class GameScene extends Scene {
    * @param {MouseEvent} event
    */
   handleMousedown = (event) => {
-    this.context.mousedown = vec2(event.offsetX, event.offsetY);
-    this.context.mouseMoved = false;
+    this.gameContext.mousedown = vec2(event.offsetX, event.offsetY);
+    this.gameContext.mouseMoved = false;
   
-    const clickInWorldSpace = this.context.camera.position
+    const clickInWorldSpace = this.gameContext.camera.position
       .copy()
-      .add(this.context.mousedown.copy().subScalar(this.context.ctx.canvas.width / 2, this.context.ctx.canvas.height / 2));
+      .add(this.gameContext.mousedown.copy().subScalar(this.gameContext.ctx.canvas.width / 2, this.gameContext.ctx.canvas.height / 2));
     
-    this.context.selectedEntity = null;
-    for (const entity of this.context.entities) {
+    this.gameContext.selectedEntity = null;
+    for (const entity of this.gameContext.entities) {
       if (entity.getVisibleRect().isInside(clickInWorldSpace)) {
         console.log(entity);
-        this.context.selectedEntity = entity;
+        this.gameContext.selectedEntity = entity;
       }
     }
 
 
-    if (this.context.paused || this.context.freeCamera) return;
+    if (this.gameContext.paused || this.gameContext.freeCamera) return;
   
-    if (!this.context.bird.hitted) {
-      this.context.bird.velocity.y = -4;
+    if (!this.gameContext.bird.hitted) {
+      this.gameContext.bird.velocity.y = -4;
     }
   }
 
@@ -244,18 +263,18 @@ export class GameScene extends Scene {
    * @param {MouseEvent} event 
    */
   handleMouseup = (event) => {
-    if (this.context.freeCamera && !this.context.mouseMoved && !this.context.selectedEntity) {
+    if (this.gameContext.freeCamera && !this.gameContext.mouseMoved && !this.gameContext.selectedEntity) {
       // @todo João, mover esse código
-      const clickInWorldSpace = this.context.camera.position
+      const clickInWorldSpace = this.gameContext.camera.position
         .copy()
-        .add(this.context.mousedown.copy().subScalar(this.context.ctx.canvas.width / 2, this.context.ctx.canvas.height / 2));
+        .add(this.gameContext.mousedown.copy().subScalar(this.gameContext.ctx.canvas.width / 2, this.gameContext.ctx.canvas.height / 2));
       const pipe = new PipeEntity();
       pipe.position = clickInWorldSpace.copy();
-      this.context.entities.push(pipe);
+      this.gameContext.entities.push(pipe);
     }
   
-    this.context.mousedown = null;
-    this.context.mouseMoved = false;
+    this.gameContext.mousedown = null;
+    this.gameContext.mouseMoved = false;
   }
 
   /**
@@ -263,18 +282,18 @@ export class GameScene extends Scene {
    * @param {MouseEvent} event 
    */
   handleMousemove = (event) => {
-    if (!this.context.mousedown || !this.context.freeCamera) return;
+    if (!this.gameContext.mousedown || !this.gameContext.freeCamera) return;
   
     const deltaMove = vec2(event.offsetX, event.offsetY)
-      .sub(this.context.mousedown);
+      .sub(this.gameContext.mousedown);
   
-    this.context.mousedown = vec2(event.offsetX, event.offsetY);
-    this.context.mouseMoved = true;
+    this.gameContext.mousedown = vec2(event.offsetX, event.offsetY);
+    this.gameContext.mouseMoved = true;
   
-    if (this.context.selectedEntity) {
-      this.context.selectedEntity.position.add(deltaMove);
+    if (this.gameContext.selectedEntity) {
+      this.gameContext.selectedEntity.position.add(deltaMove);
     } else {
-      this.context.camera.position.add(deltaMove.mulScalar(-1));
+      this.gameContext.camera.position.add(deltaMove.mulScalar(-1));
     }
   }
 
@@ -285,36 +304,36 @@ export class GameScene extends Scene {
   handleKeyup = (event) => {
     switch (event.code) {
       case 'KeyP': {
-        this.context.paused = !this.context.paused;
+        this.gameContext.paused = !this.gameContext.paused;
       }; break;
       case 'KeyS': {
-        this.context.isRenderSprite = !this.context.isRenderSprite;
+        this.gameContext.isRenderSprite = !this.gameContext.isRenderSprite;
       }; break;
       case 'KeyM': {
-        this.context.isShowMemory = !this.context.isShowMemory;
+        this.gameContext.isShowMemory = !this.gameContext.isShowMemory;
       }; break;
       case 'KeyR': {
         this.resetGameState();
       }; break;
       case 'KeyD': {
-        this.context.isShowDimension = !this.context.isShowDimension;
+        this.gameContext.isShowDimension = !this.gameContext.isShowDimension;
       }; break;
       case 'KeyF': {
-        this.context.freeCamera = !this.context.freeCamera;
+        this.gameContext.freeCamera = !this.gameContext.freeCamera;
       }; break;
       case 'KeyC': {
-        this.context.selectedEntity = null;
+        this.gameContext.selectedEntity = null;
       }; break;
       case 'KeyE': {
         let exported = ''; ;
-        if (this.context.selectedEntity) {
-          exported = this.context.selectedEntity.serialize();
+        if (this.gameContext.selectedEntity) {
+          exported = this.gameContext.selectedEntity.serialize();
         } else {
           resetExportedIdSequence();
           
           const world = {
             world: {
-              entities: this.context.entities
+              entities: this.gameContext.entities
                 .map(e => e.exportableObject())
                 .sort((a, b) => a.id - b.id)
                 .map(e => { e.id = exportedIdGenerator(); return e; })
@@ -331,7 +350,7 @@ export class GameScene extends Scene {
           });
       }; break;
       case 'KeyO': {
-        this.context.isShowCollider = !this.context.isShowCollider;
+        this.gameContext.isShowCollider = !this.gameContext.isShowCollider;
       }; break;
     }
   }

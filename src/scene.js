@@ -1,12 +1,29 @@
+import { AppContext } from './app-context.js';
 
 export class Scene {
-  setup() {}
-  cleanUp() {}
 
-  update(timestamp) {}
+  /**
+   * @type {AppContext}
+   */
+  appContext;
+
   /**
    * 
-   * @param {CanvasRenderingContext2D} ctx 
+   * @param {AppContext} appContext
    */
-  render(ctx) {}
+  constructor(appContext) {
+    this.appContext = appContext;
+  }
+
+  /**
+   * @param {HTMLElement|null} rootElement 
+   */
+  setup(rootElement = null) {}
+  /**
+   * @param {HTMLElement|null} rootElement 
+   */
+  cleanUp(rootElement = null) {}
+
+  update(timestamp) {}
+  render() {}
 }
