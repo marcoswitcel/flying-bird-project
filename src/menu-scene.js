@@ -9,7 +9,7 @@ export class MenuScene extends Scene {
    * @param {AppContext} appContext
    */
   constructor(appContext) {
-    super(appContext);
+    super(appContext, 'Menu');
   }
 
   /**

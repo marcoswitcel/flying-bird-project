@@ -72,7 +72,7 @@ export class GameScene extends Scene {
    * @param {AppContext} appContext
    */
   constructor(appContext) {
-    super(appContext);
+    super(appContext, 'Jogando');
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     
@@ -133,6 +133,7 @@ export class GameScene extends Scene {
         if (this.gameContext.state === 'win') {
           entity.velocity.y = 0
           loadLevel(this, "../public/level/level02.json")
+          this.appContext.sceneManager.updateTitle('Level 02');
         }
 
         // por hora velocidade horizontal fixa

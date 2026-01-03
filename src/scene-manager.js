@@ -38,7 +38,18 @@ export class SceneManager {
 
       console.log('[SceneManager] setup: ' + this.current.constructor.name)
       this.current.setup(this.rootElement);
+      
+      // atualiza título da página
+      this.updateTitle(this.current.title)
     }
+  }
+
+  /**
+   * 
+   * @param {string} title 
+   */
+  updateTitle(title) {
+    document.title = title;
   }
 
   /**

@@ -8,11 +8,18 @@ export class Scene {
   appContext;
 
   /**
+   * @type {string}
+   */
+  title;
+
+  /**
    * 
    * @param {AppContext} appContext
+   * @param {string} title
    */
-  constructor(appContext) {
+  constructor(appContext, title) {
     this.appContext = appContext;
+    this.title = title;
   }
 
   /**
