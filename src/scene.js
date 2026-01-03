@@ -17,13 +17,25 @@ export class Scene {
 
   /**
    * @param {HTMLElement|null} rootElement 
+   * @returns {void}
    */
   setup(rootElement = null) {}
+
   /**
    * @param {HTMLElement|null} rootElement 
+   * @returns {void} 
    */
   cleanUp(rootElement = null) {}
 
+  /**
+   * 
+   * @param {number} timestamp 
+   * @returns {void}
+   */
   update(timestamp) {}
+
+  /**
+   * @returns {void}
+   */
   render() {}
 }
