@@ -16,6 +16,11 @@ export class SceneManager {
   entering = null;
 
   /**
+   * @type {HTMLStyleElement}
+   */
+  styleElement;
+
+  /**
    * 
    * @param {HTMLElement} rootElement 
    * @param {Scene} entering 
@@ -23,6 +28,13 @@ export class SceneManager {
   constructor(rootElement, entering = null) {
     this.rootElement = rootElement;
     this.entering = entering;
+    this.styleElement = document.createElement('style');
+    this.styleElement.setAttribute('data-managed', 'scene-manager')
+  }
+
+  setup() {
+    // seguro fazer o append mais de uma vez sendo o mesmo elemento
+    document.head.append(this.styleElement);
   }
 
   changeIfNeeds() {
@@ -50,6 +62,14 @@ export class SceneManager {
    */
   updateTitle(title) {
     document.title = title;
+  }
+
+  /**
+   * 
+   * @param {string} style css style
+   */
+  updateStyle(style) {
+    this.styleElement.innerHTML = style;
   }
 
   /**

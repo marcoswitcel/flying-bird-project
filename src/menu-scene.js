@@ -2,6 +2,47 @@ import { AppContext } from './app-context.js';
 import { GameScene } from './game-scene.js';
 import { Scene } from './scene.js';
 
+const style = `
+.container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  background-color: white;
+  padding: 1rem;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+.button {
+  padding: 1rem;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  flex-grow: initial;
+  cursor: pointer;
+  margin: 1rem;
+  margin: 0.5em 0;
+  border-radius: 3px;
+  letter-spacing: 0.2em;
+}
+
+.button:hover {
+  background-color: rgba(0,0,0,.1)
+}
+
+.button:active {
+  background-color: rgba(0,0,0,.2)
+}
+`
+
+const html = `
+<div class="container">
+  <button class="button" type="button" id="jogar">Jogar</button>
+  <button class="button" type="button" id="creditos">Créditos</button>
+</div>
+`
+
 export class MenuScene extends Scene {
 
   /**
@@ -17,9 +58,9 @@ export class MenuScene extends Scene {
    */
   setup(rootElement = null) {
     // @todo joão, temporário 
-    rootElement.innerHTML = `
-      <button type="button" id="jogar">Jogar</button>
-    `
+    rootElement.innerHTML = html
+
+    this.appContext.sceneManager.updateStyle(style);
 
     rootElement.querySelector('#jogar').addEventListener('click', () => {
       this.appContext.changeTo(new GameScene(this.appContext));
@@ -32,5 +73,7 @@ export class MenuScene extends Scene {
   cleanUp(rootElement = null) {
     // @todo joão, refatorar o setup para não fazer o lick dos callbacks
     rootElement.innerHTML = null
+
+    this.appContext.sceneManager.updateStyle('');
   }
 }

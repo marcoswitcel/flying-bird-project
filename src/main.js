@@ -31,6 +31,8 @@ resourceManager.add('./assets/image/parallax/clouds.svg', 'image','clouds');
 
 const context = new AppContext(new SceneManager(appElement, null));
 
+context.sceneManager.setup()
+
 context.changeTo(new MenuScene(context));
 
 let lastTimestamp = 0;
