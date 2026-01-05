@@ -1,6 +1,6 @@
 import { AppContext } from './app-context.js';
 import { GameScene } from './game-scene.js';
-import { LevelSelectionScene } from './level-selection-scene.js';
+import { MenuScene } from './menu-scene.js';
 import { Scene } from './scene.js';
 
 const style = `
@@ -39,20 +39,19 @@ const style = `
 
 const html = `
 <div class="container">
-  <button class="button" type="button" id="btnCampaign">Campanha</button>
-  <button class="button" type="button" id="btnEndless">Modo Sem Fim</button>
-  <button class="button" type="button" id="btnCredits">Créditos</button>
+  <button class="button" type="button" id="btnNextLevel">Primeiro Nível</button>
+  <button class="button" type="button" id="btnMenu">Menu</button>
 </div>
 `
 
-export class MenuScene extends Scene {
+export class LevelSelectionScene extends Scene {
 
   /**
    * 
    * @param {AppContext} appContext
    */
   constructor(appContext) {
-    super(appContext, 'Menu');
+    super(appContext, 'Seleção de Nível');
   }
 
   /**
@@ -64,12 +63,13 @@ export class MenuScene extends Scene {
 
     this.appContext.sceneManager.updateStyle(style);
 
-    rootElement.querySelector('#btnCampaign').addEventListener('click', () => {
-      this.appContext.changeTo(new LevelSelectionScene(this.appContext));
+    rootElement.querySelector('#btnNextLevel').addEventListener('click', () => {
+      // @todo João, aqui não deve ser fixo
+      this.appContext.changeTo(new GameScene(this.appContext, '../public/level/level01.json'));
     })
 
-    rootElement.querySelector('#btnEndless').addEventListener('click', () => {
-      this.appContext.changeTo(new GameScene(this.appContext, '../public/level/endless.json'));
+    rootElement.querySelector('#btnMenu').addEventListener('click', () => {
+      this.appContext.changeTo(new MenuScene(this.appContext));
     })
   }
 

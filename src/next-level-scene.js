@@ -51,7 +51,7 @@ export class NextLevelScene extends Scene {
    * @param {AppContext} appContext
    */
   constructor(appContext) {
-    super(appContext, 'Menu');
+    super(appContext, 'Próximo Nível');
   }
 
   /**
