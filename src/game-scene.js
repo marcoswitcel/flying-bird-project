@@ -3,6 +3,7 @@ import { Camera } from './camera.js';
 import { BoundingRect, drawRectBorder, RectCollisionShape } from './collision.js';
 import { config } from './config.js';
 import { BirdEntity, Entity, exportedIdGenerator, loadLevel, PipeEntity, resetExportedIdSequence } from './entities.js';
+import { NextLevelScene } from './next-level-scene.js';
 import { drawRect, drawText } from './render.js';
 import { Scene } from './scene.js';
 import { AnimatedSprite } from './sprite.js';
@@ -142,6 +143,7 @@ export class GameScene extends Scene {
           // @todo João, aqui deve abrir a tela de seleção de próximo
           loadLevel(this, "../public/level/level02.json")
           this.appContext.sceneManager.updateTitle('Level 02');
+          this.appContext.changeTo(new NextLevelScene(this.appContext))
         }
 
         // por hora velocidade horizontal fixa
