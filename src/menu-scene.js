@@ -38,8 +38,9 @@ const style = `
 
 const html = `
 <div class="container">
-  <button class="button" type="button" id="jogar">Jogar</button>
-  <button class="button" type="button" id="creditos">Créditos</button>
+  <button class="button" type="button" id="btnCampain">Campanha</button>
+  <button class="button" type="button" id="btnEndless">Modo Sem Fim</button>
+  <button class="button" type="button" id="btnCredits">Créditos</button>
 </div>
 `
 
@@ -62,8 +63,12 @@ export class MenuScene extends Scene {
 
     this.appContext.sceneManager.updateStyle(style);
 
-    rootElement.querySelector('#jogar').addEventListener('click', () => {
-      this.appContext.changeTo(new GameScene(this.appContext));
+    rootElement.querySelector('#btnCampain').addEventListener('click', () => {
+      this.appContext.changeTo(new GameScene(this.appContext, '../public/level/level01.json'));
+    })
+
+    rootElement.querySelector('#btnEndless').addEventListener('click', () => {
+      this.appContext.changeTo(new GameScene(this.appContext, '../public/level/level01.json'));
     })
   }
 

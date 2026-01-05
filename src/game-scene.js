@@ -68,10 +68,16 @@ export class GameScene extends Scene {
   gameContext;
 
   /**
+   * @type {string}
+   */
+  levelPath;
+
+  /**
    * 
    * @param {AppContext} appContext
+   * @param {string} levelPath
    */
-  constructor(appContext) {
+  constructor(appContext, levelPath) {
     super(appContext, 'Jogando');
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -80,6 +86,7 @@ export class GameScene extends Scene {
     canvas.height = config.height;
 
     this.gameContext = new GameContext(ctx);
+    this.levelPath = levelPath;
   }
 
   resetGameState() {
@@ -104,7 +111,7 @@ export class GameScene extends Scene {
     // adiciona no elemento #app
     rootElement.append(this.gameContext.ctx.canvas)
 
-    loadLevel(this, "../public/level/level01.json")
+    loadLevel(this, this.levelPath);
   }
 
   /**
@@ -132,6 +139,7 @@ export class GameScene extends Scene {
 
         if (this.gameContext.state === 'win') {
           entity.velocity.y = 0
+          // @todo João, aqui deve abrir a tela de seleção de próximo
           loadLevel(this, "../public/level/level02.json")
           this.appContext.sceneManager.updateTitle('Level 02');
         }
