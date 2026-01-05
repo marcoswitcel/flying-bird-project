@@ -1,0 +1,8 @@
+{
+  "worlds": [
+    {
+      "name": "plains",
+      "levels": [ "01", "02" ]
+    }
+  ]
+}
