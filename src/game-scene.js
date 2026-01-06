@@ -140,10 +140,7 @@ export class GameScene extends Scene {
 
         if (this.gameContext.state === 'win') {
           entity.velocity.y = 0
-          // @todo João, aqui deve abrir a tela de seleção de próximo
-          loadLevel(this, "../public/level/level02.json")
-          this.appContext.sceneManager.updateTitle('Level 02');
-          this.appContext.changeTo(new NextLevelScene(this.appContext))
+          this.appContext.changeTo(new NextLevelScene(this.appContext, this.levelPath))
         }
 
         // por hora velocidade horizontal fixa

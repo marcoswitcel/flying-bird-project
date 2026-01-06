@@ -49,9 +49,11 @@ export class NextLevelScene extends Scene {
   /**
    * 
    * @param {AppContext} appContext
+   * @param {string} currentLevel
    */
-  constructor(appContext) {
+  constructor(appContext, currentLevel) {
     super(appContext, 'Próximo Nível');
+    this.currentLevel = currentLevel;
   }
 
   /**
@@ -64,8 +66,20 @@ export class NextLevelScene extends Scene {
     this.appContext.sceneManager.updateStyle(style);
 
     rootElement.querySelector('#btnNextLevel').addEventListener('click', () => {
-      // @todo João, aqui não deve ser fixo
-      this.appContext.changeTo(new GameScene(this.appContext, '../public/level/level02.json'));
+      const [filename, ...rest] = this.currentLevel.split('/').reverse();
+
+      // @todo João, ainda não checa se o level em questão existe... fazer isso quando ajustar o momento de carregamento dos
+      //  dados de level
+      if (filename) {
+        const index = Number(filename.replace('.json', ''));
+        if (!isNaN(index)) {
+          const nextLevel = String(index + 1).padStart(2, '0');
+          const newPath = rest.reverse()
+          newPath.push(`${nextLevel}.json`);
+          this.appContext.changeTo(new GameScene(this.appContext, newPath.join('/')));
+        }
+      }
+      
     })
 
     rootElement.querySelector('#btnMenu').addEventListener('click', () => {
