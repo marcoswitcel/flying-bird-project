@@ -39,6 +39,7 @@ const style = `
 
 const html = `
 <div class="container">
+  <div id="levels-wrapper" class="wrapper"></div>
   <button class="button" type="button" id="btnNextLevel">Primeiro Nível</button>
   <button class="button" type="button" id="btnMenu">Menu</button>
 </div>
@@ -71,6 +72,13 @@ export class LevelSelectionScene extends Scene {
     rootElement.querySelector('#btnMenu').addEventListener('click', () => {
       this.appContext.changeTo(new MenuScene(this.appContext));
     })
+
+    fetch('../public/level/campaign.json')
+      .then(blob => blob.json())
+      .then(json => {
+        // @todo João, montar o html correto aqui e garantir que não vai editar quando estiver desmontada a tela
+        rootElement.querySelector('#levels-wrapper').innerHTML = json.worlds[0].levels
+      })
   }
 
   /**
