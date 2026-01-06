@@ -265,7 +265,7 @@ export class ParallaxEntity extends Entity {
  * @param {any} value 
  * @returns {boolean}
  */
-const is = (type, value) => typeof value === type && value !== null;
+export const is = (type, value) => typeof value === type && value !== null;
 
 /**
  * 

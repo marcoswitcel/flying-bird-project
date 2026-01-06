@@ -1,4 +1,5 @@
 import { AppContext } from './app-context.js';
+import { is } from './entities.js';
 import { GameScene } from './game-scene.js';
 import { MenuScene } from './menu-scene.js';
 import { Scene } from './scene.js';
@@ -40,12 +41,13 @@ const style = `
 const html = `
 <div class="container">
   <div id="levels-wrapper" class="wrapper"></div>
-  <button class="button" type="button" id="btnNextLevel">Primeiro Nível</button>
   <button class="button" type="button" id="btnMenu">Menu</button>
 </div>
 `
 
 export class LevelSelectionScene extends Scene {
+
+  activated = false;
 
   /**
    * 
@@ -59,15 +61,11 @@ export class LevelSelectionScene extends Scene {
    * @param {HTMLElement|null} rootElement 
    */
   setup(rootElement = null) {
+    this.activated = true;
     // @todo joão, temporário 
     rootElement.innerHTML = html
 
     this.appContext.sceneManager.updateStyle(style);
-
-    rootElement.querySelector('#btnNextLevel').addEventListener('click', () => {
-      // @todo João, aqui não deve ser fixo
-      this.appContext.changeTo(new GameScene(this.appContext, '../public/level/level01.json'));
-    })
 
     rootElement.querySelector('#btnMenu').addEventListener('click', () => {
       this.appContext.changeTo(new MenuScene(this.appContext));
@@ -75,9 +73,32 @@ export class LevelSelectionScene extends Scene {
 
     fetch('../public/level/campaign.json')
       .then(blob => blob.json())
-      .then(json => {
-        // @todo João, montar o html correto aqui e garantir que não vai editar quando estiver desmontada a tela
-        rootElement.querySelector('#levels-wrapper').innerHTML = json.worlds[0].levels
+      .then(/** @param {{ worlds: { name: string, levels: string[]}[]}} json */ json => {
+        if (this.activated) {
+          const wrapperElement = rootElement.querySelector('#levels-wrapper');
+          
+          if (is('object', json) && Array.isArray(json.worlds)) {
+            const innerHTML = json.worlds.map(world => {
+              return world.levels.map(level => `
+                <button class="button level-select" type="button" data-path="../public/level/${world.name}/${level}.json">${level}</button>
+              `).join('')
+            })
+            .join('')
+
+            wrapperElement.innerHTML = innerHTML;
+            wrapperElement.querySelectorAll('.button.level-select').forEach((element) => {
+              element.addEventListener('click', () => {
+                /**
+                 * @type {HTMLElement}
+                 * 
+                 */// @ts-expect-error
+                const el = element;
+                this.appContext.changeTo(new GameScene(this.appContext, el.dataset.path));
+              })
+            })
+          }
+
+        }
       })
   }
 
@@ -89,5 +110,6 @@ export class LevelSelectionScene extends Scene {
     rootElement.innerHTML = null
 
     this.appContext.sceneManager.updateStyle('');
+    this.activated = false;
   }
 }
