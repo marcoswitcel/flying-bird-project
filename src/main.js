@@ -28,6 +28,9 @@ resourceManager.add('./assets/image/floor/floor.svg', 'image','floor');
 resourceManager.add('./assets/image/parallax/moutains.svg', 'image','moutains');
 resourceManager.add('./assets/image/parallax/clouds.svg', 'image','clouds');
 
+// level metadados
+resourceManager.add('./level/campaign.json', 'json','campaign');
+
 
 const context = new AppContext(new SceneManager(appElement, null));
 

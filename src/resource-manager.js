@@ -6,6 +6,12 @@ export class ResourceManager {
 
   map = new Map();
 
+  /**
+   * 
+   * @param {string} path caminho do asset
+   * @param {'image'|'json'} type tipo do recruso
+   * @param {string} alias nome do asset
+   */
   add(path, type, alias) {
     if (type === 'image') {
       const img = new Image();
@@ -20,6 +26,20 @@ export class ResourceManager {
         console.assert(!this.map.has(alias), `Alias duplicad: ${alias}`)
         this.map.set(alias, img);
       }
+    } else if (type === 'json') {
+      fetch(path)
+        .then(blob => blob.json())
+        .then(json => {
+          log(`[onload] path="${path}" alias="${alias}"`);
+          this.map.set(path, json);
+          if (alias) {
+            console.assert(!this.map.has(alias), `Alias duplicad: ${alias}`)
+            this.map.set(alias, json);
+          }
+        })
+        .catch(error => {
+          log(`[onerror] path="${path}" alias="${alias}"`);
+        })
     }
   }
 
