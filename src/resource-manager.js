@@ -50,7 +50,19 @@ export class ResourceManager {
    */
   getImage(alias) {
     const value = this.map.get(alias);
-    console.assert(value, `requisitando imagem que não foi cadsatra: ${alias}`);
+    console.assert(value, `requisitando imagem que não foi cadastrada: ${alias}`);
+
+    return value;
+  }
+
+  /**
+   * 
+   * @param {string} alias 
+   * @returns {object}
+   */
+  getJson(alias) {
+    const value = this.map.get(alias);
+    console.assert(value, `requisitando json que não foi cadastrado: ${alias}`);
 
     return value;
   }
