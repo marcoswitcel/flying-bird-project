@@ -1,3 +1,4 @@
+import { ResourceManager, resourceManager } from './resource-manager.js';
 import { SceneManager } from './scene-manager.js';
 import { Scene } from './scene.js';
 
@@ -7,8 +8,14 @@ export class AppContext {
    */
   sceneManager;
 
-  constructor(sceneManager) {
+  /**
+   * @type {ResourceManager}
+   */
+  resourceMangager;
+
+  constructor(sceneManager, _resourceManager = resourceManager) {
     this.sceneManager = sceneManager
+    this.resourceManager = _resourceManager;
   }
 
   /**

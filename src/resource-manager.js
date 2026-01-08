@@ -100,6 +100,11 @@ export class ResourceManager {
 
     return sprite;
   }
+
+  isAllLoaded() {
+    // @todo João, terminar de implementar isso aqui...
+    return true;
+  }
 }
 
 export const resourceManager = new ResourceManager();

@@ -1,8 +1,7 @@
 import { AppContext } from './app-context.js';
 import { config } from './config.js';
-import { loadLevel } from './entities.js';
-import { GameContext, GameScene } from './game-scene.js';
-import { MenuScene } from './menu-scene.js';
+import { GameScene } from './game-scene.js';
+import { LoadingScene } from './loading-scene.js';
 import { drawRect } from './render.js';
 import { resourceManager } from './resource-manager.js';
 import { SceneManager } from './scene-manager.js';
@@ -36,7 +35,7 @@ const context = new AppContext(new SceneManager(appElement, null));
 
 context.sceneManager.setup()
 
-context.changeTo(new MenuScene(context));
+context.changeTo(new LoadingScene(context));
 
 let lastTimestamp = 0;
 requestAnimationFrame(function loop(timestamp) {
