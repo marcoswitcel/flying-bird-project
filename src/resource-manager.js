@@ -21,21 +21,16 @@ export class ResourceManager {
       img.onabort = () => { log(`[onabort] path="${path}" alias="${alias}"`) };
       img.onerror = () => { log(`[onerror] path="${path}" alias="${alias}"`) };
       
-      this.map.set(path, img);
-      if (alias) {
-        console.assert(!this.map.has(alias), `Alias duplicad: ${alias}`)
-        this.map.set(alias, img);
-      }
+      this.setAsset(path, alias, img);
     } else if (type === 'json') {
-      fetch(path)
+      const promise = fetch(path);
+      this.setAsset(path, alias, promise);
+
+      promise
         .then(blob => blob.json())
         .then(json => {
           log(`[onload] path="${path}" alias="${alias}"`);
-          this.map.set(path, json);
-          if (alias) {
-            console.assert(!this.map.has(alias), `Alias duplicad: ${alias}`)
-            this.map.set(alias, json);
-          }
+          this.setAsset(path, alias, json);
         })
         .catch(error => {
           log(`[onerror] path="${path}" alias="${alias}"`);
@@ -105,6 +100,22 @@ export class ResourceManager {
     // @todo João, terminar de implementar isso aqui...
     return true;
   }
+
+  /**
+   * 
+   * @param {string} path 
+   * @param {string} alias 
+   * @param {any} value 
+   */
+  setAsset(path, alias, value) {
+    this.map.set(path, value);
+    if (alias) {
+      console.assert(!this.map.has(alias) || isPromise(this.map.get(alias)), `Alias duplicad: ${alias}`)
+      this.map.set(alias, value);
+    }
+  }
 }
+
+const isPromise = (maybePromise) => (typeof maybePromise === 'object' || typeof maybePromise === 'function') && typeof maybePromise.then === 'function';
 
 export const resourceManager = new ResourceManager();
