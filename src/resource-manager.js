@@ -126,7 +126,15 @@ export class ResourceManager {
   numberOfResourcesLoaded() {
     let count = 0;
     for (const [_, value] of this._map.entries()) {
-      count += Number(!isPromise(value))
+      
+      if (isPromise(value)) continue;
+
+      if (value instanceof HTMLImageElement) {
+        count += Number(value.complete);
+      } else {
+        count += 1;
+      }
+
     }
     return count;
   }
