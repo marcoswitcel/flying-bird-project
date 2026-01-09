@@ -34,6 +34,12 @@ const html = `
 
 export class LoadingScene extends Scene {
 
+
+  /**
+   * @type {HTMLElement|null}
+   */
+  loaderElement = null;
+
   /**
    * 
    * @param {AppContext} appContext
@@ -48,6 +54,8 @@ export class LoadingScene extends Scene {
   setup(rootElement = null) {
     // @todo joão, temporário 
     rootElement.innerHTML = html
+
+    this.loaderElement = rootElement.querySelector('.loader');
 
     this.appContext.sceneManager.updateStyle(style);
 
@@ -65,8 +73,17 @@ export class LoadingScene extends Scene {
   }
 
   update(timestamp) {
+    // @note pode ser bem lento isso aqui... muito trabalho duplicado
+
+    // @todo João, testar e melhorar essa tela de loading...
     if (resourceManager.isAllLoaded()) {
       this.appContext.changeTo(new MenuScene(this.appContext));
+      return;
     }
+
+    const percentage = this.appContext.resourceManager.numberOfResourcesLoaded() / this.appContext.resourceManager.numberOfResources();
+
+    this.loaderElement.style.transform = `scaleX(${percentage})`
+
   }
 }

@@ -4,7 +4,11 @@ const log = (...args) => console.log('[ResourceManager]', ...args);
 
 export class ResourceManager {
 
-  map = new Map();
+  /**
+   * @private
+   * @type {Map<string, any>}
+   */
+  _map = new Map();
 
   /**
    * 
@@ -44,7 +48,7 @@ export class ResourceManager {
    * @returns {HTMLImageElement|undefined}
    */
   getImage(alias) {
-    const value = this.map.get(alias);
+    const value = this._map.get(alias);
     console.assert(value, `requisitando imagem que não foi cadastrada: ${alias}`);
 
     return value;
@@ -56,7 +60,7 @@ export class ResourceManager {
    * @returns {object}
    */
   getJson(alias) {
-    const value = this.map.get(alias);
+    const value = this._map.get(alias);
     console.assert(value, `requisitando json que não foi cadastrado: ${alias}`);
 
     return value;
@@ -70,8 +74,8 @@ export class ResourceManager {
   getSprite(alias) {
     const spriteKey = `sprite.${alias}`;
     
-    if (this.map.has(spriteKey)) {
-      return this.map.get(spriteKey);
+    if (this._map.has(spriteKey)) {
+      return this._map.get(spriteKey);
     }
 
     const img = this.getImage(alias);
@@ -91,14 +95,14 @@ export class ResourceManager {
       });
     }
 
-    this.map.set(spriteKey, sprite);
+    this._map.set(spriteKey, sprite);
 
     return sprite;
   }
 
   isAllLoaded() {
-    // @todo João, terminar de implementar isso aqui...
-    return true;
+    // @note pode ser bem lento isso aqui... muito trabalho duplicado
+    return this.numberOfResources() === this.numberOfResourcesLoaded();
   }
 
   /**
@@ -108,11 +112,23 @@ export class ResourceManager {
    * @param {any} value 
    */
   setAsset(path, alias, value) {
-    this.map.set(path, value);
+    this._map.set(path, value);
     if (alias) {
-      console.assert(!this.map.has(alias) || isPromise(this.map.get(alias)), `Alias duplicad: ${alias}`)
-      this.map.set(alias, value);
+      console.assert(!this._map.has(alias) || isPromise(this._map.get(alias)), `Alias duplicad: ${alias}`)
+      this._map.set(alias, value);
     }
+  }
+
+  numberOfResources() {
+    return this._map.size;
+  }
+
+  numberOfResourcesLoaded() {
+    let count = 0;
+    for (const [_, value] of this._map.entries()) {
+      count += Number(!isPromise(value))
+    }
+    return count;
   }
 }
 
