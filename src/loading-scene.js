@@ -21,7 +21,9 @@ const style = `
 .loader {
   width: 100%;
   height: 16px;
-  background-color: white
+  background-color: white;
+  transition: .5s linear;
+  transform = scaleX(0);
 }
 `
 
@@ -36,9 +38,20 @@ export class LoadingScene extends Scene {
 
 
   /**
+   * Tempo mínimo com a tela aberta
+   * @type {number}
+   */
+  minimalTimeInScene = 1.8 * 1000;
+
+  /**
    * @type {HTMLElement|null}
    */
   loaderElement = null;
+
+  /** 
+   * @type {number}
+   */
+  firstRenderTimestamp = 0;
 
   /**
    * 
@@ -73,17 +86,21 @@ export class LoadingScene extends Scene {
   }
 
   update(timestamp) {
-    // @note pode ser bem lento isso aqui... muito trabalho duplicado
-
-    // @todo João, testar e melhorar essa tela de loading...
-    if (resourceManager.isAllLoaded()) {
-      this.appContext.changeTo(new MenuScene(this.appContext));
-      return;
+    // registra quando tela foi montada, como não tem timestamp no setup faço aqui
+    if (this.firstRenderTimestamp === 0) {
+      this.firstRenderTimestamp = timestamp;
     }
 
+    // @note pode ser bem lento isso aqui... muito trabalho duplicado
     const percentage = this.appContext.resourceManager.numberOfResourcesLoaded() / this.appContext.resourceManager.numberOfResources();
 
     this.loaderElement.style.transform = `scaleX(${percentage})`
 
+    // @todo João, testar e melhorar essa tela de loading...
+    if (resourceManager.isAllLoaded()) {
+      if (timestamp - this.firstRenderTimestamp > this.minimalTimeInScene) {
+        this.appContext.changeTo(new MenuScene(this.appContext));
+      }
+    }
   }
 }
