@@ -2,6 +2,10 @@ import { Sprite } from './sprite.js';
 
 const log = (...args) => console.log('[ResourceManager]', ...args);
 
+/**
+ * @typedef {'json'|'image'} ResourceType
+ */
+
 export class ResourceManager {
 
   /**
@@ -13,7 +17,7 @@ export class ResourceManager {
   /**
    * 
    * @param {string} path caminho do asset
-   * @param {'image'|'json'} type tipo do recruso
+   * @param {ResourceType} type tipo do recruso
    * @param {string} alias nome do asset
    */
   add(path, type, alias) {
