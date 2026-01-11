@@ -71,35 +71,34 @@ export class LevelSelectionScene extends Scene {
       this.appContext.changeTo(new MenuScene(this.appContext));
     })
 
-    fetch('../public/level/campaign.json')
-      .then(blob => blob.json())
-      .then(/** @param {{ worlds: { name: string, levels: string[]}[]}} json */ json => {
-        if (this.activated) {
-          const wrapperElement = rootElement.querySelector('#levels-wrapper');
-          
-          if (is('object', json) && Array.isArray(json.worlds)) {
-            const innerHTML = json.worlds.map(world => {
-              return world.levels.map(level => `
-                <button class="button level-select" type="button" data-path="../public/level/${world.name}/${level}.json">${level}</button>
-              `).join('')
-            })
-            .join('')
+    /** @type {{ worlds: { name: string, levels: string[]}[]}} */
+    const campaign = this.appContext.resourceManager.getJson('campaign')
 
-            wrapperElement.innerHTML = innerHTML;
-            wrapperElement.querySelectorAll('.button.level-select').forEach((element) => {
-              element.addEventListener('click', () => {
-                /**
-                 * @type {HTMLElement}
-                 * 
-                 */// @ts-expect-error
-                const el = element;
-                this.appContext.changeTo(new GameScene(this.appContext, el.dataset.path));
-              })
-            })
-          }
+    if (this.activated) {
+      const wrapperElement = rootElement.querySelector('#levels-wrapper');
+      
+      if (is('object', campaign) && Array.isArray(campaign.worlds)) {
+        const innerHTML = campaign.worlds.map(world => {
+          return world.levels.map(level => `
+            <button class="button level-select" type="button" data-path="../public/level/${world.name}/${level}.json">${level}</button>
+          `).join('')
+        })
+        .join('')
 
-        }
-      })
+        wrapperElement.innerHTML = innerHTML;
+        wrapperElement.querySelectorAll('.button.level-select').forEach((element) => {
+          element.addEventListener('click', () => {
+            /**
+             * @type {HTMLElement}
+             * 
+             */// @ts-expect-error
+            const el = element;
+            this.appContext.changeTo(new GameScene(this.appContext, el.dataset.path));
+          })
+        })
+      }
+
+    }
   }
 
   /**
