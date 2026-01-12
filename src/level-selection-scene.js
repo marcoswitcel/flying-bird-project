@@ -71,7 +71,9 @@ export class LevelSelectionScene extends Scene {
       this.appContext.changeTo(new MenuScene(this.appContext));
     })
 
-    /** @type {{ worlds: { name: string, levels: string[]}[]}} */
+    /**
+     * @type {ApplicationTypes.CampaignJson}
+     */
     const campaign = this.appContext.resourceManager.getJson('campaign')
 
     if (this.activated) {
