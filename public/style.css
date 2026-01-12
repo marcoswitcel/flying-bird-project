@@ -1,0 +1,15 @@
+body {
+  background-color: #333;
+}
+#app {
+
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  overflow: hidden;
+}
+canvas {
+  max-width: 100%;
+}
