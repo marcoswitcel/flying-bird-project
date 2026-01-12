@@ -188,15 +188,17 @@ export class TiledEntity extends Entity {
     const x = (this.position.x - (this.dimension.x * this.sprite.width) / 2) - camera.position.x + ctx.canvas.width / 2;
     const y = (this.position.y - (this.dimension.y * this.sprite.height) / 2) - camera.position.y + ctx.canvas.height / 2;
 
-    const dimensions = { x: this.sprite.width, y: this.sprite.height };
-    let position = { x: 0, y: 0 };
+    const rect = new BoundingRect({ x: 0, y: 0, }, { x: this.sprite.width, y: this.sprite.height });
 
     for (let i = 0; i < this.dimension.x; i++) {
       for (let j = 0; j < this.dimension.y; j++) {
-        position.x = x + this.sprite.width * i;
-        position.y = y + this.sprite.height * j;
+        rect.position.x = x + this.sprite.width * i;
+        rect.position.y = y + this.sprite.height * j;
 
-        this.sprite.render(ctx, position, dimensions, false);
+        // @todo João, esse if auxiliaria se o código do método `isIntersecting` não estivesse errado...
+        // if (rect.isIntersecting(camera)) {}
+
+        this.sprite.render(ctx, rect.position, rect.dimensions, false);
       }
     }
   }
