@@ -10,3 +10,4 @@
 * gráfico com uso de memória, talvez uma lib de métricas de tempo e memória que (gráfico e lib de métrica)
 * Definir ordem de renderização ou vários layers -- Parado por hora
 * implementar contadores (anexar as entidades 'pipe')
+* fazer mapas maiores usando o recurso de verticalidade pra testar a eficiência das soluções desenvolvidas
