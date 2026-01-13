@@ -185,20 +185,25 @@ export class TiledEntity extends Entity {
     this.collisionShape.dimensions.x = this.sprite.width * this.dimension.x;
     this.collisionShape.dimensions.y = this.sprite.height * this.dimension.y;
 
-    const x = (this.position.x - (this.dimension.x * this.sprite.width) / 2) - camera.position.x + ctx.canvas.width / 2;
-    const y = (this.position.y - (this.dimension.y * this.sprite.height) / 2) - camera.position.y + ctx.canvas.height / 2;
+    const x = (this.position.x - (this.dimension.x * this.sprite.width) / 2); // 
+    const y = (this.position.y - (this.dimension.y * this.sprite.height) / 2); // 
 
-    const rect = new BoundingRect({ x: 0, y: 0, }, { x: this.sprite.width, y: this.sprite.height });
+    const tileRect = new BoundingRect({ x: 0, y: 0, }, { x: this.sprite.width, y: this.sprite.height });
 
     for (let i = 0; i < this.dimension.x; i++) {
       for (let j = 0; j < this.dimension.y; j++) {
-        rect.position.x = x + this.sprite.width * i;
-        rect.position.y = y + this.sprite.height * j;
+        // @note João é necessário que a position esteja considerando o centro do objeto, por isso 
+        // foi adicionado a metade da largura / altura, isso se deve pois o código do método `isIntersecting`
+        // espera receber o centro do objeto
+        tileRect.position.x = x + this.sprite.width * i + this.sprite.width / 2;
+        tileRect.position.y = y + this.sprite.height * j + this.sprite.height / 2;
+        
+        if (tileRect.isIntersecting(camera)) {
+          tileRect.position.x = tileRect.position.x - camera.position.x + ctx.canvas.width / 2;
+          tileRect.position.y = tileRect.position.y - camera.position.y + ctx.canvas.height / 2;
 
-        // @todo João, esse if auxiliaria se o código do método `isIntersecting` não estivesse errado...
-        // if (rect.isIntersecting(camera)) {}
-
-        this.sprite.render(ctx, rect.position, rect.dimensions, false);
+          this.sprite.render(ctx, tileRect.position, tileRect.dimensions, true);
+        }
       }
     }
   }
