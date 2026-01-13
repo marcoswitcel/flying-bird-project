@@ -190,7 +190,6 @@ export class TiledEntity extends Entity {
         // @note João é necessário que a position esteja considerando o centro do objeto, por isso 
         // foi adicionado a metade da largura / altura, isso se deve pois o código do método `isIntersecting`
         // espera receber o centro do objeto
-        // @todo João, testar mais isso aqui...
         tileRect.position.x = x + this.sprite.width * i + this.sprite.width / 2;
         tileRect.position.y = y + this.sprite.height * j + this.sprite.height / 2;
         
