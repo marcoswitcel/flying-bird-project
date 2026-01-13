@@ -213,8 +213,8 @@ export class GameScene extends Scene {
     drawText(ctx, `${this.gameContext.counter}`, vec2(24, 24), 16, 'white', 'monospace');
     
     for (const entity of this.gameContext.entities) {
-      // @todo João, não funcionando para a TiledEntity
-      // if (!entity.getVisibleRect().isIntersecting(camera)) continue;
+      // @todo João, não funciona bem com o fundo...
+      // if (!entity.getVisibleRect().isIntersecting(this.gameContext.camera)) continue;
   
       if (this.gameContext.isRenderSprite) entity.render(ctx, this.gameContext.camera);
   
