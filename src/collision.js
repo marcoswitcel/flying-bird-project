@@ -71,23 +71,11 @@ export class BoundingRect {
    * @returns {boolean}
    */
   isIntersecting(rect) {
-    const aHalfDimension = this.dimensions.x / 2;
-    const bHalfDimension = rect.dimensions.x / 2;
-    const aYHalfDimension = this.dimensions.y / 2;
-    const bYHalfDimension = rect.dimensions.y / 2;
-    
-    const aXStart = this.position.x - aHalfDimension;
-    const aXEnd = this.position.x + aHalfDimension;
-    const bXStart = rect.position.x - bHalfDimension;
-    const bXEnd = rect.position.x + bHalfDimension;
-
-    const aYStart = this.position.y - aYHalfDimension;
-    const aYEnd = this.position.y + aYHalfDimension;
-    const bYStart = rect.position.y - bYHalfDimension;
-    const bYEnd = rect.position.y + bYHalfDimension;
-
-    return ((aXStart >= bXStart && aXStart <= bXEnd) || (aXEnd >= bXStart && aXEnd <= bXEnd)) &&
-      ((aYStart >= bYStart && aYStart <= bYEnd) || (aYEnd >= bYStart && aYEnd <= bYEnd));
+    return (
+      (Math.abs(this.position.x - rect.position.x) <= (this.dimensions.x / 2 + rect.dimensions.x / 2))
+      &&
+      (Math.abs(this.position.y - rect.position.y) <= (this.dimensions.y / 2 + rect.dimensions.y / 2))
+    )
   }
 
   /**
