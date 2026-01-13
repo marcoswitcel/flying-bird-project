@@ -219,6 +219,7 @@ export class GameScene extends Scene {
       if (this.gameContext.isRenderSprite) entity.render(ctx, this.gameContext.camera);
   
       if (this.gameContext.isShowDimension) {
+        // @todo João, aqui dá pra usar o getVisibleRect?
         const dimensions = (entity.type === 'TiledEntity') ? { x: entity.sprite.width * entity.dimension.x, y: entity.sprite.height * entity.dimension.y, } : entity.dimension;
         drawRectBorder(ctx, this.gameContext.camera, entity.position, dimensions, 'black', true);
       }
