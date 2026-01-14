@@ -4,6 +4,7 @@ import { BoundingRect, drawRectBorder, RectCollisionShape } from './collision.js
 import { config } from './config.js';
 import { BirdEntity, Entity, exportedIdGenerator, loadLevel, PipeEntity, resetExportedIdSequence } from './entities.js';
 import { NextLevelScene } from './next-level-scene.js';
+import { TimerProfile } from './profiling.js';
 import { drawRect, drawText } from './render.js';
 import { Scene } from './scene.js';
 import { AnimatedSprite } from './sprite.js';
@@ -212,6 +213,7 @@ export class GameScene extends Scene {
     // contador
     drawText(ctx, `${this.gameContext.counter}`, vec2(24, 24), 16, 'white', 'monospace');
     
+    const timer = new TimerProfile();
     for (const entity of this.gameContext.entities) {
       // @todo João, não funciona bem com o fundo...
       // if (!entity.getVisibleRect().isIntersecting(this.gameContext.camera)) continue;
