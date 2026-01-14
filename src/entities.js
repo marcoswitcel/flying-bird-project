@@ -374,6 +374,9 @@ export function loadLevel(gameScene, levelFile) {
       
     })
     .catch((reason) => {
-      console.log(reason);
+      // @todo João, aqui falta tomar alguma ação para retornar para o 'menu', porém precisa mudar
+      // a função pra receber o status do carregamento, assim o 'callee' terá controle da ação
+      console.error("[loadLevel] error filename: '%s'", levelFile)
+      console.trace(reason)
     })
 }
