@@ -1,5 +1,6 @@
 import { AppContext } from './app-context.js';
 import { GameScene } from './game-scene.js';
+import { LevelSelectionScene } from './level-selection-scene.js';
 import { MenuScene } from './menu-scene.js';
 import { Scene } from './scene.js';
 
@@ -68,23 +69,24 @@ export class NextLevelScene extends Scene {
     rootElement.querySelector('#btnNextLevel').addEventListener('click', () => {
       const [filename, worldName, ...rest] = this.currentLevel.split('/').reverse();
 
-      // @todo João, ainda não checa se o level em questão existe... fazer isso quando ajustar o momento de carregamento dos
-      //  dados de level
       if (filename && worldName) {
         const index = Number(filename.replace('.json', ''));
         if (!isNaN(index)) {
+          const nextLevel = String(index + 1).padStart(2, '0');
           /**
            * @type {ApplicationTypes.CampaignJson}
            */
           const campaign = this.appContext.resourceManager.getJson('campaign');
+          const world = campaign.worlds.filter(world => world.name === worldName)[0];
 
-          // @todo João, aqui falta checar se o arquivo existe no arquivo de 'campaign'
-
-          const nextLevel = String(index + 1).padStart(2, '0');
-          const newPath = rest.reverse();
-          newPath.push(worldName);
-          newPath.push(`${nextLevel}.json`);
-          this.appContext.changeTo(new GameScene(this.appContext, newPath.join('/')));
+          if (world?.levels.includes(nextLevel)) {
+            const newPath = rest.reverse();
+            newPath.push(worldName);
+            newPath.push(`${nextLevel}.json`);
+            this.appContext.changeTo(new GameScene(this.appContext, newPath.join('/')));
+          } else {
+            this.appContext.changeTo(new LevelSelectionScene(this.appContext));
+          }
         }
       }
       
