@@ -142,7 +142,7 @@ export class BirdEntity extends Entity {
   }
 
   initialState() {
-    this.position = vec2(0, 0);
+    this.position = vec2(0, 150);
     this.velocity = vec2(0, 0);
     this.accel = vec2(0, 0);
     this.hitted = false;
