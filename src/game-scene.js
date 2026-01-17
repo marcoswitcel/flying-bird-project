@@ -215,13 +215,12 @@ export class GameScene extends Scene {
     
     const timer = new TimerProfile();
     for (const entity of this.gameContext.entities) {
-      // @todo João, não funciona bem com o fundo...
+      // @todo João, o fundo se move e aí resetando o nível ocorre que às vezes ele fica fora da área da câmera
       // if (!entity.getVisibleRect().isIntersecting(this.gameContext.camera)) continue;
   
       if (this.gameContext.isRenderSprite) entity.render(ctx, this.gameContext.camera);
   
       if (this.gameContext.isShowDimension) {
-        // @todo João, aqui dá pra usar o getVisibleRect?
         const dimensions = (entity.type === 'TiledEntity') ? { x: entity.sprite.width * entity.dimension.x, y: entity.sprite.height * entity.dimension.y, } : entity.dimension;
         drawRectBorder(ctx, this.gameContext.camera, entity.position, dimensions, 'black', true);
       }
