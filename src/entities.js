@@ -87,6 +87,10 @@ export class Entity {
     return new BoundingRect(this.position, this.dimension);
   }
 
+  /**
+   * @todo João, na hora de exportar não estou conseguindo saber a position original do parallax objet e do bird para fazer o export,
+   * por este motivo penso que talvez eu precise salvar os dados originais do nível na entidade, ou recarregar e fazer o diff.
+   */
   initialState() {}
 }
 
