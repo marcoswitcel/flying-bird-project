@@ -24,7 +24,7 @@ resourceManager.add('./assets/image/bird/idle/frame-4.png', 'image','bird.4');
 resourceManager.add('./assets/image/bird/got-hit/frame-1.png', 'image','bird.hit');
 resourceManager.add('./assets/image/floor/floor.svg', 'image','floor');
 // parallax
-resourceManager.add('./assets/image/parallax/moutains.svg', 'image','moutains');
+resourceManager.add('./assets/image/parallax/mountains.svg', 'image','mountains');
 resourceManager.add('./assets/image/parallax/clouds.svg', 'image','clouds');
 
 // level metadados

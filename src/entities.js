@@ -222,7 +222,7 @@ export class ParallaxEntity extends Entity {
   constructor() {
     super();
     this.backgrounds = [
-      { sprite: resourceManager.getSprite('moutains'), dt: 0.2 },
+      { sprite: resourceManager.getSprite('mountains'), dt: 0.2 },
       { sprite: resourceManager.getSprite('clouds'), dt: 0.1 },
     ];
     this.position.y = 300;
