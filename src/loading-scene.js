@@ -11,19 +11,19 @@ const style = `
   height: 100%;
   width: 100%;
   flex-direction: column;
-  background-color: white;
   padding: 1rem;
   box-sizing: border-box;
   justify-content: center;
-  background-color: black;
+  background-color: white;
 }
 
 .loader {
   width: 100%;
-  height: 16px;
-  background-color: white;
+  height: 1.5rem;
+  background-color: blue;
   transition: .5s linear;
   transform = scaleX(0);
+  border-radius: 3px;
 }
 `
 
