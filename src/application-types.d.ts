@@ -6,6 +6,9 @@ declare module ApplicationTypes {
     levels: string[]
   }
 
+  /**
+   * Definição do arquivo 'campaign.json'
+   */
   interface CampaignJson {
     worlds: World[]
   }

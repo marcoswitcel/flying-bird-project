@@ -1,5 +1,6 @@
 {
   "world": {
+    "backgroundColor": "blue",
     "entities": [
       {
         "id": 0,

@@ -15,6 +15,10 @@ export class GameContext {
    * @type {Entity[]}
    */
   entities = [];
+  /**
+   * @todo joão, falta carregar do JSON
+   */
+  backgroundColor = 'blue';
   bird = new BirdEntity();
 
   /**
@@ -207,10 +211,10 @@ export class GameScene extends Scene {
     const ctx = this.gameContext.ctx;
     const canvas = ctx.canvas;
 
-    // faze de renderização
-    drawRect(ctx, 0, 0, canvas.width, canvas.height, 'blue');
+    // limpa e define a cor de fundo do mundo
+    drawRect(ctx, 0, 0, canvas.width, canvas.height, this.gameContext.backgroundColor);
   
-    // contador
+    // contador (@todo João, não deveria mover para baixo?)
     drawText(ctx, `${this.gameContext.counter}`, vec2(24, 24), 16, 'white', 'monospace');
     
     const timer = new TimerProfile();
