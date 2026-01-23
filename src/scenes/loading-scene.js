@@ -3,7 +3,7 @@ import { GameScene } from './game-scene.js';
 import { LevelSelectionScene } from './level-selection-scene.js';
 import { MenuScene } from './menu-scene.js';
 import { resourceManager } from '../resource-manager.js';
-import { Scene } from '../scene.js';
+import { Scene } from './scene.js';
 
 const style = `
 .container {

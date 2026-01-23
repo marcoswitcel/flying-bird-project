@@ -2,7 +2,7 @@ import { AppContext } from '../app-context.js';
 import { GameScene } from './game-scene.js';
 import { LevelSelectionScene } from './level-selection-scene.js';
 import { MenuScene } from './menu-scene.js';
-import { Scene } from '../scene.js';
+import { Scene } from './scene.js';
 
 const style = `
 .container {

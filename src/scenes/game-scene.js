@@ -6,7 +6,7 @@ import { BirdEntity, Entity, exportedIdGenerator, loadLevel, PipeEntity, resetEx
 import { NextLevelScene } from './next-level-scene.js';
 import { TimerProfile } from '../profiling.js';
 import { drawRect, drawText } from '../render.js';
-import { Scene } from '../scene.js';
+import { Scene } from './scene.js';
 import { AnimatedSprite } from '../sprite.js';
 import { vec2, Vector2 } from '../vector2.js';
 

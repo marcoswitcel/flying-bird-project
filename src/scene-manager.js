@@ -1,4 +1,4 @@
-import { Scene } from './scene.js';
+import { Scene } from './scenes/scene.js';
 
 export class SceneManager {
 

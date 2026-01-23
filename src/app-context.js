@@ -1,6 +1,6 @@
 import { ResourceManager, resourceManager } from './resource-manager.js';
 import { SceneManager } from './scene-manager.js';
-import { Scene } from './scene.js';
+import { Scene } from './scenes/scene.js';
 
 export class AppContext {
   /**
