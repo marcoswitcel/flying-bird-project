@@ -3,7 +3,7 @@ import { Camera } from '../camera.js';
 import { BoundingRect, drawRectBorder, RectCollisionShape } from '../collision.js';
 import { config } from '../config.js';
 import { BirdEntity, Entity, exportedIdGenerator, loadLevel, PipeEntity, resetExportedIdSequence } from '../entities.js';
-import { NextLevelScene } from '../next-level-scene.js';
+import { NextLevelScene } from './next-level-scene.js';
 import { TimerProfile } from '../profiling.js';
 import { drawRect, drawText } from '../render.js';
 import { Scene } from '../scene.js';
