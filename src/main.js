@@ -1,6 +1,6 @@
 import { AppContext } from './app-context.js';
 import { config } from './config.js';
-import { GameScene } from './game-scene.js';
+import { GameScene } from './scenes/game-scene.js';
 import { LoadingScene } from './loading-scene.js';
 import { drawRect } from './render.js';
 import { resourceManager } from './resource-manager.js';

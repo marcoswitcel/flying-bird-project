@@ -1,6 +1,6 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, RectCollisionShape } from './collision.js';
-import { GameScene } from './game-scene.js';
+import { GameScene } from './scenes/game-scene.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';

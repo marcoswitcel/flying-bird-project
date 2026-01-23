@@ -1,6 +1,6 @@
 import { AppContext } from './app-context.js';
 import { is } from './entities.js';
-import { GameScene } from './game-scene.js';
+import { GameScene } from './scenes/game-scene.js';
 import { MenuScene } from './menu-scene.js';
 import { Scene } from './scene.js';
 
