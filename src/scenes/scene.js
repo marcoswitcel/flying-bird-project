@@ -32,7 +32,10 @@ export class Scene {
    * @param {HTMLElement|null} rootElement 
    * @returns {void} 
    */
-  cleanUp(rootElement = null) {}
+  cleanUp(rootElement = null) {
+    rootElement.innerHTML = null
+    this.appContext.sceneManager.updateStyle('');
+  }
 
   /**
    * 

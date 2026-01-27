@@ -78,8 +78,6 @@ export class MenuScene extends Scene {
    */
   cleanUp(rootElement = null) {
     // @todo joão, refatorar o setup para não fazer o lick dos callbacks
-    rootElement.innerHTML = null
-
-    this.appContext.sceneManager.updateStyle('');
+    super.cleanUp(rootElement);
   }
 }
