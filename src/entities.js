@@ -189,6 +189,10 @@ export class TiledEntity extends Entity {
 
     const tileRect = new BoundingRect({ x: 0, y: 0, }, { x: this.sprite.width, y: this.sprite.height });
 
+    /**
+     * @todo João, aqui o ideal seria identificar o "range" de "índices" que de fato poderiam estar
+     * dentro da área da câmera e checar apenas eles
+     */
     for (let i = 0; i < this.dimension.x; i++) {
       for (let j = 0; j < this.dimension.y; j++) {
         // @note João é necessário que a position esteja considerando o centro do objeto, por isso 
