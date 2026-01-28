@@ -26,8 +26,8 @@
         "id": 1,
         "type": "PipeEntity",
         "position": {
-          "x": 450,
-          "y": 405
+          "x": 504,
+          "y": 331
         },
         "collisionShape": {
           "color": "black",
@@ -46,8 +46,8 @@
         "id": 2,
         "type": "PipeEntity",
         "position": {
-          "x": 650,
-          "y": 405
+          "x": 811,
+          "y": 328
         },
         "collisionShape": {
           "color": "black",
@@ -85,7 +85,7 @@
         "id": 4,
         "type": "PipeEntity",
         "position": {
-          "x": 960,
+          "x": 1074,
           "y": 403
         },
         "collisionShape": {
@@ -105,8 +105,8 @@
         "id": 5,
         "type": "PipeEntity",
         "position": {
-          "x": 1168,
-          "y": 406
+          "x": 1291,
+          "y": 403
         },
         "collisionShape": {
           "color": "black",
@@ -125,8 +125,8 @@
         "id": 6,
         "type": "PipeEntity",
         "position": {
-          "x": 1392,
-          "y": 404
+          "x": 1586,
+          "y": 403
         },
         "collisionShape": {
           "color": "black",
@@ -145,8 +145,8 @@
         "id": 7,
         "type": "PipeEntity",
         "position": {
-          "x": 1612,
-          "y": 71
+          "x": 1874,
+          "y": 46
         },
         "collisionShape": {
           "color": "black",
@@ -164,6 +164,19 @@
       },
       {
         "id": 8,
+        "type": "ParallaxEntity",
+        "position": {
+          "x": 143.20000000000002,
+          "y": 300
+        },
+        "collisionShape": null,
+        "dimension": {
+          "x": 1123,
+          "y": 794
+        }
+      },
+      {
+        "id": 9,
         "type": "BirdEntity",
         "position": {
           "x": 43.20000000000002,
@@ -179,19 +192,6 @@
         "dimension": {
           "x": 75,
           "y": 65
-        }
-      },
-      {
-        "id": 9,
-        "type": "ParallaxEntity",
-        "position": {
-          "x": 143.20000000000002,
-          "y": 300
-        },
-        "collisionShape": null,
-        "dimension": {
-          "x": 1123,
-          "y": 794
         }
       }
     ]

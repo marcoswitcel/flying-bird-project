@@ -346,6 +346,7 @@ export class GameScene extends Scene {
           resetExportedIdSequence();
           
           const world = {
+            backgroundColor: this.gameContext.backgroundColor,
             world: {
               entities: this.gameContext.entities
                 .map(e => e.exportableObject())
