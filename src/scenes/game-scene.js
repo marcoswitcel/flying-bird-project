@@ -338,6 +338,12 @@ export class GameScene extends Scene {
       case 'KeyC': {
         this.gameContext.selectedEntity = null;
       }; break;
+      case 'KeyU': {
+        if (this.gameContext.selectedEntity && this.gameContext.selectedEntity instanceof PipeEntity) {
+          this.gameContext.selectedEntity.isUpsideDown = !this.gameContext.selectedEntity.isUpsideDown
+          this.gameContext.selectedEntity.updateSprite()
+        }
+      }; break;
       case 'KeyE': {
         let exported = ''; ;
         if (this.gameContext.selectedEntity) {
