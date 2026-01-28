@@ -135,7 +135,8 @@ export class GameScene extends Scene {
   }
 
   update(timestamp) {
-    if (!this.gameContext.paused)
+    if (this.gameContext.paused) return;
+
     for (const entity of this.gameContext.entities) {
       if (entity instanceof BirdEntity) {
         // gravidade
@@ -191,7 +192,6 @@ export class GameScene extends Scene {
       }
     }
 
-    if (!this.gameContext.paused)
     for (const entity of this.gameContext.entities) {
       if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
         const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
