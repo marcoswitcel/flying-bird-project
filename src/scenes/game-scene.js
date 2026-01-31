@@ -344,6 +344,22 @@ export class GameScene extends Scene {
           this.gameContext.selectedEntity.updateSprite()
         }
       }; break;
+      case 'KeyH': {
+        if (event.shiftKey && this.gameContext.selectedEntity instanceof PipeEntity) {
+          const increateSize = 1.05;
+          const pipe = this.gameContext.selectedEntity;
+          pipe.collisionShape.dimensions.x *= increateSize;
+          pipe.dimension.x *= increateSize;
+        }
+      }; break;
+      case 'KeyV': {
+        if (event.shiftKey && this.gameContext.selectedEntity instanceof PipeEntity) {
+          const increateSize = 1.05;
+          const pipe = this.gameContext.selectedEntity;
+          pipe.collisionShape.dimensions.y *= increateSize;
+          pipe.dimension.y *= increateSize;
+        }
+      }; break;
       case 'KeyE': {
         let exported = ''; ;
         if (this.gameContext.selectedEntity) {
