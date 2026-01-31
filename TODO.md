@@ -11,3 +11,4 @@
 * Definir ordem de renderização ou vários layers -- Parado por hora
 * implementar contadores (anexar as entidades 'pipe')
 * fazer mapas maiores usando o recurso de verticalidade pra testar a eficiência das soluções desenvolvidas
+* Inimigos que atiram no pássaro? ou outra ideia para obstátculos móveis
