@@ -97,14 +97,4 @@ export class NextLevelScene extends Scene {
       this.appContext.changeTo(new MenuScene(this.appContext));
     })
   }
-
-  /**
-   * @param {HTMLElement|null} rootElement 
-   */
-  cleanUp(rootElement = null) {
-    // @todo joão, refatorar o setup para não fazer o lick dos callbacks
-    rootElement.innerHTML = null
-
-    this.appContext.sceneManager.updateStyle('');
-  }
 }

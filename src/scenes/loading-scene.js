@@ -75,16 +75,6 @@ export class LoadingScene extends Scene {
     // @todo João, update faltando
   }
 
-  /**
-   * @param {HTMLElement|null} rootElement 
-   */
-  cleanUp(rootElement = null) {
-    // @todo joão, refatorar o setup para não fazer o lick dos callbacks
-    rootElement.innerHTML = null
-
-    this.appContext.sceneManager.updateStyle('');
-  }
-
   update(timestamp) {
     // registra quando tela foi montada, como não tem timestamp no setup faço aqui
     if (this.firstRenderTimestamp === 0) {
