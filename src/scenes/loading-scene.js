@@ -65,7 +65,7 @@ export class LoadingScene extends Scene {
    * @param {HTMLElement|null} rootElement 
    */
   setup(rootElement = null) {
-    // @todo joão, temporário 
+    // @wip joão, temporário 
     rootElement.innerHTML = html
 
     this.loaderElement = rootElement.querySelector('.loader');

@@ -62,7 +62,7 @@ export class LevelSelectionScene extends Scene {
    */
   setup(rootElement = null) {
     this.activated = true;
-    // @todo joão, temporário 
+    // @wip joão, temporário 
     rootElement.innerHTML = html
 
     this.appContext.sceneManager.updateStyle(style);
