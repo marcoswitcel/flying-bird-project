@@ -64,20 +64,32 @@ export class MenuScene extends Scene {
 
     this.appContext.sceneManager.updateStyle(style);
 
-    rootElement.querySelector('#btnCampaign').addEventListener('click', () => {
-      this.appContext.changeTo(new LevelSelectionScene(this.appContext));
-    })
-
-    rootElement.querySelector('#btnEndless').addEventListener('click', () => {
-      this.appContext.changeTo(new GameScene(this.appContext, '../public/level/endless.json'));
-    })
+    rootElement.querySelector('#btnCampaign').addEventListener('click', this.actionBtnCampaign)
+    rootElement.querySelector('#btnEndless').addEventListener('click', this.actionBtnEndless)
   }
 
   /**
    * @param {HTMLElement|null} rootElement 
    */
   cleanUp(rootElement = null) {
-    // @todo joão, refatorar o setup para não fazer o lick dos callbacks
+
+    rootElement.querySelector('#btnCampaign').removeEventListener('click', this.actionBtnCampaign)
+    rootElement.querySelector('#btnEndless').removeEventListener('click', this.actionBtnEndless)
+    
     super.cleanUp(rootElement);
+  }
+
+  /**
+   * @private
+   */
+  actionBtnCampaign = () => {
+    this.appContext.changeTo(new LevelSelectionScene(this.appContext));
+  }
+
+  /**
+   * @private
+   */
+  actionBtnEndless = () => {
+    this.appContext.changeTo(new GameScene(this.appContext, '../public/level/endless.json'));
   }
 }
