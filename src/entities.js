@@ -280,11 +280,17 @@ export const is = (type, value) => typeof value === type && value !== null;
 /**
  * 
  * @param {object} json 
- * @returns {Entity[]}
+ * @returns {[string, Entity[]]}
  */
 export const processLevelData = (json) => {
   const entities = [];
   const ids = new Set();
+
+  let backgroundColor = ''
+
+  if (is('string', json.world.backgroundColor)) {
+    backgroundColor = json.world.backgroundColor;
+  }
 
   for (const entry of json.world.entities) {
     /**
@@ -346,7 +352,7 @@ export const processLevelData = (json) => {
     entities.push(entity);
   }
 
-  return entities;
+  return [ backgroundColor, entities ];
 }
 
 /**
@@ -366,7 +372,12 @@ export function loadLevel(gameScene, levelFile) {
       gameScene.gameContext.entities.length = 0;
       gameScene.resetGameState();
 
-      const allEntitiesImported = processLevelData(json)
+      const [ backgroundColor, allEntitiesImported ] = processLevelData(json)
+
+      // background color
+      if (backgroundColor) {
+        gameScene.gameContext.backgroundColor = backgroundColor;
+      }
 
       // @note João, hack temporário para fazer o parallax renderizar por trás da cena
       for (const entity of allEntitiesImported) if (entity instanceof ParallaxEntity) {
