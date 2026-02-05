@@ -16,7 +16,7 @@ export class GameContext {
    */
   entities = [];
   /**
-   * @todo joão, falta carregar do JSON
+   * @type {string}
    */
   backgroundColor = 'blue';
   bird = new BirdEntity();
@@ -214,8 +214,8 @@ export class GameScene extends Scene {
     // limpa e define a cor de fundo do mundo
     drawRect(ctx, 0, 0, canvas.width, canvas.height, this.gameContext.backgroundColor);
   
-    // contador (@todo João, não deveria mover para baixo?)
-    drawText(ctx, `${this.gameContext.counter}`, vec2(24, 24), 16, 'white', 'monospace');
+    // contador
+    drawText(ctx, `${this.gameContext.counter}`, vec2(24, 24), 18, 'white', 'monospace');
     
     const timer = new TimerProfile();
     for (const entity of this.gameContext.entities) {

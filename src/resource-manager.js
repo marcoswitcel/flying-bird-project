@@ -4,20 +4,21 @@ const log = (...args) => console.log('[ResourceManager]', ...args);
 
 /**
  * @typedef {'json'|'image'} ResourceType
+ * @typedef {Sprite | HTMLImageElement | Promise<any>} ResourceEntry
  */
 
 export class ResourceManager {
 
   /**
    * @private
-   * @type {Map<string, any>}
+   * @type {Map<string, ResourceEntry>}
    */
   _map = new Map();
 
   /**
    * 
    * @param {string} path caminho do asset
-   * @param {ResourceType} type tipo do recruso
+   * @param {ResourceType} type tipo do recurso
    * @param {string} alias nome do asset
    */
   add(path, type, alias) {
@@ -29,17 +30,18 @@ export class ResourceManager {
       img.onabort = () => { log(`[onabort] path="${path}" alias="${alias}"`) };
       img.onerror = () => { log(`[onerror] path="${path}" alias="${alias}"`) };
       
-      this.setAsset(path, alias, img);
+      this.setAsset(path, img, alias);
     } else if (type === 'json') {
       const promise = fetch(path);
-      this.setAsset(path, alias, promise);
+      this.setAsset(path, promise, alias);
 
       promise
         .then(blob => blob.json())
         .then(json => {
           log(`[onload] path="${path}" alias="${alias}"`);
-          this.setAsset(path, alias, json);
+          this.setAsset(path, json, alias);
         })
+        // @ts-ignore
         .catch(error => {
           log(`[onerror] path="${path}" alias="${alias}"`);
         })
@@ -53,8 +55,10 @@ export class ResourceManager {
    */
   getImage(alias) {
     const value = this._map.get(alias);
+    // @ts-ignore
     console.assert(value, `requisitando imagem que não foi cadastrada: ${alias}`);
 
+    // @ts-ignore
     return value;
   }
 
@@ -65,6 +69,7 @@ export class ResourceManager {
    */
   getJson(alias) {
     const value = this._map.get(alias);
+    // @ts-ignore
     console.assert(value, `requisitando json que não foi cadastrado: ${alias}`);
 
     return value;
@@ -79,7 +84,8 @@ export class ResourceManager {
     const spriteKey = `sprite.${alias}`;
     
     if (this._map.has(spriteKey)) {
-      return this._map.get(spriteKey);
+      // @ts-ignore aqui eu sei que chaves `sprite.*` contém sprites ou null
+      return this._map.get(spriteKey) || null;
     }
 
     const img = this.getImage(alias);
@@ -99,7 +105,7 @@ export class ResourceManager {
       });
     }
 
-    this._map.set(spriteKey, sprite);
+    this.setAsset(spriteKey, sprite);
 
     return sprite;
   }
@@ -112,10 +118,10 @@ export class ResourceManager {
   /**
    * 
    * @param {string} path 
-   * @param {string} alias 
-   * @param {any} value 
+   * @param {ResourceEntry} value 
+   * @param {string|null} alias 
    */
-  setAsset(path, alias, value) {
+  setAsset(path, value, alias = null) {
     this._map.set(path, value);
     if (alias) {
       console.assert(!this._map.has(alias) || isPromise(this._map.get(alias)), `Alias duplicad: ${alias}`)
