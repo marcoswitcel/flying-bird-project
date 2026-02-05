@@ -71,8 +71,6 @@ export class LoadingScene extends Scene {
     this.loaderElement = rootElement.querySelector('.loader');
 
     this.appContext.sceneManager.updateStyle(style);
-
-    // @todo João, update faltando
   }
 
   update(timestamp) {
@@ -86,7 +84,6 @@ export class LoadingScene extends Scene {
 
     this.loaderElement.style.transform = `scaleX(${percentage})`
 
-    // @todo João, testar e melhorar essa tela de loading...
     if (resourceManager.isAllLoaded()) {
       if (timestamp - this.firstRenderTimestamp > this.minimalTimeInScene) {
         this.appContext.changeTo(new MenuScene(this.appContext));
