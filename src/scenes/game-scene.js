@@ -135,9 +135,13 @@ export class GameScene extends Scene {
   }
 
   update(timestamp) {
-    if (this.gameContext.paused) return;
+    
+    if (this.gameContext.paused) { 
+      TimeManager.stoped()
+      return;
+    }
 
-    TimeManager.timestamp = timestamp;
+    TimeManager.update(timestamp);
 
     for (const entity of this.gameContext.entities) {
       if (entity instanceof BirdEntity) {

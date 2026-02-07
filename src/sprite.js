@@ -1,6 +1,41 @@
 
+/**
+ * @todo João, testar
+ */
 export class TimeManager {
+
+  /**
+   * 
+   * @type {number}
+   */
   static timestamp = 0;
+  /**
+   * Update nesse frame
+   * @type {number}
+   */
+  static deltaTime = 0;
+  // tempos usados para controlar a timeline
+  static currentTimestamp = 0;
+  static lastTimestamp = 0;
+
+  static update(timestamp) {
+    if (this.lastTimestamp === 0) {
+      this.lastTimestamp = timestamp;
+      this.timestamp = 0;
+      this.currentTimestamp = timestamp;
+      this.deltaTime = 0;
+      return;
+    }
+
+    this.lastTimestamp = this.currentTimestamp;
+    this.currentTimestamp = timestamp;
+    this.deltaTime = this.currentTimestamp - this.lastTimestamp;
+    this.timestamp += this.deltaTime;
+  }
+
+  static stoped() {
+    this.deltaTime = 0
+  }
 }
 
 /**
@@ -53,16 +88,33 @@ export class Sprite {
   }
 }
 
+/**
+ * @todo João, considerar como controlar as animações, adicionar um campo timestamp pra representar o começo da animação?
+ * que pode ou não ser baseado no timestamp do navegador? não seria melhor incrementar a animação em si? não seria melhor
+ * ter um campo 'paused'? um método start? e um método advance (pra atualizar o tempo)?
+ */
 export class AnimatedSprite {
   /**
+   * Imagens/frames que compẽom a animação
    * @type {Sprite[]}
    */
   frames;
 
   /**
+   * Duração em milisegundos. E.x: para durar 2 segundos o valor seria 2000 (porque está em milisegundos)
    * @type {number}
    */
   length;
+
+  /**
+   * @type {number}
+   */
+  elapsedTime = 0;
+
+  /**
+   * @type {boolean}
+   */
+  paused = false;
 
   /**
    * 
@@ -87,7 +139,11 @@ export class AnimatedSprite {
   }
 
   get currentFrame() {
-    const tick = TimeManager.timestamp;
+    // @todo joão, mover esse if, adiciona duplicado...
+    if (!this.paused) {
+      this.elapsedTime += TimeManager.deltaTime
+    }
+    const tick = this.elapsedTime;
     // @todo João, ajustar isso aqui...
     const index = ~~(~~(~~tick % (this.length)) / (this.length / this.frames.length)) % this.frames.length;
     return this.frames[index];
