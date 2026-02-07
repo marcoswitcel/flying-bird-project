@@ -228,7 +228,11 @@ export class GameScene extends Scene {
       // @todo João, o fundo se move e aí resetando o nível ocorre que às vezes ele fica fora da área da câmera
       // if (!entity.getVisibleRect().isIntersecting(this.gameContext.camera)) continue;
   
-      if (this.gameContext.isRenderSprite) entity.render(ctx, this.gameContext.camera);
+      if (this.gameContext.isRenderSprite) {
+        if (entity.sprite instanceof AnimatedSprite) entity.sprite.updateIfNotPaused(TimeManager.deltaTime);
+
+        entity.render(ctx, this.gameContext.camera);
+      }
   
       if (this.gameContext.isShowDimension) {
         const dimensions = (entity.type === 'TiledEntity') ? { x: entity.sprite.width * entity.dimension.x, y: entity.sprite.height * entity.dimension.y, } : entity.dimension;

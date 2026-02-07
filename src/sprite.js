@@ -5,19 +5,34 @@
 export class TimeManager {
 
   /**
-   * 
+   * @public
    * @type {number}
    */
   static timestamp = 0;
+  
   /**
    * Update nesse frame
+   * @public
    * @type {number}
    */
   static deltaTime = 0;
-  // tempos usados para controlar a timeline
+  
+  /**
+   * @private
+   * @type {number}
+   */
   static currentTimestamp = 0;
+  /**
+   * @private
+   * @type {number}
+   */
   static lastTimestamp = 0;
 
+  /**
+   * @public
+   * @param {number} timestamp 
+   * @returns 
+   */
   static update(timestamp) {
     if (this.lastTimestamp === 0) {
       this.lastTimestamp = timestamp;
@@ -33,6 +48,9 @@ export class TimeManager {
     this.timestamp += this.deltaTime;
   }
 
+  /**
+   * @public
+   */
   static stoped() {
     this.deltaTime = 0
   }
@@ -139,14 +157,21 @@ export class AnimatedSprite {
   }
 
   get currentFrame() {
-    // @todo joão, mover esse if, adiciona duplicado...
-    if (!this.paused) {
-      this.elapsedTime += TimeManager.deltaTime
-    }
     const tick = this.elapsedTime;
-    // @todo João, ajustar isso aqui...
+    // @todo João, reescrever e testar isso aqui...
     const index = ~~(~~(~~tick % (this.length)) / (this.length / this.frames.length)) % this.frames.length;
     return this.frames[index];
+  }
+
+  /**
+   * 
+   * @param {number} deltaTime 
+   * @returns 
+   */
+  updateIfNotPaused(deltaTime) {
+    if (this.paused) return;
+
+    this.elapsedTime += deltaTime;
   }
 
   /**
