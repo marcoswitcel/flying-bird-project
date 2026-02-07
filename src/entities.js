@@ -251,7 +251,13 @@ export class ParallaxEntity extends Entity {
     for (const bg of this.backgrounds) {
       const delta = bg.dt;
       const m = camera.position.x % Math.floor(width / delta);
-      bg.sprite.render(ctx, { x: x - (delta * m), y: y }, this.dimension, this.centered);
+      const position = { x: x - (delta * m), y: y };
+      bg.sprite.render(ctx, position, this.dimension, this.centered);
+      // @todo João, ajustar o próximo trecho, é um hack pra renderização continua
+      // @todo João, além do hack tem o problema de arredondamento pra resolver...
+      position.x += this.dimension.x
+      bg.sprite.render(ctx, position, this.dimension, this.centered);
+
     }
   }
 
