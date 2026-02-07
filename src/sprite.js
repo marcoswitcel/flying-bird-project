@@ -1,4 +1,8 @@
 
+export class TimeManager {
+  static timestamp = 0;
+}
+
 /**
  * @typedef {{
  *  source: CanvasImageSource,
@@ -83,7 +87,7 @@ export class AnimatedSprite {
   }
 
   get currentFrame() {
-    const tick = performance.now();
+    const tick = TimeManager.timestamp;
     // @todo João, ajustar isso aqui...
     const index = ~~(~~(~~tick % (this.length)) / (this.length / this.frames.length)) % this.frames.length;
     return this.frames[index];

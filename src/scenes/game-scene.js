@@ -7,7 +7,7 @@ import { NextLevelScene } from './next-level-scene.js';
 import { TimerProfile } from '../profiling.js';
 import { drawRect, drawText } from '../render.js';
 import { Scene } from './scene.js';
-import { AnimatedSprite } from '../sprite.js';
+import { AnimatedSprite, TimeManager } from '../sprite.js';
 import { vec2, Vector2 } from '../vector2.js';
 
 export class GameContext {
@@ -136,6 +136,8 @@ export class GameScene extends Scene {
 
   update(timestamp) {
     if (this.gameContext.paused) return;
+
+    TimeManager.timestamp = timestamp;
 
     for (const entity of this.gameContext.entities) {
       if (entity instanceof BirdEntity) {
