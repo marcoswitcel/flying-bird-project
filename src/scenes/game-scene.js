@@ -79,6 +79,13 @@ export class GameScene extends Scene {
   levelPath;
 
   /**
+   * usado apenas para os cálculos de tempo de execução
+   * @private
+   * @type {number}
+   */
+  starTime = 0;
+
+  /**
    * 
    * @param {AppContext} appContext
    * @param {string} levelPath
@@ -135,6 +142,8 @@ export class GameScene extends Scene {
   }
 
   update(timestamp) {
+    // timing
+    this.starTime = performance.now();
     
     if (this.gameContext.paused) { 
       TimeManager.stoped()
@@ -251,6 +260,21 @@ export class GameScene extends Scene {
       drawRect(ctx, 0, 0, canvas.width, canvas.height, 'rgba(0, 0, 0, .5)');
       drawRect(ctx, x, y, boxWidth, boxHeight, 'green');
       drawText(ctx, 'Fim de jogo', vec2(ctx.canvas.width / 2, ctx.canvas.height / 2), 24, 'white', 'monospace');
+    }
+
+    const endTime = performance.now();
+    // @ts-expect-error
+    const memory = performance.memory;
+    
+    if (this.gameContext.isShowMemory && memory) {
+      const ctx = this.gameContext.ctx;
+      drawRect(ctx, 0, 0, 300, 85, 'rgba(0, 0, 0, .75)');
+      ctx.fillStyle = 'white';
+      ctx.font = '24px serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('JS Heap: ' + memory.usedJSHeapSize, 25, 25);
+      ctx.fillText('JS Heap Total: ' + memory.totalJSHeapSize, 25, 45);
+      ctx.fillText('Time: ' + (endTime - this.starTime).toFixed(4), 25, 65);
     }
   }
 
