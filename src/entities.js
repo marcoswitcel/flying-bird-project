@@ -41,7 +41,7 @@ export class Entity {
   }
 
   /**
-   * 
+   * @todo João, mover o código do if de render pra cá? posso fazer override no caso do parallax daí, ao invés de por condições lá
    * @param {Camera} camera 
    */
   isVisible(camera) {
@@ -237,6 +237,7 @@ export class ParallaxEntity extends Entity {
   }
 
   render(ctx, camera) {
+    // @todo João, duplicado no render do método e aqui...
     // mantendo a área visível alinhada com a renderização em relação a câmera câmera
     this.position.x = camera.position.x;
 
