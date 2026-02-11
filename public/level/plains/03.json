@@ -1,0 +1,199 @@
+{
+  "world": {
+    "backgroundColor": "blue",
+    "entities": [
+      {
+        "id": 0,
+        "type": "PipeEntity",
+        "position": {
+          "x": 250,
+          "y": 405
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 150
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 150
+        },
+        "isUpsideDown": false
+      },
+      {
+        "id": 1,
+        "type": "PipeEntity",
+        "position": {
+          "x": 504,
+          "y": 331
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 300
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 300
+        },
+        "isUpsideDown": false
+      },
+      {
+        "id": 2,
+        "type": "PipeEntity",
+        "position": {
+          "x": 811,
+          "y": 328
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 300
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 300
+        },
+        "isUpsideDown": false
+      },
+      {
+        "id": 3,
+        "type": "TiledEntity",
+        "position": {
+          "x": 0,
+          "y": 525
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 5670,
+            "y": 94
+          }
+        },
+        "dimension": {
+          "x": 5,
+          "y": 1
+        }
+      },
+      {
+        "id": 4,
+        "type": "PipeEntity",
+        "position": {
+          "x": 1074,
+          "y": 403
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 150
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 150
+        },
+        "isUpsideDown": false
+      },
+      {
+        "id": 5,
+        "type": "PipeEntity",
+        "position": {
+          "x": 1291,
+          "y": 403
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 150
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 150
+        },
+        "isUpsideDown": false
+      },
+      {
+        "id": 6,
+        "type": "PipeEntity",
+        "position": {
+          "x": 1586,
+          "y": 403
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 150
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 150
+        },
+        "isUpsideDown": false
+      },
+      {
+        "id": 7,
+        "type": "PipeEntity",
+        "position": {
+          "x": 1874,
+          "y": 46
+        },
+        "collisionShape": {
+          "color": "black",
+          "dimensions": {
+            "x": 25,
+            "y": 300
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 300
+        },
+        "isUpsideDown": true,
+        "isClearLevel": true
+      },
+      {
+        "id": 8,
+        "type": "ParallaxEntity",
+        "position": {
+          "x": 143.20000000000002,
+          "y": 300
+        },
+        "collisionShape": null,
+        "dimension": {
+          "x": 1123,
+          "y": 794
+        }
+      },
+      {
+        "id": 9,
+        "type": "BirdEntity",
+        "position": {
+          "x": 43.20000000000002,
+          "y": 99.89999999999998
+        },
+        "collisionShape": {
+          "color": "yellow",
+          "dimensions": {
+            "x": 10,
+            "y": 10
+          }
+        },
+        "dimension": {
+          "x": 75,
+          "y": 65
+        }
+      }
+    ]
+  }
+}

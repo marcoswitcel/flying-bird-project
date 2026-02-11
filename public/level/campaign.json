@@ -2,7 +2,7 @@
   "worlds": [
     {
       "name": "plains",
-      "levels": [ "01", "02" ]
+      "levels": [ "01", "02", "03" ]
     }
   ]
 }
