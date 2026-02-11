@@ -412,10 +412,18 @@ export function loadLevel(gameScene, levelFile) {
  * @param {GameContext} gameContext 
  */
 export function generateSceneWithManyElements(gameContext) {
-  const pipe = new PipeEntity();
-  
-  pipe.isUpsideDown = Math.random() > 0.5;
-  pipe.updateSprite()
 
-  gameContext.entities.push(pipe);
+  // @todo João, terminar
+  for (let i = 0; i < 1000; i++) {
+
+    const pipe = new PipeEntity();
+    
+    pipe.isUpsideDown = Math.random() > 0.5;
+    pipe.updateSprite()
+
+    pipe.position.x += i * 100;
+  
+    gameContext.entities.push(pipe);
+  }
+
 }
