@@ -1,6 +1,6 @@
 import { Camera } from './camera.js';
 import { BoundingRect, CollisionShape, RectCollisionShape } from './collision.js';
-import { GameScene } from './scenes/game-scene.js';
+import { GameContext, GameScene } from './scenes/game-scene.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
@@ -405,4 +405,17 @@ export function loadLevel(gameScene, levelFile) {
       console.error("[loadLevel] error filename: '%s'", levelFile)
       console.trace(reason)
     })
+}
+
+/**
+ * 
+ * @param {GameContext} gameContext 
+ */
+export function generateSceneWithManyElements(gameContext) {
+  const pipe = new PipeEntity();
+  
+  pipe.isUpsideDown = Math.random() > 0.5;
+  pipe.updateSprite()
+
+  gameContext.entities.push(pipe);
 }
