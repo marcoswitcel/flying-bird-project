@@ -152,6 +152,10 @@ export class GameScene extends Scene {
 
     TimeManager.update(timestamp);
 
+    /**
+     * @todo João, talvez criar um set de entidades visíveis ou atualizáveis aqui?
+     * seriam apenas as que a câmera vê que atualizariam?
+     */
     for (const entity of this.gameContext.entities) {
       if (entity instanceof BirdEntity) {
         // gravidade
@@ -196,6 +200,9 @@ export class GameScene extends Scene {
       }
     }
 
+    /**
+     * @todo joão, um set só de pipes? ou de pipes que estão perto do pássaro?
+     */
     for (const entity of this.gameContext.entities) {
       if (entity.type === 'PipeEntity') {
         /** @type {PipeEntity} */
@@ -238,8 +245,9 @@ export class GameScene extends Scene {
     
     const timer = new TimerProfile();
     for (const entity of this.gameContext.entities) {
-      // @todo João, o fundo se move e aí resetando o nível ocorre que às vezes ele fica fora da área da câmera
-      // if (!entity.getVisibleRect().isIntersecting(this.gameContext.camera)) continue;
+      // @note João, fiz um teste e melhorou bastante com o "if" abaixo, movi o código para o método "isVisible"
+      // no caso de 10_000 entidades, com esse if a perfomance melhora "16x", mas o ideal mesmo é não percorrer o set inteiro
+      if (!entity.isVisible(this.gameContext.camera)) continue;
   
       if (this.gameContext.isRenderSprite) {
         if (entity.sprite instanceof AnimatedSprite) entity.sprite.updateIfNotPaused(TimeManager.deltaTime);

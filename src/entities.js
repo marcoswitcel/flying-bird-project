@@ -41,13 +41,11 @@ export class Entity {
   }
 
   /**
-   * @todo João, mover o código do if de render pra cá? posso fazer override no caso do parallax daí, ao invés de por condições lá
+   * O objeto é visível na área visível definida pela câmera
    * @param {Camera} camera 
    */
   isVisible(camera) {
-    // @todo João, não funciona
-    return (this.position.x >= (camera.position.x - camera.dimensions.x / 2) && this.position.x <= (camera.position.x + camera.dimensions.x / 2)) &&
-      (this.position.y >= (camera.position.y - camera.dimensions.y / 2) && this.position.y <= (camera.position.y + camera.dimensions.y / 2));
+    return this.getVisibleRect().isIntersecting(camera);
   }
 
   /**
@@ -414,7 +412,7 @@ export function loadLevel(gameScene, levelFile) {
 export function generateSceneWithManyElements(gameContext) {
 
   // @todo João, terminar
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 100000; i++) {
 
     const pipe = new PipeEntity();
     
