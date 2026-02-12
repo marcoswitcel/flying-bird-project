@@ -244,6 +244,10 @@ export class GameScene extends Scene {
     drawText(ctx, `${this.gameContext.counter}`, vec2(24, 24), 18, 'white', 'monospace');
     
     const timer = new TimerProfile();
+    /**
+     * @todo João, aqui usar alguma estrutura para fazer o "particionamento espacial" e checar só áreas próximas
+     * da câmera, assim evitando percorrer as possíveis 10.000 entidades.
+     */
     for (const entity of this.gameContext.entities) {
       // @note João, fiz um teste e melhorou bastante com o "if" abaixo, movi o código para o método "isVisible"
       // no caso de 10_000 entidades, com esse if a perfomance melhora "16x", mas o ideal mesmo é não percorrer o set inteiro
