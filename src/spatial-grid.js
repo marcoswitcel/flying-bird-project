@@ -25,7 +25,7 @@ function hash(data)
 }
 
 /**
- * 
+ * @todo João, integrar e testar hash
  * @param {number} x 
  * @param {number} y 
  */
