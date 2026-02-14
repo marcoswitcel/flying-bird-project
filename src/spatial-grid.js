@@ -29,6 +29,7 @@ export class SpatialGrid {
     
   insert(entity) {
     // @todo João, implementar
+    // Talvez fazer o hash da coordernada x e y e usar o número no map?
   }
 
   update(entity) {
