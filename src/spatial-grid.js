@@ -49,7 +49,7 @@ function hashPosition(x, y) {
  */
 export class SpatialGrid {
   /**
-   * @type {Map<number, Entity>}
+   * @type {Map<number, Entity[] | undefined> & Map<Entity, Entity[] | undefined>}
    */
   grid;
 
@@ -68,9 +68,33 @@ export class SpatialGrid {
   }
 
     
+  /**
+   * 
+   * @param {Entity} entity 
+   */
   insert(entity) {
-    // @todo João, implementar
-    // Talvez fazer o hash da coordernada x e y e usar o número no map?
+    // descobrindo celula que o elemento ficaria
+    const x = Math.floor(entity.position.x / this.cellSize);
+    const y = Math.floor(entity.position.y / this.cellSize);
+    
+    // @todo joão, poder ser mais lento que usar string, mas vou ver de usar bitwise pra computar depois...
+    const hash = hashPosition(x, y);
+
+    if (this.grid.has(entity)) {
+      console.assert(false, 'Não deveria tentar inserir duplicado');
+      return;
+    }
+
+    let entitiesSet = this.grid.get(hash);
+
+    if (entitiesSet) {
+      entitiesSet.push(entity)
+    } else {
+      entitiesSet = [ entity ];
+      this.grid.set(hash, entitiesSet)
+    }
+
+    this.grid.set(entity, entitiesSet)
   }
 
   update(entity) {

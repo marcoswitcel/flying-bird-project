@@ -9,6 +9,7 @@ import { drawRect, drawText } from '../render.js';
 import { Scene } from './scene.js';
 import { AnimatedSprite, TimeManager } from '../sprite.js';
 import { vec2, Vector2 } from '../vector2.js';
+import { SpatialGrid } from '../spatial-grid.js';
 
 export class GameContext {
   /**
@@ -152,11 +153,18 @@ export class GameScene extends Scene {
 
     TimeManager.update(timestamp);
 
+    // @todo João, testar com valores diversos de cellSize e fazer testes com update versus add limpo
+    // @todo João, quando tiver o método range testar as conclusões do loop de render contra os palpites do grid
+    // const grid = new SpatialGrid(100);
+
     /**
      * @todo João, talvez criar um set de entidades visíveis ou atualizáveis aqui?
      * seriam apenas as que a câmera vê que atualizariam?
      */
     for (const entity of this.gameContext.entities) {
+      
+      // grid.insert(entity);
+      
       if (entity instanceof BirdEntity) {
         // gravidade
         entity.accel.y += 0.15;
@@ -199,6 +207,8 @@ export class GameScene extends Scene {
         entity.position.x = this.gameContext.camera.position.x;
       }
     }
+
+    // console.log(grid)
 
     /**
      * @todo joão, um set só de pipes? ou de pipes que estão perto do pássaro?
@@ -284,13 +294,14 @@ export class GameScene extends Scene {
     
     if (this.gameContext.isShowMemory && memory) {
       const ctx = this.gameContext.ctx;
-      drawRect(ctx, 0, 0, 300, 85, 'rgba(0, 0, 0, .75)');
+      drawRect(ctx, 0, 0, 300, 105, 'rgba(0, 0, 0, .75)');
       ctx.fillStyle = 'white';
       ctx.font = '24px serif';
       ctx.textAlign = 'left';
       ctx.fillText('JS Heap: ' + memory.usedJSHeapSize, 25, 25);
       ctx.fillText('JS Heap Total: ' + memory.totalJSHeapSize, 25, 45);
       ctx.fillText('Time: ' + (endTime - this.starTime).toFixed(4), 25, 65);
+      ctx.fillText('Entities: ' + this.gameContext.entities.length, 25, 85);
     }
   }
 
