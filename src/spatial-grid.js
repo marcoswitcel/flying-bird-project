@@ -49,7 +49,7 @@ function hashPosition(x, y) {
  */
 export class SpatialGrid {
   /**
-   * @type {Map<number, Entity[] | undefined> & Map<Entity, Entity[] | undefined>}
+   * @type {Map<number, Set<Entity> | undefined> & Map<Entity, Set<Entity> | undefined>}
    */
   grid;
 
@@ -81,24 +81,54 @@ export class SpatialGrid {
     const hash = hashPosition(x, y);
 
     if (this.grid.has(entity)) {
-      console.assert(false, 'Não deveria tentar inserir duplicado');
+      console.warn(false, 'Não deveria tentar inserir duplicado');
       return;
     }
 
     let entitiesSet = this.grid.get(hash);
 
     if (entitiesSet) {
-      entitiesSet.push(entity)
+      entitiesSet.add(entity)
     } else {
-      entitiesSet = [ entity ];
+      entitiesSet = new Set([ entity ]);
       this.grid.set(hash, entitiesSet)
     }
 
     this.grid.set(entity, entitiesSet)
   }
 
+  /**
+   * 
+   * @param {Entity} entity 
+   * @returns 
+   */
   update(entity) {
-    // @todo João, implementar
+    // descobrindo celula que o elemento ficaria
+    const x = Math.floor(entity.position.x / this.cellSize);
+    const y = Math.floor(entity.position.y / this.cellSize);
+    
+    // @todo joão, poder ser mais lento que usar string, mas vou ver de usar bitwise pra computar depois...
+    const hash = hashPosition(x, y);
+
+    const oldSet = this.grid.get(entity);
+
+    if (!oldSet) {
+      console.warn(false, 'Não deveria tentar atualizar uma entidade não inserida');
+      return;
+    }
+
+    oldSet.delete(entity);
+
+    let entitiesSet = this.grid.get(hash);
+
+    if (entitiesSet) {
+      entitiesSet.add(entity)
+    } else {
+      entitiesSet = new Set([ entity ]);
+      this.grid.set(hash, entitiesSet)
+    }
+
+    this.grid.set(entity, entitiesSet)
   }
 
   remove(entity) {
