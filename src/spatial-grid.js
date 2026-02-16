@@ -181,6 +181,8 @@ export class SpatialGrid {
         }
       }
     }
+
+    return entities;
   }
 
   clear() {
