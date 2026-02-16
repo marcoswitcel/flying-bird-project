@@ -394,7 +394,13 @@ export function loadLevel(gameScene, levelFile) {
       }
       // @note João, hack temporário para fazer o paássaro ser renderizado por último
       gameScene.gameContext.entities.push(gameScene.gameContext.bird);
-      gameScene.gameContext.bird.initialState()
+      gameScene.gameContext.bird.initialState();
+
+      const grid = gameScene.gameContext.spatialGrid;
+      grid.clear();
+      for (const entity of gameScene.gameContext.entities) {
+        grid.insert(entity);
+      }
       
     })
     .catch((reason) => {

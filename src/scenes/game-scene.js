@@ -26,6 +26,11 @@ export class GameContext {
    * @type {Entity|null}
    */
   selectedEntity = null;
+
+  /**
+   * @type {SpatialGrid}
+   */
+  spatialGrid;
   
   /**
    * @type {'running'|'win'|'lose'}
@@ -64,6 +69,7 @@ export class GameContext {
     this.camera.position.y = ctx.canvas.height / 2;
     this.camera.dimensions.x = ctx.canvas.width;
     this.camera.dimensions.y = ctx.canvas.height;
+    this.spatialGrid = new SpatialGrid(300);
   }
 }
 
@@ -201,10 +207,16 @@ export class GameScene extends Scene {
             entity.sprite.length = 250;
           }
         }
+
+        // update no grid
+        this.gameContext.spatialGrid.update(entity);
       } else if (entity instanceof ParallaxEntity) {
         // @todo João, duplicado no render do método e aqui...
         // mantendo a área visível alinhada com a renderização em relação a câmera câmera
         entity.position.x = this.gameContext.camera.position.x;
+
+        // update no grid
+        this.gameContext.spatialGrid.update(entity);
       }
     }
 

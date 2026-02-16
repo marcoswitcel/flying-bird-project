@@ -49,11 +49,13 @@ function hashPosition(x, y) {
  */
 export class SpatialGrid {
   /**
+   * @private
    * @type {Map<number, Set<Entity> | undefined> & Map<Entity, Set<Entity> | undefined>}
    */
   grid;
 
   /**
+   * @readonly
    * @type {number}
    */
   cellSize;
@@ -133,7 +135,21 @@ export class SpatialGrid {
   }
 
   remove(entity) {
-    // @todo João, implementar
+    // descobrindo celula que o elemento ficaria
+    const x = Math.floor(entity.position.x / this.cellSize);
+    const y = Math.floor(entity.position.y / this.cellSize);
+    
+    // @todo joão, poder ser mais lento que usar string, mas vou ver de usar bitwise pra computar depois...
+    const hash = hashPosition(x, y);
+
+    const oldSet = this.grid.get(entity);
+
+    if (!oldSet) {
+      console.warn(false, 'Não deveria tentar remover uma entidade não inserida');
+      return;
+    }
+
+    oldSet.delete(entity);
   }
 
   /**
@@ -144,6 +160,30 @@ export class SpatialGrid {
    * @param {number} height 
    */
   query(x, y, width, height) {
-    // @todo João, implementar
+    const xStart =  Math.floor((x - width / 2) / this.cellSize);
+    const xEnd =  Math.floor((x + width / 2) / this.cellSize);
+    const yStart =  Math.floor((y - height / 2) / this.cellSize);
+    const yEnd =  Math.floor((y + height / 2) / this.cellSize);
+
+    /**
+     * @type {Set<Entity>}
+     */
+    const entities = new Set()
+
+    for (let i = xStart; i <= xEnd; i++) {
+      for (let j = yStart; j <= yEnd; j++) {
+        const hash = hashPosition(i, j);
+        const set = this.grid.get(hash);
+        if (set) {
+          for (const value of set) {
+            entities.add(value);
+          }
+        }
+      }
+    }
+  }
+
+  clear() {
+    this.grid.clear()
   }
 }
