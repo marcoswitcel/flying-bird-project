@@ -2,7 +2,7 @@ import { AppContext } from '../app-context.js';
 import { Camera } from '../camera.js';
 import { BoundingRect, drawRectBorder, RectCollisionShape } from '../collision.js';
 import { config } from '../config.js';
-import { BirdEntity, Entity, exportedIdGenerator, generateSceneWithManyElements, loadLevel, ParallaxEntity, PipeEntity, resetExportedIdSequence } from '../entities.js';
+import { BirdEntity, Entity, EntityManager, exportedIdGenerator, generateSceneWithManyElements, loadLevel, ParallaxEntity, PipeEntity, resetExportedIdSequence } from '../entities.js';
 import { NextLevelScene } from './next-level-scene.js';
 import { TimerProfile } from '../profiling.js';
 import { drawRect, drawText } from '../render.js';
@@ -13,9 +13,9 @@ import { SpatialGrid } from '../spatial-grid.js';
 
 export class GameContext {
   /**
-   * @type {Entity[]}
+   * @type {EntityManager}
    */
-  entities = [];
+  entityManager = new EntityManager();
   /**
    * @type {string}
    */
@@ -113,7 +113,7 @@ export class GameScene extends Scene {
     this.gameContext.state = 'running'
     this.gameContext.counter = 0;
     // @todo João, revisar e integrar esses códigos de reset
-    for (const entity of this.gameContext.entities) {
+    for (const entity of this.gameContext.entityManager.allEntities) {
       entity.initialState();
     }
   }
@@ -167,7 +167,7 @@ export class GameScene extends Scene {
      * @todo João, talvez criar um set de entidades visíveis ou atualizáveis aqui?
      * seriam apenas as que a câmera vê que atualizariam?
      */
-    for (const entity of this.gameContext.entities) {
+    for (const entity of this.gameContext.entityManager.allEntities) {
       
       // grid.insert(entity);
       
@@ -225,7 +225,7 @@ export class GameScene extends Scene {
     /**
      * @todo joão, um set só de pipes? ou de pipes que estão perto do pássaro?
      */
-    for (const entity of this.gameContext.entities) {
+    for (const entity of this.gameContext.entityManager.allEntities) {
       if (entity.type === 'PipeEntity') {
         /** @type {PipeEntity} */
         // @ts-expect-error
@@ -240,7 +240,7 @@ export class GameScene extends Scene {
       }
     }
 
-    for (const entity of this.gameContext.entities) {
+    for (const entity of this.gameContext.entityManager.allEntities) {
       if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
         const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
         const rectBird = new BoundingRect(this.gameContext.bird.position, this.gameContext.bird.collisionShape.dimensions);
@@ -274,7 +274,7 @@ export class GameScene extends Scene {
      * @todo João, aqui usar alguma estrutura para fazer o "particionamento espacial" e checar só áreas próximas
      * da câmera, assim evitando percorrer as possíveis 10.000 entidades.
      */
-    for (const entity of this.gameContext.entities) {
+    for (const entity of this.gameContext.entityManager.allEntities) {
       // @note João, fiz um teste e melhorou bastante com o "if" abaixo, movi o código para o método "isVisible"
       // no caso de 10_000 entidades, com esse if a perfomance melhora "16x", mas o ideal mesmo é não percorrer o set inteiro
       if (!entity.isVisible(this.gameContext.camera)) continue;
@@ -322,7 +322,7 @@ export class GameScene extends Scene {
       ctx.fillText('JS Heap: ' + memory.usedJSHeapSize, 25, 25);
       ctx.fillText('JS Heap Total: ' + memory.totalJSHeapSize, 25, 45);
       ctx.fillText('Time: ' + (endTime - this.starTime).toFixed(4), 25, 65);
-      ctx.fillText('Entities: ' + this.gameContext.entities.length, 25, 85);
+      ctx.fillText('Entities: ' + this.gameContext.entityManager.allEntities.length, 25, 85);
     }
   }
 
@@ -339,7 +339,7 @@ export class GameScene extends Scene {
       .add(this.gameContext.mousedown.copy().subScalar(this.gameContext.ctx.canvas.width / 2, this.gameContext.ctx.canvas.height / 2));
     
     this.gameContext.selectedEntity = null;
-    for (const entity of this.gameContext.entities) {
+    for (const entity of this.gameContext.entityManager.allEntities) {
       if (entity.getVisibleRect().isInside(clickInWorldSpace)) {
         console.log(entity);
         this.gameContext.selectedEntity = entity;
@@ -366,7 +366,7 @@ export class GameScene extends Scene {
         .add(this.gameContext.mousedown.copy().subScalar(this.gameContext.ctx.canvas.width / 2, this.gameContext.ctx.canvas.height / 2));
       const pipe = new PipeEntity();
       pipe.position = clickInWorldSpace.copy();
-      this.gameContext.entities.push(pipe);
+      this.gameContext.entityManager.allEntities.push(pipe);
     }
   
     this.gameContext.mousedown = null;
@@ -452,7 +452,7 @@ export class GameScene extends Scene {
           const world = {
             backgroundColor: this.gameContext.backgroundColor,
             world: {
-              entities: this.gameContext.entities
+              entities: this.gameContext.entityManager.allEntities
                 .map(e => e.exportableObject())
                 .sort((a, b) => a.id - b.id)
                 .map(e => { e.id = exportedIdGenerator(); return e; })

@@ -14,6 +14,22 @@ export const resetExportedIdSequence = () => { exportedIdSequence = 0; }
 export const exportedIdGenerator = () => exportedIdSequence++;
 const runtimeIdGenerator = () => runtimeIdSequence++;
 
+export class EntityManager {
+  /**
+   * @type {Entity[]}
+   */
+  allEntities = [];
+
+  /**
+   * @type {Record<string, Entity[]>}
+   */
+  all = {
+    pipeEntities: []
+  }
+
+  // @todo João, implementar o método add e remove pra gerenciar
+}
+
 export class Entity {
   /**
    * @type {number}
@@ -374,7 +390,7 @@ export function loadLevel(gameScene, levelFile) {
       console.log("[loadLevel] level loaded name: '%s'", levelFile)
 
       // reset
-      gameScene.gameContext.entities.length = 0;
+      gameScene.gameContext.entityManager.allEntities.length = 0;
       gameScene.resetGameState();
 
       const [ backgroundColor, allEntitiesImported ] = processLevelData(json)
@@ -386,19 +402,19 @@ export function loadLevel(gameScene, levelFile) {
 
       // @note João, hack temporário para fazer o parallax renderizar por trás da cena
       for (const entity of allEntitiesImported) if (entity instanceof ParallaxEntity) {
-        gameScene.gameContext.entities.push(entity);
+        gameScene.gameContext.entityManager.allEntities.push(entity);
       }
       
       for (const entity of allEntitiesImported) if (!(entity instanceof ParallaxEntity)) {
-        gameScene.gameContext.entities.push(entity);
+        gameScene.gameContext.entityManager.allEntities.push(entity);
       }
       // @note João, hack temporário para fazer o paássaro ser renderizado por último
-      gameScene.gameContext.entities.push(gameScene.gameContext.bird);
+      gameScene.gameContext.entityManager.allEntities.push(gameScene.gameContext.bird);
       gameScene.gameContext.bird.initialState();
 
       const grid = gameScene.gameContext.spatialGrid;
       grid.clear();
-      for (const entity of gameScene.gameContext.entities) {
+      for (const entity of gameScene.gameContext.entityManager.allEntities) {
         grid.insert(entity);
       }
       
@@ -427,7 +443,7 @@ export function generateSceneWithManyElements(gameContext) {
 
     pipe.position.x += i * 100;
   
-    gameContext.entities.push(pipe);
+    gameContext.entityManager.allEntities.push(pipe);
   }
 
 }
