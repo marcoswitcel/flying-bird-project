@@ -21,13 +21,38 @@ export class EntityManager {
   allEntities = [];
 
   /**
+   * @type {BirdEntity}
+   */
+  bird;
+
+  /**
    * @type {Record<string, Entity[]>}
    */
   all = {
-    pipeEntities: []
+    PipeEntity: [],
+    TiledEntity: [],
+    BirdEntity: [],
+    ParallaxEntity: [],
   }
 
   // @todo João, implementar o método add e remove pra gerenciar
+
+  /**
+   * @param {Entity} entity 
+   */
+  add(entity) {
+    // adiciona na lista geral
+    this.allEntities.push(entity);
+    
+    const className = entity.constructor.name;
+    const collection = this.all[className];
+
+    if (collection) {
+      collection.push(entity);
+    } else {
+      console.error('ClassName "%s" não encontrado', className)
+    }
+  }
 }
 
 export class Entity {
@@ -390,7 +415,7 @@ export function loadLevel(gameScene, levelFile) {
       console.log("[loadLevel] level loaded name: '%s'", levelFile)
 
       // reset
-      gameScene.gameContext.entityManager.allEntities.length = 0;
+      gameScene.gameContext.entityManager.allEntities.length = 0; // @todo João, chamar clear no manager
       gameScene.resetGameState();
 
       const [ backgroundColor, allEntitiesImported ] = processLevelData(json)
@@ -402,14 +427,14 @@ export function loadLevel(gameScene, levelFile) {
 
       // @note João, hack temporário para fazer o parallax renderizar por trás da cena
       for (const entity of allEntitiesImported) if (entity instanceof ParallaxEntity) {
-        gameScene.gameContext.entityManager.allEntities.push(entity);
+        gameScene.gameContext.entityManager.add(entity);
       }
       
       for (const entity of allEntitiesImported) if (!(entity instanceof ParallaxEntity)) {
-        gameScene.gameContext.entityManager.allEntities.push(entity);
+        gameScene.gameContext.entityManager.add(entity);
       }
       // @note João, hack temporário para fazer o paássaro ser renderizado por último
-      gameScene.gameContext.entityManager.allEntities.push(gameScene.gameContext.bird);
+      gameScene.gameContext.entityManager.add(gameScene.gameContext.bird);
       gameScene.gameContext.bird.initialState();
 
       const grid = gameScene.gameContext.spatialGrid;
@@ -443,7 +468,7 @@ export function generateSceneWithManyElements(gameContext) {
 
     pipe.position.x += i * 100;
   
-    gameContext.entityManager.allEntities.push(pipe);
+    gameContext.entityManager.add(pipe);
   }
 
 }

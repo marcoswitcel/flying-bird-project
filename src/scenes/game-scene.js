@@ -366,7 +366,7 @@ export class GameScene extends Scene {
         .add(this.gameContext.mousedown.copy().subScalar(this.gameContext.ctx.canvas.width / 2, this.gameContext.ctx.canvas.height / 2));
       const pipe = new PipeEntity();
       pipe.position = clickInWorldSpace.copy();
-      this.gameContext.entityManager.allEntities.push(pipe);
+      this.gameContext.entityManager.add(pipe);
     }
   
     this.gameContext.mousedown = null;
