@@ -223,19 +223,14 @@ export class GameScene extends Scene {
     // console.log(grid)
 
     /**
-     * @todo joão, um set só de pipes? ou de pipes que estão perto do pássaro?
+     * @todo joão, um set só de pipes que estão perto do pássaro?
      */
-    for (const entity of this.gameContext.entityManager.allEntities) {
-      if (entity.type === 'PipeEntity') {
-        /** @type {PipeEntity} */
-        // @ts-expect-error
-        const pipe = entity;
-        if (!pipe.birdPassedThrough && pipe.position.x < this.gameContext.bird.position.x) {
-          pipe.birdPassedThrough = true;
-          this.gameContext.counter++;
-          if (pipe.isClearLevel) {
-            this.gameContext.state = 'win';
-          }
+    for (const pipe of this.gameContext.entityManager.all.PipeEntity) {
+      if (!pipe.birdPassedThrough && pipe.position.x < this.gameContext.bird.position.x) {
+        pipe.birdPassedThrough = true;
+        this.gameContext.counter++;
+        if (pipe.isClearLevel) {
+          this.gameContext.state = 'win';
         }
       }
     }

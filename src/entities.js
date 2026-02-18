@@ -26,7 +26,7 @@ export class EntityManager {
   bird;
 
   /**
-   * @type {Record<string, Entity[]>}
+   * @type {{ PipeEntity: PipeEntity[], TiledEntity: TiledEntity[],  BirdEntity: BirdEntity[],  ParallaxEntity: ParallaxEntity[] }}
    */
   all = {
     PipeEntity: [],
@@ -51,6 +51,14 @@ export class EntityManager {
       collection.push(entity);
     } else {
       console.error('ClassName "%s" não encontrado', className)
+    }
+  }
+
+  clear() {
+    this.allEntities.length = 0;
+    
+    for (const key of Object.keys(this.all)) {
+      this.all[key].length = 0;
     }
   }
 }
@@ -415,7 +423,7 @@ export function loadLevel(gameScene, levelFile) {
       console.log("[loadLevel] level loaded name: '%s'", levelFile)
 
       // reset
-      gameScene.gameContext.entityManager.allEntities.length = 0; // @todo João, chamar clear no manager
+      gameScene.gameContext.entityManager.clear();
       gameScene.resetGameState();
 
       const [ backgroundColor, allEntitiesImported ] = processLevelData(json)
