@@ -50,7 +50,7 @@ function hashPosition(x, y) {
 export class SpatialGrid {
   /**
    * @private
-   * @type {Map<number, Set<Entity> | undefined> & Map<Entity, Set<Entity> | undefined>}
+   * @type {Map<number, Set<Entity> | undefined> & Map<Entity, Set<number> | undefined>}
    */
   grid;
 
@@ -71,32 +71,40 @@ export class SpatialGrid {
 
     
   /**
-   * 
+   * @todo joão, refatorar o resto
    * @param {Entity} entity 
    */
   insert(entity) {
     // descobrindo celula que o elemento ficaria
-    const x = Math.floor(entity.position.x / this.cellSize);
-    const y = Math.floor(entity.position.y / this.cellSize);
+    const rect = entity.getVisibleRect()
+
+    const xStart =  Math.floor((rect.position.x - rect.dimensions.x / 2) / this.cellSize);
+    const xEnd =  Math.floor((rect.position.x + rect.dimensions.x / 2) / this.cellSize);
+    const yStart =  Math.floor((rect.position.y - rect.dimensions.y / 2) / this.cellSize);
+    const yEnd =  Math.floor((rect.position.y + rect.dimensions.y / 2) / this.cellSize);
     
     // @todo joão, poder ser mais lento que usar string, mas vou ver de usar bitwise pra computar depois...
-    const hash = hashPosition(x, y);
+    /**
+     * @type {Set<number>}
+     */
+    const hashs = new Set();
+
+    for (let x = xStart; x < xEnd; x++) {
+      for (let y = yStart; y < yEnd; y++) {
+        hashs.add(hashPosition(x, y));
+      }
+    }
 
     if (this.grid.has(entity)) {
       console.warn(false, 'Não deveria tentar inserir duplicado');
       return;
     }
 
-    let entitiesSet = this.grid.get(hash);
-
-    if (entitiesSet) {
-      entitiesSet.add(entity)
-    } else {
-      entitiesSet = new Set([ entity ]);
-      this.grid.set(hash, entitiesSet)
+    for (const hash of hashs) {
+      this.getOrCreatePartition(hash).add(entity);
     }
 
-    this.grid.set(entity, entitiesSet)
+    this.grid.set(entity, hashs)
   }
 
   /**
@@ -183,6 +191,21 @@ export class SpatialGrid {
     }
 
     return entities;
+  }
+
+  /**
+   * 
+   * @param {number} hash 
+   */
+  getOrCreatePartition(hash) {
+    let entitiesSet = this.grid.get(hash);
+
+    if (!entitiesSet) {
+      entitiesSet = new Set();
+      this.grid.set(hash, entitiesSet)
+    }
+
+    return entitiesSet;
   }
 
   clear() {
