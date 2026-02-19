@@ -167,60 +167,55 @@ export class GameScene extends Scene {
      * @todo João, talvez criar um set de entidades visíveis ou atualizáveis aqui?
      * seriam apenas as que a câmera vê que atualizariam?
      */
-    for (const entity of this.gameContext.entityManager.allEntities) {
-      
-      // grid.insert(entity);
-      
-      if (entity instanceof BirdEntity) {
-        // gravidade
-        entity.accel.y += 0.15;
+    for (const entity of this.gameContext.entityManager.all.BirdEntity) {
+      // gravidade
+      entity.accel.y += 0.15;
 
-        entity.velocity.add(entity.accel);
+      entity.velocity.add(entity.accel);
 
-        if (this.gameContext.state === 'win') {
-          entity.velocity.y = 0
-          this.appContext.changeTo(new NextLevelScene(this.appContext, this.levelPath))
-        }
-
-        // por hora velocidade horizontal fixa
-        if (!entity.hitted) {
-          entity.velocity.x = 1.2;
-        } else {
-          entity.velocity.x = 0;
-        }
-        entity.position.add(entity.velocity);
-
-        // reset aceleração
-        entity.accel.x = 0;
-        entity.accel.y = 0;
-
-        // camera seguindo 'bird'
-        if (!this.gameContext.freeCamera) {
-          this.gameContext.camera.position.x = entity.position.x + 100;
-        }
-
-        // pequeno feedback visual para demonstrar o esforço do pássaro tentando subir
-        if (entity.sprite instanceof AnimatedSprite) {
-          if (entity.velocity.y < 0) {
-            entity.sprite.length = 150;
-          } else {
-            entity.sprite.length = 250;
-          }
-        }
-
-        // update no grid
-        this.gameContext.spatialGrid.update(entity);
-      } else if (entity instanceof ParallaxEntity) {
-        // @todo João, duplicado no render do método e aqui...
-        // mantendo a área visível alinhada com a renderização em relação a câmera câmera
-        entity.position.x = this.gameContext.camera.position.x;
-
-        // update no grid
-        this.gameContext.spatialGrid.update(entity);
+      if (this.gameContext.state === 'win') {
+        entity.velocity.y = 0
+        this.appContext.changeTo(new NextLevelScene(this.appContext, this.levelPath))
       }
+
+      // por hora velocidade horizontal fixa
+      if (!entity.hitted) {
+        entity.velocity.x = 1.2;
+      } else {
+        entity.velocity.x = 0;
+      }
+      entity.position.add(entity.velocity);
+
+      // reset aceleração
+      entity.accel.x = 0;
+      entity.accel.y = 0;
+
+      // camera seguindo 'bird'
+      if (!this.gameContext.freeCamera) {
+        this.gameContext.camera.position.x = entity.position.x + 100;
+      }
+
+      // pequeno feedback visual para demonstrar o esforço do pássaro tentando subir
+      if (entity.sprite instanceof AnimatedSprite) {
+        if (entity.velocity.y < 0) {
+          entity.sprite.length = 150;
+        } else {
+          entity.sprite.length = 250;
+        }
+      }
+
+      // update no grid
+      this.gameContext.spatialGrid.update(entity);
     }
 
-    // console.log(grid)
+    for (const entity of this.gameContext.entityManager.all.ParallaxEntity) {
+      // @todo João, duplicado no render do método e aqui...
+      // mantendo a área visível alinhada com a renderização em relação a câmera câmera
+      entity.position.x = this.gameContext.camera.position.x;
+
+      // update no grid
+      this.gameContext.spatialGrid.update(entity);
+    }
 
     /**
      * @todo joão, um set só de pipes que estão perto do pássaro?
