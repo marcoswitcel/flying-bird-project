@@ -131,6 +131,7 @@ export class SpatialGrid {
       }
     }
 
+    // @todo joão, adicionar depois de remover
     for (const hash of hashs) {
       this.getOrCreatePartition(hash).add(entity);
     }
@@ -156,20 +157,42 @@ export class SpatialGrid {
 
   remove(entity) {
     // descobrindo celula que o elemento ficaria
-    const x = Math.floor(entity.position.x / this.cellSize);
-    const y = Math.floor(entity.position.y / this.cellSize);
+    const rect = entity.getVisibleRect()
+
+    const xStart =  Math.floor((rect.position.x - rect.dimensions.x / 2) / this.cellSize);
+    const xEnd =  Math.floor((rect.position.x + rect.dimensions.x / 2) / this.cellSize);
+    const yStart =  Math.floor((rect.position.y - rect.dimensions.y / 2) / this.cellSize);
+    const yEnd =  Math.floor((rect.position.y + rect.dimensions.y / 2) / this.cellSize);
     
     // @todo joão, poder ser mais lento que usar string, mas vou ver de usar bitwise pra computar depois...
-    const hash = hashPosition(x, y);
+    /**
+     * @type {Set<number>}
+     */
+    const hashs = new Set();
 
-    const oldSet = this.grid.get(entity);
-
-    if (!oldSet) {
-      console.assert(false, 'Não deveria tentar remover uma entidade não inserida');
-      return;
+    for (let x = xStart; x < xEnd; x++) {
+      for (let y = yStart; y < yEnd; y++) {
+        hashs.add(hashPosition(x, y));
+      }
     }
 
-    oldSet.delete(entity);
+
+    const oldHashs = this.grid.get(entity);
+
+    console.assert(!!oldHashs, 'Não deveria tentar remover uma entidade não inserida');
+ 
+    for (const hash of oldHashs) {
+      const set = this.grid.get(hash);
+
+      if (set) {
+        set.delete(entity)
+        if (!set.size) {
+          this.grid.delete(hash);
+        }
+      }
+    }
+    
+    this.grid.set(entity, hashs)
   }
 
   /**
