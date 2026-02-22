@@ -257,9 +257,10 @@ export class GameScene extends Scene {
     
     const timer = new TimerProfile();
     /**
+     * @todo João, remover quando acabar de testar
      * @type {Entity[]}
      */
-    //const all = []
+    const all = []
     /**
      * @todo João, aqui usar alguma estrutura para fazer o "particionamento espacial" e checar só áreas próximas
      * da câmera, assim evitando percorrer as possíveis 10.000 entidades.
@@ -268,7 +269,9 @@ export class GameScene extends Scene {
       // @note João, fiz um teste e melhorou bastante com o "if" abaixo, movi o código para o método "isVisible"
       // no caso de 10_000 entidades, com esse if a perfomance melhora "16x", mas o ideal mesmo é não percorrer o set inteiro
       if (!entity.isVisible(this.gameContext.camera)) continue;
-      //all.push(entity);
+      
+      // visible
+      all.push(entity);
   
       if (this.gameContext.isRenderSprite) {
         if (entity.sprite instanceof AnimatedSprite) entity.sprite.updateIfNotPaused(TimeManager.deltaTime);
@@ -286,9 +289,13 @@ export class GameScene extends Scene {
       }
     }
 
-    // const all2 = this.gameContext.spatialGrid.query(this.gameContext.camera.position.x, this.gameContext.camera.position.y, this.gameContext.camera.dimensions.x, this.gameContext.camera.dimensions.y);
-    // console.log(all, all2);
-    // debugger;
+
+    // @todo João, remover
+    const all2 = this.gameContext.spatialGrid.query(this.gameContext.camera.position.x, this.gameContext.camera.position.y, this.gameContext.camera.dimensions.x, this.gameContext.camera.dimensions.y);
+    for (const entity of all2) {
+      if (!entity.isVisible(this.gameContext.camera)) all2.delete(entity)
+    }
+    console.assert(all.length ===  all2.size, 'Deveria ser do mesmo tamanho. %s %s', all.length, all2.size);
   
     if (this.gameContext.bird.hitted) {
       const boxWidth = 200, boxHeight = 75;

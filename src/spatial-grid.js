@@ -77,7 +77,6 @@ export class SpatialGrid {
   insert(entity) {
     const hashs = this.getHashs(entity);
 
-
     for (const hash of hashs) {
       this.getOrCreatePartition(hash).add(entity);
     }
@@ -212,8 +211,8 @@ export class SpatialGrid {
      */
     const hashs = new Set();
 
-    for (let x = xStart; x < xEnd; x++) {
-      for (let y = yStart; y < yEnd; y++) {
+    for (let x = xStart; x <= xEnd; x++) {
+      for (let y = yStart; y <= yEnd; y++) {
         hashs.add(hashPosition(x, y));
       }
     }
