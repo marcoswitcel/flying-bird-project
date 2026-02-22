@@ -75,25 +75,8 @@ export class SpatialGrid {
    * @param {Entity} entity 
    */
   insert(entity) {
-    // descobrindo celula que o elemento ficaria
-    const rect = entity.getVisibleRect()
+    const hashs = this.getHashs(entity);
 
-    const xStart =  Math.floor((rect.position.x - rect.dimensions.x / 2) / this.cellSize);
-    const xEnd =  Math.floor((rect.position.x + rect.dimensions.x / 2) / this.cellSize);
-    const yStart =  Math.floor((rect.position.y - rect.dimensions.y / 2) / this.cellSize);
-    const yEnd =  Math.floor((rect.position.y + rect.dimensions.y / 2) / this.cellSize);
-    
-    // @todo joão, poder ser mais lento que usar string, mas vou ver de usar bitwise pra computar depois...
-    /**
-     * @type {Set<number>}
-     */
-    const hashs = new Set();
-
-    for (let x = xStart; x < xEnd; x++) {
-      for (let y = yStart; y < yEnd; y++) {
-        hashs.add(hashPosition(x, y));
-      }
-    }
 
     for (const hash of hashs) {
       this.getOrCreatePartition(hash).add(entity);
@@ -111,32 +94,7 @@ export class SpatialGrid {
    * @returns 
    */
   update(entity) {
-     // descobrindo celula que o elemento ficaria
-    const rect = entity.getVisibleRect()
-
-    const xStart =  Math.floor((rect.position.x - rect.dimensions.x / 2) / this.cellSize);
-    const xEnd =  Math.floor((rect.position.x + rect.dimensions.x / 2) / this.cellSize);
-    const yStart =  Math.floor((rect.position.y - rect.dimensions.y / 2) / this.cellSize);
-    const yEnd =  Math.floor((rect.position.y + rect.dimensions.y / 2) / this.cellSize);
-    
-    // @todo joão, poder ser mais lento que usar string, mas vou ver de usar bitwise pra computar depois...
-    /**
-     * @type {Set<number>}
-     */
-    const hashs = new Set();
-
-    for (let x = xStart; x < xEnd; x++) {
-      for (let y = yStart; y < yEnd; y++) {
-        hashs.add(hashPosition(x, y));
-      }
-    }
-
-    // @todo joão, adicionar depois de remover
-    for (const hash of hashs) {
-      this.getOrCreatePartition(hash).add(entity);
-    }
-
-
+    const hashs = this.getHashs(entity);
     const oldHashs = this.grid.get(entity);
 
     console.assert(!!oldHashs, 'Não deveria tentar atualizar uma entidade não inserida');
@@ -151,32 +109,19 @@ export class SpatialGrid {
         }
       }
     }
+
+    for (const hash of hashs) {
+      this.getOrCreatePartition(hash).add(entity);
+    }
     
     this.grid.set(entity, hashs)
   }
 
+  /**
+   * 
+   * @param {Entity} entity 
+   */
   remove(entity) {
-    // descobrindo celula que o elemento ficaria
-    const rect = entity.getVisibleRect()
-
-    const xStart =  Math.floor((rect.position.x - rect.dimensions.x / 2) / this.cellSize);
-    const xEnd =  Math.floor((rect.position.x + rect.dimensions.x / 2) / this.cellSize);
-    const yStart =  Math.floor((rect.position.y - rect.dimensions.y / 2) / this.cellSize);
-    const yEnd =  Math.floor((rect.position.y + rect.dimensions.y / 2) / this.cellSize);
-    
-    // @todo joão, poder ser mais lento que usar string, mas vou ver de usar bitwise pra computar depois...
-    /**
-     * @type {Set<number>}
-     */
-    const hashs = new Set();
-
-    for (let x = xStart; x < xEnd; x++) {
-      for (let y = yStart; y < yEnd; y++) {
-        hashs.add(hashPosition(x, y));
-      }
-    }
-
-
     const oldHashs = this.grid.get(entity);
 
     console.assert(!!oldHashs, 'Não deveria tentar remover uma entidade não inserida');
@@ -192,7 +137,7 @@ export class SpatialGrid {
       }
     }
     
-    this.grid.set(entity, hashs)
+    this.grid.delete(entity)
   }
 
   /**
@@ -245,5 +190,34 @@ export class SpatialGrid {
 
   clear() {
     this.grid.clear()
+  }
+
+  /**
+   * @private
+   * @param {Entity} entity 
+   * @returns {Set<number>}
+   */
+  getHashs(entity) {
+    // descobrindo celula que o elemento ficaria
+    const rect = entity.getVisibleRect()
+
+    const xStart =  Math.floor((rect.position.x - rect.dimensions.x / 2) / this.cellSize);
+    const xEnd =  Math.floor((rect.position.x + rect.dimensions.x / 2) / this.cellSize);
+    const yStart =  Math.floor((rect.position.y - rect.dimensions.y / 2) / this.cellSize);
+    const yEnd =  Math.floor((rect.position.y + rect.dimensions.y / 2) / this.cellSize);
+    
+    // @todo joão, poder ser mais lento que usar string, mas vou ver de usar bitwise pra computar depois...
+    /**
+     * @type {Set<number>}
+     */
+    const hashs = new Set();
+
+    for (let x = xStart; x < xEnd; x++) {
+      for (let y = yStart; y < yEnd; y++) {
+        hashs.add(hashPosition(x, y));
+      }
+    }
+
+    return hashs;
   }
 }
