@@ -174,7 +174,7 @@ export class SpatialGrid {
   }
 
   /**
-   * 
+   * @private
    * @param {number} hash 
    */
   getOrCreatePartition(hash) {
