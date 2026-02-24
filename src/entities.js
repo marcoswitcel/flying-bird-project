@@ -445,6 +445,8 @@ export function loadLevel(gameScene, levelFile) {
       gameScene.gameContext.entityManager.add(gameScene.gameContext.bird);
       gameScene.gameContext.bird.initialState();
 
+      // @todo João, preciso adicionar o spatial grid ao entity manager e ele ficará responsável de fazer o
+      // insert e delete
       const grid = gameScene.gameContext.spatialGrid;
       grid.clear();
       for (const entity of gameScene.gameContext.entityManager.allEntities) {
@@ -477,6 +479,8 @@ export function generateSceneWithManyElements(gameContext) {
     pipe.position.x += i * 100;
   
     gameContext.entityManager.add(pipe);
+    // @todo joão, apagar quando unir o spatial grid ao entity manager
+    gameContext.spatialGrid.insert(pipe);
   }
 
 }
