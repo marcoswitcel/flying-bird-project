@@ -290,7 +290,7 @@ export class GameScene extends Scene {
     }
 
 
-    // @todo João, remover
+    // @todo João, remover, testei usar o resultado da query no if acima, melhorou a perfomance
     const all2 = this.gameContext.spatialGrid.query(this.gameContext.camera.position.x, this.gameContext.camera.position.y, this.gameContext.camera.dimensions.x, this.gameContext.camera.dimensions.y);
     for (const entity of all2) {
       if (!entity.isVisible(this.gameContext.camera)) all2.delete(entity)
