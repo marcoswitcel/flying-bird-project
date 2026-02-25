@@ -267,6 +267,19 @@ export class GameScene extends Scene {
      * @type {Entity[]}
      */
     const all = []
+
+
+    /**
+     * @todo joão, esse result set está 'correto' em relação ao loop abaixo, porém a ordem dos elementos
+     * muda e o render quebra, acho que está na hora de implementar uma solução mais elegante para renderizar na ordem correta.
+     */
+    const queryResult = this.gameContext.spatialGrid.query(
+      this.gameContext.camera.position.x,
+      this.gameContext.camera.position.y,
+      this.gameContext.camera.dimensions.x,
+      this.gameContext.camera.dimensions.y,
+    )
+
     /**
      * @todo João, aqui usar alguma estrutura para fazer o "particionamento espacial" e checar só áreas próximas
      * da câmera, assim evitando percorrer as possíveis 10.000 entidades.
