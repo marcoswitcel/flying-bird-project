@@ -4,6 +4,7 @@ import { GameContext, GameScene } from './scenes/game-scene.js';
 import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
+import { SpatialGrid } from './spatial-grid.js';
 
 
 export const RUNTIME_ID_SEQUENCE_START = 60000;
@@ -35,6 +36,15 @@ export class EntityManager {
     ParallaxEntity: [],
   }
 
+  /**
+   * @type {SpatialGrid | null}
+   */
+  spatialGrid;
+
+  constructor(spatialGrid = null) {
+    this.spatialGrid = spatialGrid;
+  }
+
   // @todo João, implementar o método add e remove pra gerenciar
 
   /**
@@ -52,6 +62,9 @@ export class EntityManager {
     } else {
       console.error('ClassName "%s" não encontrado', className)
     }
+
+    // atualiza spatial grid
+    if (this.spatialGrid) this.spatialGrid.insert(entity);
   }
 
   clear() {
@@ -60,6 +73,9 @@ export class EntityManager {
     for (const key of Object.keys(this.all)) {
       this.all[key].length = 0;
     }
+
+    // atualiza spatial grid
+    if (this.spatialGrid) this.spatialGrid.clear();
   }
 }
 
@@ -444,15 +460,6 @@ export function loadLevel(gameScene, levelFile) {
       // @note João, hack temporário para fazer o paássaro ser renderizado por último
       gameScene.gameContext.entityManager.add(gameScene.gameContext.bird);
       gameScene.gameContext.bird.initialState();
-
-      // @todo João, preciso adicionar o spatial grid ao entity manager e ele ficará responsável de fazer o
-      // insert e delete
-      const grid = gameScene.gameContext.spatialGrid;
-      grid.clear();
-      for (const entity of gameScene.gameContext.entityManager.allEntities) {
-        grid.insert(entity);
-      }
-      
     })
     .catch((reason) => {
       // @todo João, aqui falta tomar alguma ação para retornar para o 'menu', porém precisa mudar
@@ -479,8 +486,6 @@ export function generateSceneWithManyElements(gameContext) {
     pipe.position.x += i * 100;
   
     gameContext.entityManager.add(pipe);
-    // @todo joão, apagar quando unir o spatial grid ao entity manager
-    gameContext.spatialGrid.insert(pipe);
   }
 
 }

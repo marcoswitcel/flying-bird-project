@@ -15,11 +15,16 @@ export class GameContext {
   /**
    * @type {EntityManager}
    */
-  entityManager = new EntityManager();
+  entityManager;
+  
   /**
    * @type {string}
    */
   backgroundColor = 'blue';
+
+  /**
+   * @type {BirdEntity}
+   */
   bird = new BirdEntity();
 
   /**
@@ -70,6 +75,7 @@ export class GameContext {
     this.camera.dimensions.x = ctx.canvas.width;
     this.camera.dimensions.y = ctx.canvas.height;
     this.spatialGrid = new SpatialGrid(300);
+    this.entityManager = new EntityManager(this.spatialGrid)
   }
 }
 
