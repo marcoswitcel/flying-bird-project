@@ -2,7 +2,7 @@ import { AppContext } from '../app-context.js';
 import { Camera } from '../camera.js';
 import { BoundingRect, drawRectBorder, RectCollisionShape } from '../collision.js';
 import { config } from '../config.js';
-import { BirdEntity, Entity, EntityManager, exportedIdGenerator, generateSceneWithManyElements, loadLevel, ParallaxEntity, PipeEntity, resetExportedIdSequence } from '../entities.js';
+import { BirdEntity, Entity, EntityManager, exportedIdGenerator, generateSceneWithManyElements, loadLevel, ParallaxEntity, PipeEntity, resetExportedIdSequence, viewByType } from '../entities.js';
 import { NextLevelScene } from './next-level-scene.js';
 import { TimerProfile } from '../profiling.js';
 import { drawRect, drawText } from '../render.js';
@@ -236,6 +236,10 @@ export class GameScene extends Scene {
       }
     }
 
+    /**
+     * @todo João, mapear entidades que podem colidir e checar apenas entidades próximas ao pássaro,
+     * isso nesse cenário.
+     */
     for (const entity of this.gameContext.entityManager.allEntities) {
       if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
         const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
@@ -279,6 +283,23 @@ export class GameScene extends Scene {
       this.gameContext.camera.dimensions.x,
       this.gameContext.camera.dimensions.y,
     )
+
+    /**
+     * @type {Entity[]}
+     */
+    const renderOrder = [];
+    const view = viewByType(queryResult);
+    /**
+     * @type {(keyof import('../entities.js').ByType)[]}
+     */
+    const types = ['ParallaxEntity', 'PipeEntity', 'TiledEntity', 'BirdEntity'];
+
+    for (const type of types) {
+      for (const entity of view[type])  {
+        renderOrder.push(entity);
+      }
+    }
+
 
     /**
      * @todo João, aqui usar alguma estrutura para fazer o "particionamento espacial" e checar só áreas próximas
