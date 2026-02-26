@@ -15,6 +15,61 @@ export const resetExportedIdSequence = () => { exportedIdSequence = 0; }
 export const exportedIdGenerator = () => exportedIdSequence++;
 const runtimeIdGenerator = () => runtimeIdSequence++;
 
+/**
+ * @typedef {{ PipeEntity: PipeEntity[], TiledEntity: TiledEntity[],  BirdEntity: BirdEntity[],  ParallaxEntity: ParallaxEntity[] }} ByType
+ */
+
+/**
+ * 
+ * @param {Iterable<Entity>} collection 
+ * @returns {ByType}
+ */
+export function viewByType(collection) {
+
+  return {
+    get PipeEntity() {
+      /**
+       * @type {PipeEntity[]}
+       */
+      const view = [];
+      for (const entity of collection) {
+        if (entity instanceof PipeEntity) view.push(entity)
+      }
+      return view;
+    },
+    get TiledEntity() {
+      /**
+       * @type {TiledEntity[]}
+       */
+      const view = [];
+      for (const entity of collection) {
+        if (entity instanceof TiledEntity) view.push(entity)
+      }
+      return view;
+    }, 
+    get BirdEntity() {
+      /**
+       * @type {BirdEntity[]}
+       */
+      const view = [];
+      for (const entity of collection) {
+        if (entity instanceof BirdEntity) view.push(entity)
+      }
+      return view;
+    }, 
+    get ParallaxEntity() {
+      /**
+       * @type {ParallaxEntity[]}
+       */
+      const view = [];
+      for (const entity of collection) {
+        if (entity instanceof ParallaxEntity) view.push(entity)
+      }
+      return view;
+    }
+  }
+}
+
 export class EntityManager {
   /**
    * @type {Entity[]}
@@ -27,7 +82,7 @@ export class EntityManager {
   bird;
 
   /**
-   * @type {{ PipeEntity: PipeEntity[], TiledEntity: TiledEntity[],  BirdEntity: BirdEntity[],  ParallaxEntity: ParallaxEntity[] }}
+   * @type {ByType}
    */
   all = {
     PipeEntity: [],
