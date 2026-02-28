@@ -219,6 +219,7 @@ export class SpatialGrid {
    */
   clear() {
     this.grid.clear()
+    this.entitiesHash.clear()
   }
 
   /**
