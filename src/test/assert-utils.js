@@ -6,5 +6,11 @@
  * sucesso ou falha.
  */
 export const assert = (condition, description) => {
-    console.log(`${condition ? '✅' : '❌'}: ${description}`);
-};
+    console.log(`${condition ? '✅' : '❌'}: ${description}`)
+}
+
+export const hiddenAssert = (condition, description) => {
+    if (condition)  return;
+
+    console.log(`❌: ${description}`)
+}

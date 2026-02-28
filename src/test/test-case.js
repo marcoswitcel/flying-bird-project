@@ -37,6 +37,7 @@ export class TestCase {
 
         console.group(this.name);
         instance.beforeAll();
+        // @todo João, considerar agrupar por método também
         for (const method of Object.getOwnPropertyNames(this.prototype)) {
             if (excluded.indexOf(method) !== -1)
                 continue;

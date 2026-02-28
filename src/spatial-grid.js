@@ -61,6 +61,17 @@ export class SpatialGrid {
   cellSize;
 
   /**
+   * @todo joão, considerar separa em dois hashmaps
+   * @readonly
+   * @type {number}
+   */
+  get size() {
+    const size = this.grid.size;
+    console.assert(size % 2 == 0, 'Deveria sempre inserir em pares');
+    return size / 2;
+  }
+
+  /**
    * 
    * @param {number} cellSize 
    */
@@ -88,7 +99,7 @@ export class SpatialGrid {
 
   /**
    * @todo João, testar
-   * 
+   * @public
    * @param {Entity} entity 
    * @returns 
    */
@@ -117,7 +128,7 @@ export class SpatialGrid {
   }
 
   /**
-   * 
+   * @public
    * @param {Entity} entity 
    */
   remove(entity) {
@@ -141,6 +152,7 @@ export class SpatialGrid {
 
   /**
    * 
+   * @public
    * @param {number} x 
    * @param {number} y 
    * @param {number} width 
@@ -187,6 +199,9 @@ export class SpatialGrid {
     return entitiesSet;
   }
 
+  /**
+   * @public
+   */
   clear() {
     this.grid.clear()
   }

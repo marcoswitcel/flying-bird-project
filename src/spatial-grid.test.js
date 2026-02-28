@@ -1,19 +1,33 @@
-import { assert } from './test/assert-utils.js';
+import { Entity } from './entities.js';
+import { SpatialGrid } from './spatial-grid.js';
+import { assert, hiddenAssert } from './test/assert-utils.js';
 import { TestCase } from './test/test-case.js';
 
 export class SpatialGridTest extends TestCase {
-  ['test']() {
-    assert(true, 'Não printa');
-    assert(false, 'Print');
+  
+  ['deveria estar vazio após criação']() {
+    const spatialGrid = new SpatialGrid(128);
+
+    assert(spatialGrid.size === 0, 'Deveria estar vazio')
   }
-  ['test2']() {
-    assert(true, 'Não printa');
-    assert(false, 'Print');
+
+  ['adicionar uma entidade']() {
+    const spatialGrid = new SpatialGrid(128);
+    const entity = new Entity();
+
+    spatialGrid.insert(entity);
+
+    assert(spatialGrid.size === 1, 'Deveria registrar a entidade')
   }
-  beforeEach() {
-    console.log('before each')
-  }
-  beforeAll() {
-    console.log('before all')
+
+  ['remover uma entidade']() {
+    const spatialGrid = new SpatialGrid(128);
+    const entity = new Entity();
+
+    spatialGrid.insert(entity);
+    hiddenAssert(spatialGrid.size === 1, 'Deveria registrar a entidade')
+    spatialGrid.remove(entity);
+
+    assert(spatialGrid.size === 0, 'Deveria estar vazio após remover')
   }
 }
