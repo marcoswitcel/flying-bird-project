@@ -26,6 +26,8 @@ function hash(data)
 
 /**
  * @todo João, integrar e testar hash
+ * @todo João, mover os objetos para uma variável "estática" e ou usar otimizações para inteiros de 32bits 
+ * para evitar alocar memória
  * @param {number} x 
  * @param {number} y 
  */
