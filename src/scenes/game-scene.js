@@ -305,7 +305,8 @@ export class GameScene extends Scene {
      * @todo João, aqui usar alguma estrutura para fazer o "particionamento espacial" e checar só áreas próximas
      * da câmera, assim evitando percorrer as possíveis 10.000 entidades.
      */
-    for (const entity of this.gameContext.entityManager.allEntities) {
+    //for (const entity of this.gameContext.entityManager.allEntities) {
+    for (const entity of renderOrder) {
       // @note João, fiz um teste e melhorou bastante com o "if" abaixo, movi o código para o método "isVisible"
       // no caso de 10_000 entidades, com esse if a perfomance melhora "16x", mas o ideal mesmo é não percorrer o set inteiro
       if (!entity.isVisible(this.gameContext.camera)) continue;
