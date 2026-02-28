@@ -45,6 +45,7 @@ export class TestCase {
             if (typeof func !== 'function')
                 continue;
 
+            console.group(method);
             instance.beforeEach();
             try {
                 func.call(instance);
@@ -52,6 +53,7 @@ export class TestCase {
                 console.error(error);
             }
             instance.afterEach();
+            console.groupEnd();
         }
         instance.afterAll();
         console.groupEnd();
