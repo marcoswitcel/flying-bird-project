@@ -52,9 +52,15 @@ function hashPosition(x, y) {
 export class SpatialGrid {
   /**
    * @private
-   * @type {Map<number, Set<Entity> | undefined> & Map<Entity, Set<number> | undefined>}
+   * @type {Map<number, Set<Entity> | undefined>}
    */
   grid;
+  
+  /**
+   * @private
+   * @type {Map<Entity, Set<number> | undefined>}
+   */
+  entitiesHash;
 
   /**
    * @readonly
@@ -68,9 +74,7 @@ export class SpatialGrid {
    * @type {number}
    */
   get size() {
-    const size = this.grid.size;
-    console.assert(size % 2 == 0, 'Deveria sempre inserir em pares');
-    return size / 2;
+    return this.entitiesHash.size;
   }
 
   /**
@@ -80,6 +84,7 @@ export class SpatialGrid {
   constructor(cellSize) {
     this.cellSize = cellSize;
     this.grid = new Map();
+    this.entitiesHash = new Map();
   }
 
     
@@ -88,15 +93,19 @@ export class SpatialGrid {
    * @param {Entity} entity 
    */
   insert(entity) {
+
+    if (this.entitiesHash.has(entity)) {
+      console.assert(false, 'Não deveria tentar inserir duplicado');
+      return;
+    }
+
     const hashs = this.getHashs(entity);
 
     for (const hash of hashs) {
       this.getOrCreatePartition(hash).add(entity);
     }
 
-    console.assert(!this.grid.has(entity), 'Não deveria tentar inserir duplicado');
-    
-    this.grid.set(entity, hashs)
+    this.entitiesHash.set(entity, hashs)
   }
 
   /**
@@ -106,10 +115,14 @@ export class SpatialGrid {
    * @returns 
    */
   update(entity) {
-    const hashs = this.getHashs(entity);
-    const oldHashs = this.grid.get(entity);
+    const oldHashs = this.entitiesHash.get(entity);
 
-    console.assert(!!oldHashs, 'Não deveria tentar atualizar uma entidade não inserida');
+    if (!oldHashs) {
+      console.assert(false, 'Não deveria tentar atualizar uma entidade não inserida');
+      return;
+    }
+
+    const hashs = this.getHashs(entity);
  
     for (const hash of oldHashs) {
       const set = this.grid.get(hash);
@@ -126,7 +139,7 @@ export class SpatialGrid {
       this.getOrCreatePartition(hash).add(entity);
     }
     
-    this.grid.set(entity, hashs)
+    this.entitiesHash.set(entity, hashs)
   }
 
   /**
@@ -134,7 +147,7 @@ export class SpatialGrid {
    * @param {Entity} entity 
    */
   remove(entity) {
-    const oldHashs = this.grid.get(entity);
+    const oldHashs = this.entitiesHash.get(entity);
 
     console.assert(!!oldHashs, 'Não deveria tentar remover uma entidade não inserida');
  
@@ -149,7 +162,7 @@ export class SpatialGrid {
       }
     }
     
-    this.grid.delete(entity)
+    this.entitiesHash.delete(entity)
   }
 
   /**

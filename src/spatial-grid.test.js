@@ -11,13 +11,18 @@ export class SpatialGridTest extends TestCase {
     assert(spatialGrid.size === 0, 'Deveria estar vazio')
   }
 
-  ['adicionar uma entidade']() {
+  ['adicionar entidades']() {
     const spatialGrid = new SpatialGrid(128);
     const entity = new Entity();
+    const entity2 = new Entity();
 
     spatialGrid.insert(entity);
 
     assert(spatialGrid.size === 1, 'Deveria registrar a entidade')
+
+    spatialGrid.insert(entity2);
+
+    assert(spatialGrid.size === 2, 'Deveria registrar a segunda entidade')
   }
 
   ['remover uma entidade']() {
