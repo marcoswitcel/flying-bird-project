@@ -35,4 +35,19 @@ export class SpatialGridTest extends TestCase {
 
     assert(spatialGrid.size === 0, 'Deveria estar vazio após remover')
   }
+
+   ['limpando SpatialGrid']() {
+    const spatialGrid = new SpatialGrid(128);
+    const entity = new Entity();
+    const entity2 = new Entity();
+
+    spatialGrid.insert(entity);
+    hiddenAssert(spatialGrid.size === 1, 'Deveria registrar a entidade')
+
+    spatialGrid.insert(entity2);
+    hiddenAssert(spatialGrid.size === 2, 'Deveria registrar a entidade')
+
+    spatialGrid.clear();
+    assert(spatialGrid.size === 0, 'Deveria estar vazio após remover')
+  }
 }
