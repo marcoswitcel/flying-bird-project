@@ -50,4 +50,26 @@ export class SpatialGridTest extends TestCase {
     spatialGrid.clear();
     assert(spatialGrid.size === 0, 'Deveria estar vazio após remover')
   }
+
+  ['query SpatialGrid']() {
+    const spatialGrid = new SpatialGrid(128);
+    const entity = new Entity();
+    
+    entity.position.x = 100;
+    entity.position.y = 100;
+    entity.dimension.x = 50;
+    entity.dimension.y = 50;
+
+    spatialGrid.insert(entity);
+    hiddenAssert(spatialGrid.size === 1, 'Deveria registrar a entidade')
+
+    const result = spatialGrid.query(0, 0, 100, 100);
+    assert(result.size === 1, 'Deveria retornar a célula com a entidade')
+
+    const result2 = spatialGrid.query(300, 0, 100, 100);
+    assert(result2.size === 0, 'Não deveria encontrar a entidade')
+
+    const result3 = spatialGrid.query(300, 0, 600, 600);
+    assert(result3.size === 1, 'Deveria encontrar a entidade')
+  }
 }
