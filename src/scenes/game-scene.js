@@ -224,9 +224,21 @@ export class GameScene extends Scene {
     }
 
     /**
+     * @todo João, ajustar query pra usar a posição do pássaro como referência
+     */
+    const queryResult = this.gameContext.spatialGrid.query(
+      this.gameContext.camera.position.x,
+      this.gameContext.camera.position.y,
+      this.gameContext.camera.dimensions.x,
+      this.gameContext.camera.dimensions.y,
+    )
+    const view = viewByType(queryResult);
+
+
+    /**
      * @todo joão, um set só de pipes que estão perto do pássaro?
      */
-    for (const pipe of this.gameContext.entityManager.all.PipeEntity) {
+    for (const pipe of view.PipeEntity) {
       if (!pipe.birdPassedThrough && pipe.position.x < this.gameContext.bird.position.x) {
         pipe.birdPassedThrough = true;
         this.gameContext.counter++;
@@ -240,7 +252,7 @@ export class GameScene extends Scene {
      * @todo João, mapear entidades que podem colidir e checar apenas entidades próximas ao pássaro,
      * isso nesse cenário.
      */
-    for (const entity of this.gameContext.entityManager.allEntities) {
+    for (const entity of queryResult) {
       if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
         const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
         const rectBird = new BoundingRect(this.gameContext.bird.position, this.gameContext.bird.collisionShape.dimensions);
