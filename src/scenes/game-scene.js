@@ -266,11 +266,6 @@ export class GameScene extends Scene {
     drawText(ctx, `${this.gameContext.counter}`, vec2(24, 24), 18, 'white', 'monospace');
     
     const timer = new TimerProfile();
-    /**
-     * @todo João, remover quando acabar de testar
-     * @type {Entity[]}
-     */
-    const all = []
 
 
     /**
@@ -311,9 +306,6 @@ export class GameScene extends Scene {
       // no caso de 10_000 entidades, com esse if a perfomance melhora "16x", mas o ideal mesmo é não percorrer o set inteiro
       if (!entity.isVisible(this.gameContext.camera)) continue;
       
-      // visible
-      all.push(entity);
-  
       if (this.gameContext.isRenderSprite) {
         if (entity.sprite instanceof AnimatedSprite) entity.sprite.updateIfNotPaused(TimeManager.deltaTime);
 
@@ -331,13 +323,6 @@ export class GameScene extends Scene {
     }
 
 
-    // @todo João, remover, testei usar o resultado da query no if acima, melhorou a perfomance
-    const all2 = this.gameContext.spatialGrid.query(this.gameContext.camera.position.x, this.gameContext.camera.position.y, this.gameContext.camera.dimensions.x, this.gameContext.camera.dimensions.y);
-    for (const entity of all2) {
-      if (!entity.isVisible(this.gameContext.camera)) all2.delete(entity)
-    }
-    console.assert(all.length ===  all2.size, 'Deveria ser do mesmo tamanho. %s %s', all.length, all2.size);
-  
     if (this.gameContext.bird.hitted) {
       const boxWidth = 200, boxHeight = 75;
       const x = ctx.canvas.width / 2 - boxWidth / 2;
