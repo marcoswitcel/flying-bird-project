@@ -25,6 +25,24 @@ export class SpatialGridTest extends TestCase {
     assert(spatialGrid.size === 2, 'Deveria registrar a segunda entidade')
   }
 
+  ['atualizando entidades']() {
+    const spatialGrid = new SpatialGrid(128);
+    const entity = new Entity();
+
+    spatialGrid.insert(entity);
+    hiddenAssert(spatialGrid.size === 1, 'Deveria registrar a entidade')
+
+    spatialGrid.update(entity);
+    hiddenAssert(spatialGrid.size === 1, 'Deveria registrar a entidade')
+
+    entity.position.x += 300;
+    entity.position.y += 300;
+
+    spatialGrid.update(entity);
+    assert(spatialGrid.size === 1, 'Deveria registrar a entidade')
+
+  }
+
   ['remover uma entidade']() {
     const spatialGrid = new SpatialGrid(128);
     const entity = new Entity();
