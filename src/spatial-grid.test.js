@@ -3,6 +3,8 @@ import { SpatialGrid } from './spatial-grid.js';
 import { assert, hiddenAssert } from './test/assert-utils.js';
 import { TestCase } from './test/test-case.js';
 
+// @todo João, testar com valores diversos de cellSize e fazer testes com update versus add limpo
+
 export class SpatialGridTest extends TestCase {
   
   ['deveria estar vazio após criação']() {

@@ -165,10 +165,6 @@ export class GameScene extends Scene {
 
     TimeManager.update(timestamp);
 
-    // @todo João, testar com valores diversos de cellSize e fazer testes com update versus add limpo
-    // @todo João, quando tiver o método range testar as conclusões do loop de render contra os palpites do grid
-    // const grid = new SpatialGrid(100);
-
     /**
      * @todo João, talvez criar um set de entidades visíveis ou atualizáveis aqui?
      * seriam apenas as que a câmera vê que atualizariam?
