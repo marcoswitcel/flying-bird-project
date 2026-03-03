@@ -210,15 +210,6 @@ export class GameScene extends Scene {
       this.gameContext.spatialGrid.update(entity);
     }
 
-    for (const entity of this.gameContext.entityManager.all.ParallaxEntity) {
-      // @todo João, duplicado no render do método e aqui...
-      // mantendo a área visível alinhada com a renderização em relação a câmera câmera
-      entity.position.x = this.gameContext.camera.position.x;
-
-      // update no grid
-      this.gameContext.spatialGrid.update(entity);
-    }
-
     /**
      * @todo João, ajustar query pra usar a posição do pássaro como referência
      */
@@ -274,6 +265,15 @@ export class GameScene extends Scene {
     drawText(ctx, `${this.gameContext.counter}`, vec2(24, 24), 18, 'white', 'monospace');
     
     const timer = new TimerProfile();
+
+    for (const entity of this.gameContext.entityManager.all.ParallaxEntity) {
+      // @todo João, duplicado no render do método e aqui...
+      // mantendo a área visível alinhada com a renderização em relação a câmera câmera
+      entity.position.x = this.gameContext.camera.position.x;
+
+      // update no grid
+      this.gameContext.spatialGrid.update(entity);
+    }
 
 
     /**
