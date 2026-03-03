@@ -100,7 +100,7 @@ export class EntityManager {
     this.spatialGrid = spatialGrid;
   }
 
-  // @todo João, implementar o método add e remove pra gerenciar
+  // @todo João, implementar o método remove pra gerenciar
 
   /**
    * @param {Entity} entity 

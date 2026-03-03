@@ -1,7 +1,4 @@
 
-/**
- * @todo João, testar
- */
 export class TimeManager {
 
   /**
@@ -107,9 +104,7 @@ export class Sprite {
 }
 
 /**
- * @todo João, considerar como controlar as animações, adicionar um campo timestamp pra representar o começo da animação?
- * que pode ou não ser baseado no timestamp do navegador? não seria melhor incrementar a animação em si? não seria melhor
- * ter um campo 'paused'? um método start? e um método advance (pra atualizar o tempo)?
+ * Class que representa um Sprite Animado no sistema
  */
 export class AnimatedSprite {
   /**

@@ -25,7 +25,6 @@ function hash(data)
 }
 
 /**
- * @todo João, integrar e testar hash
  * @todo João, mover os objetos para uma variável "estática" e ou usar otimizações para inteiros de 32bits 
  * para evitar alocar memória
  * @param {number} x 
@@ -44,7 +43,6 @@ function hashPosition(x, y) {
 }
 
 /**
- * @todo João, terminar de implementar os métodos
  * @todo João, implementar o grid em paralelo com o código atual e validar se o
  * código atual e o grid encontram as mesmas entidades. Vai ser necessário ajustar 
  * o código atual para adicionar as entidades renderizada a uma lista para fins de comparação.
@@ -69,7 +67,6 @@ export class SpatialGrid {
   cellSize;
 
   /**
-   * @todo joão, considerar separa em dois hashmaps
    * @readonly
    * @type {number}
    */
