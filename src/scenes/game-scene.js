@@ -65,6 +65,11 @@ export class GameContext {
   ctx;
 
   /**
+   * @type {{ total: number, used: number }[]}
+   */
+  memoryHistory;
+
+  /**
    * 
    * @param {CanvasRenderingContext2D} ctx 
    */
@@ -76,6 +81,7 @@ export class GameContext {
     this.camera.dimensions.y = ctx.canvas.height;
     this.spatialGrid = new SpatialGrid(300);
     this.entityManager = new EntityManager(this.spatialGrid)
+    this.memoryHistory = []
   }
 }
 
@@ -349,6 +355,11 @@ export class GameScene extends Scene {
       ctx.fillText('JS Heap Total: ' + memory.totalJSHeapSize, 25, 45);
       ctx.fillText('Time: ' + (endTime - this.starTime).toFixed(4), 25, 65);
       ctx.fillText('Entities: ' + this.gameContext.entityManager.allEntities.length, 25, 85);
+      
+      // this.gameContext.memoryHistory.push({ used: memory.usedJSHeapSize, total: memory.totalJSHeapSize })
+      //if (this.gameContext.memoryHistory.length > 4 * 60) {
+      //  this.gameContext.memoryHistory.shift()
+      //}
     }
   }
 
