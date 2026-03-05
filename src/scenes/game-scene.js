@@ -347,7 +347,7 @@ export class GameScene extends Scene {
     
     if (this.gameContext.isShowMemory && memory) {
       const ctx = this.gameContext.ctx;
-      drawRect(ctx, 0, 0, 300, 105, 'rgba(0, 0, 0, .75)');
+      drawRect(ctx, 0, 0, 300, 125, 'rgba(0, 0, 0, .75)');
       ctx.fillStyle = 'white';
       ctx.font = '24px serif';
       ctx.textAlign = 'left';
@@ -355,6 +355,8 @@ export class GameScene extends Scene {
       ctx.fillText('JS Heap Total: ' + memory.totalJSHeapSize, 25, 45);
       ctx.fillText('Time: ' + (endTime - this.starTime).toFixed(4), 25, 65);
       ctx.fillText('Entities: ' + this.gameContext.entityManager.allEntities.length, 25, 85);
+      ctx.fillText('Entities possibly in view: ' + renderOrder.length, 25, 105);
+      
       
       // this.gameContext.memoryHistory.push({ used: memory.usedJSHeapSize, total: memory.totalJSHeapSize })
       //if (this.gameContext.memoryHistory.length > 4 * 60) {
