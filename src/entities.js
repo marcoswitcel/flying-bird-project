@@ -5,6 +5,7 @@ import { resourceManager } from './resource-manager.js';
 import { AnimatedSprite } from './sprite.js';
 import { vec2, Vector2 } from './vector2.js';
 import { SpatialGrid } from './spatial-grid.js';
+import { arrayRemoveInPlace } from './utils.js';
 
 
 export const RUNTIME_ID_SEQUENCE_START = 60000;
@@ -120,6 +121,29 @@ export class EntityManager {
 
     // atualiza spatial grid
     if (this.spatialGrid) this.spatialGrid.insert(entity);
+  }
+
+  /**
+   * @param {Entity} entity 
+   */
+  remove(entity) {
+
+    arrayRemoveInPlace(this.allEntities, entity);
+    
+    /**
+     * @type {keyof ByType}
+     */// @ts-expect-error
+    const className = entity.constructor.name;
+    const collection = this.all[className];
+
+    if (collection) {
+      arrayRemoveInPlace(collection, entity)
+    } else {
+      console.error('ClassName "%s" não encontrado', className)
+    }
+
+    // atualiza spatial grid
+    if (this.spatialGrid) this.spatialGrid.remove(entity);
   }
 
   clear() {
