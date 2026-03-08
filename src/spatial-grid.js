@@ -1,46 +1,30 @@
 import { Entity } from './entities.js';
+import { hash } from './hash.js';
 
 
-/**
- * @brief função hash simples, autor mencionado abaixo
- * 
- * @note hash function design by Daniel J. Bernstein (djb):
- * @author Daniel J. Bernstein (original design) (this version was ported by João)
- * @reference https://www.reddit.com/r/learnprogramming/comments/1h5gmb/creating_a_simple_hash_function/ 
- * 
- * @param {Uint8Array} data 
- * @returns {number}
- */
-function hash(data)
-{
-  let hash = 5381;
-  let byte;
+class PositionHasher {
+  constructor() {
+    const bytesPerNumber = 8;
 
-  for (let i = 0; i < data.length; i++) {
-    byte = data[i];
-    hash = (((hash << 5) + hash) + byte) | 0;
+    this.buffer = new ArrayBuffer(bytesPerNumber * 2);
+    this.view = new Float64Array(this.buffer);
   }
 
-  return hash >>> 0;
-}
-
-/**
- * @todo João, mover os objetos para uma variável "estática" e ou usar otimizações para inteiros de 32bits 
- * para evitar alocar memória
- * @param {number} x 
- * @param {number} y 
- */
-function hashPosition(x, y) {
-  const bytesPerNumber = 8;
-  const buffer = new ArrayBuffer(bytesPerNumber * 2);
-  const view = new Float64Array(buffer);
+  /**
+   * @todo João, mover os objetos para uma variável "estática" e ou usar otimizações para inteiros de 32bits 
+   * para evitar alocar memória
+   * @param {number} x 
+   * @param {number} y 
+   */
+  hash(x, y) {
+    // o "+ 0" é para converter -0 em 0, caso seja -0, se for outro valor não vai alterar
+    this.view[0] = x + 0;
+    this.view[1] = y + 0;
   
-  // o "+ 0" é para converter -0 em 0, caso seja -0, se for outro valor não vai alterar
-  view[0] = x + 0;
-  view[1] = y + 0;
-
-  return hash(new Uint8Array(buffer));
+    return hash(new Uint8Array(this.buffer));
+  }
 }
+
 
 /**
  * @todo João, implementar o grid em paralelo com o código atual e validar se o
@@ -67,6 +51,12 @@ export class SpatialGrid {
   cellSize;
 
   /**
+   * @private
+   * @type {PositionHasher}
+   */
+  hasher;
+
+  /**
    * @readonly
    * @type {number}
    */
@@ -82,6 +72,7 @@ export class SpatialGrid {
     this.cellSize = cellSize;
     this.grid = new Map();
     this.entitiesHash = new Map();
+    this.hasher = new PositionHasher();
   }
 
     
@@ -183,7 +174,7 @@ export class SpatialGrid {
 
     for (let i = xStart; i <= xEnd; i++) {
       for (let j = yStart; j <= yEnd; j++) {
-        const hash = hashPosition(i, j);
+        const hash = this.hasher.hash(i, j);
         const set = this.grid.get(hash);
         if (set) {
           for (const value of set) {
@@ -241,7 +232,7 @@ export class SpatialGrid {
 
     for (let x = xStart; x <= xEnd; x++) {
       for (let y = yStart; y <= yEnd; y++) {
-        hashs.add(hashPosition(x, y));
+        hashs.add(this.hasher.hash(x, y));
       }
     }
 
