@@ -8,11 +8,12 @@ class PositionHasher {
 
     this.buffer = new ArrayBuffer(bytesPerNumber * 2);
     this.view = new Float64Array(this.buffer);
+    this.bytes = new Uint8Array(this.buffer)
   }
 
   /**
-   * @todo João, mover os objetos para uma variável "estática" e ou usar otimizações para inteiros de 32bits 
-   * para evitar alocar memória
+   * Faz o hash dos números
+   * 
    * @param {number} x 
    * @param {number} y 
    */
@@ -21,7 +22,7 @@ class PositionHasher {
     this.view[0] = x + 0;
     this.view[1] = y + 0;
   
-    return hash(new Uint8Array(this.buffer));
+    return hash(this.bytes);
   }
 }
 
