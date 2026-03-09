@@ -161,6 +161,8 @@ export class SpatialGrid {
    * @param {number} y 
    * @param {number} width 
    * @param {number} height 
+   * @returns {Set<Entity>} lista contendo todas as entidades presentes nas células
+   * do grid, presente na área definida
    */
   query(x, y, width, height) {
     const xStart =  Math.floor((x - width / 2) / this.cellSize);
