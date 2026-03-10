@@ -1,3 +1,4 @@
+import { HashTest } from '../hash.test.js';
 import { SpatialGridTest } from '../spatial-grid.test.js';
 
 /**
@@ -12,3 +13,4 @@ import { SpatialGridTest } from '../spatial-grid.test.js';
  * executados.
  */
 SpatialGridTest.run();
+HashTest.run();
