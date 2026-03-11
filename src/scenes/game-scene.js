@@ -273,10 +273,6 @@ export class GameScene extends Scene {
     }
 
 
-    /**
-     * @todo joão, esse result set está 'correto' em relação ao loop abaixo, porém a ordem dos elementos
-     * muda e o render quebra, acho que está na hora de implementar uma solução mais elegante para renderizar na ordem correta.
-     */
     const queryResult = this.gameContext.spatialGrid.query(
       this.gameContext.camera.position.x,
       this.gameContext.camera.position.y,

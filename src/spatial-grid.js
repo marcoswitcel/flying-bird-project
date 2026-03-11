@@ -28,9 +28,7 @@ class PositionHasher {
 
 
 /**
- * @todo João, implementar o grid em paralelo com o código atual e validar se o
- * código atual e o grid encontram as mesmas entidades. Vai ser necessário ajustar 
- * o código atual para adicionar as entidades renderizada a uma lista para fins de comparação.
+ * 
  */
 export class SpatialGrid {
   /**
@@ -78,7 +76,7 @@ export class SpatialGrid {
 
     
   /**
-   * @todo joão, refatorar o resto
+   * 
    * @param {Entity} entity 
    */
   insert(entity) {
@@ -227,7 +225,6 @@ export class SpatialGrid {
     const yStart =  Math.floor((rect.position.y - rect.dimensions.y / 2) / this.cellSize);
     const yEnd =  Math.floor((rect.position.y + rect.dimensions.y / 2) / this.cellSize);
     
-    // @todo joão, poder ser mais lento que usar string, mas vou ver de usar bitwise pra computar depois...
     /**
      * @type {Set<number>}
      */
