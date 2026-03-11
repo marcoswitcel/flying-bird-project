@@ -171,10 +171,7 @@ export class GameScene extends Scene {
 
     TimeManager.update(timestamp);
 
-    /**
-     * @todo João, talvez criar um set de entidades visíveis ou atualizáveis aqui?
-     * seriam apenas as que a câmera vê que atualizariam?
-     */
+    // Por hora só existe um passáro por vez
     for (const entity of this.gameContext.entityManager.all.BirdEntity) {
       // gravidade
       entity.accel.y += 0.15;
@@ -217,20 +214,18 @@ export class GameScene extends Scene {
     }
 
     /**
-     * @todo João, ajustar query pra usar a posição do pássaro como referência
+     * @note aqui usa a posição do pássaro e o tamanho da câmera para considerar
+     * na busca de elementos
      */
     const queryResult = this.gameContext.spatialGrid.query(
-      this.gameContext.camera.position.x,
-      this.gameContext.camera.position.y,
+      this.gameContext.bird.position.x,
+      this.gameContext.bird.position.y,
       this.gameContext.camera.dimensions.x,
       this.gameContext.camera.dimensions.y,
     )
     const view = viewByType(queryResult);
 
 
-    /**
-     * @todo joão, um set só de pipes que estão perto do pássaro?
-     */
     for (const pipe of view.PipeEntity) {
       if (!pipe.birdPassedThrough && pipe.position.x < this.gameContext.bird.position.x) {
         pipe.birdPassedThrough = true;
@@ -241,14 +236,10 @@ export class GameScene extends Scene {
       }
     }
 
-    /**
-     * @todo João, mapear entidades que podem colidir e checar apenas entidades próximas ao pássaro,
-     * isso nesse cenário.
-     */
+    const rectBird = new BoundingRect(this.gameContext.bird.position, this.gameContext.bird.collisionShape.dimensions);
     for (const entity of queryResult) {
       if (!(entity instanceof BirdEntity) && entity.collisionShape instanceof RectCollisionShape) {
         const rectEntity = new BoundingRect(entity.position, entity.collisionShape.dimensions);
-        const rectBird = new BoundingRect(this.gameContext.bird.position, this.gameContext.bird.collisionShape.dimensions);
 
         if (rectBird.isIntersecting(rectEntity)) {
           entity.collisionShape.color = 'red';
