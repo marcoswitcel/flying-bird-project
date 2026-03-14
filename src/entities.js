@@ -223,6 +223,10 @@ export class Entity {
     };
   }
 
+  /**
+   * Área visível do elemento, esse método pode retornar sempre a mesma entidade ou não
+   * @returns {Readonly<BoundingRect>}
+   */
   getVisibleRect() {
     return new BoundingRect(this.position, this.dimension);
   }
