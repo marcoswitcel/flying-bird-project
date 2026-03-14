@@ -5,7 +5,7 @@ import { assert, hiddenAssert } from './test/assert-utils.js';
 export class HashTest extends TestCase {
   ['É determinístico']() {
 
-    const samples = [ 'string', 'Maçã', 'Professor', '7', '0.123' ];
+    const samples = [ 'string', 'Maçã', 'Professor', '7', '0.123', '+#[/\'ã' ];
 
     for (const sample of samples) {
       const input = new TextEncoder().encode(sample);

@@ -6,7 +6,7 @@
  * @author Daniel J. Bernstein (original design) (this version was ported by João)
  * @reference https://www.reddit.com/r/learnprogramming/comments/1h5gmb/creating_a_simple_hash_function/ 
  * 
- * @param {Uint8Array} data 
+ * @param {Readonly<Uint8Array>} data 
  * @returns {number}
  */
 export function hash(data)
