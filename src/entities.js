@@ -232,7 +232,7 @@ export class Entity {
   }
 
   /**
-   * @todo João, na hora de exportar não estou conseguindo saber a position original do parallax objet e do bird para fazer o export,
+   * @todo João, na hora de exportar não estou conseguindo saber a position original do parallax object e do bird para fazer o export,
    * por este motivo penso que talvez eu precise salvar os dados originais do nível na entidade, ou recarregar e fazer o diff.
    */
   initialState() {}
@@ -312,6 +312,12 @@ export class TiledEntity extends Entity {
     this.position.y = 525;
     this.sprite = resourceManager.getSprite('floor');;
     this.collisionShape = new RectCollisionShape();
+
+    // @note Esse código a seguir depende do completo carregamento dos dados antes de construir as entidades
+    //@ts-expect-error
+    console.assert(this.sprite.source.complete, 'O resource do sprite já deveria estar carregado')
+    this.collisionShape.dimensions.x = this.sprite.width * this.dimension.x;
+    this.collisionShape.dimensions.y = this.sprite.height * this.dimension.y;
   }
 
   /**
@@ -322,11 +328,6 @@ export class TiledEntity extends Entity {
    */
   render(ctx, camera) {
     if (!this.sprite) return;
-
-    // @todo João, não deveria recomputar isso toda vez, porém na hora de criação da entidade não é garantido que a largura
-    // do sprite já seja conhecida, ela depende do carregamento da imagem... Isso vai mudar eventualmente, por hora fica assim.
-    this.collisionShape.dimensions.x = this.sprite.width * this.dimension.x;
-    this.collisionShape.dimensions.y = this.sprite.height * this.dimension.y;
 
     const x = (this.position.x - (this.dimension.x * this.sprite.width) / 2); // 
     const y = (this.position.y - (this.dimension.y * this.sprite.height) / 2); // 
@@ -381,8 +382,6 @@ export class ParallaxEntity extends Entity {
   }
 
   render(ctx, camera) {
-    // @todo João, preciso definir a velocidade de transição ou a área visívil da entidade de parallax
-    // const x = (this.position.x) - camera.position.x + ctx.canvas.width / 2;
     const x = ctx.canvas.width / 2;
     const y = (this.position.y) - camera.position.y + ctx.canvas.height / 2;
     
@@ -394,8 +393,8 @@ export class ParallaxEntity extends Entity {
       const m = camera.position.x % Math.floor(width / delta);
       const position = { x: x - (delta * m), y: y };
       bg.sprite.render(ctx, position, this.dimension, this.centered);
-      // @todo João, ajustar o próximo trecho, é um hack pra renderização continua
-      // @todo João, além do hack tem o problema de arredondamento pra resolver...
+      // @todo João, ajustar o próximo trecho, é um hack pra renderização continua;
+      // além do hack tem o problema de arredondamento pra resolver...
       position.x += this.dimension.x
       bg.sprite.render(ctx, position, this.dimension, this.centered);
 
@@ -552,7 +551,6 @@ export function loadLevel(gameScene, levelFile) {
  */
 export function generateSceneWithManyElements(gameContext) {
 
-  // @todo João, terminar
   for (let i = 0; i < 100000; i++) {
 
     const pipe = new PipeEntity();

@@ -264,8 +264,6 @@ export class GameScene extends Scene {
     const timer = new TimerProfile();
 
     for (const entity of this.gameContext.entityManager.all.ParallaxEntity) {
-      // @todo João, duplicado no render do método e aqui...
-      // mantendo a área visível alinhada com a renderização em relação a câmera câmera
       entity.position.x = this.gameContext.camera.position.x;
 
       // update no grid
