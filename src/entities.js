@@ -236,6 +236,11 @@ export class Entity {
    * por este motivo penso que talvez eu precise salvar os dados originais do nível na entidade, ou recarregar e fazer o diff.
    */
   initialState() {}
+
+  /**
+   * Método chamado após montar a entidade a partir do json
+   */
+  update() {}
 }
 
 export class PipeEntity extends Entity {
@@ -313,11 +318,7 @@ export class TiledEntity extends Entity {
     this.sprite = resourceManager.getSprite('floor');;
     this.collisionShape = new RectCollisionShape();
 
-    // @note Esse código a seguir depende do completo carregamento dos dados antes de construir as entidades
-    //@ts-expect-error
-    console.assert(this.sprite.source.complete, 'O resource do sprite já deveria estar carregado')
-    this.collisionShape.dimensions.x = this.sprite.width * this.dimension.x;
-    this.collisionShape.dimensions.y = this.sprite.height * this.dimension.y;
+    this.update();
   }
 
   /**
@@ -358,6 +359,14 @@ export class TiledEntity extends Entity {
 
   getVisibleRect() {
     return new BoundingRect(this.position, { x: this.dimension.x * this.sprite.width, y: this.dimension.y * this.sprite.height, });
+  }
+
+  update() {
+    // @note Esse código a seguir depende do completo carregamento dos dados antes de construir as entidades
+    //@ts-expect-error
+    console.assert(this.sprite.source.complete, 'O resource do sprite já deveria estar carregado')
+    this.collisionShape.dimensions.x = this.sprite.width * this.dimension.x;
+    this.collisionShape.dimensions.y = this.sprite.height * this.dimension.y;
   }
 }
 
@@ -494,6 +503,8 @@ export const processLevelData = (json) => {
       entity.isUpsideDown =  entry.isUpsideDown;
       entity.updateSprite();
     }
+
+    entity.update();
 
     entities.push(entity);
   }
