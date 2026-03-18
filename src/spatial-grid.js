@@ -96,7 +96,7 @@ export class SpatialGrid {
   }
 
   /**
-   * @todo João, testar
+   * 
    * @public
    * @param {Entity} entity 
    * @returns 
